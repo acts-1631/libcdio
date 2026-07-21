@@ -79,17 +79,25 @@ static lsn_t get_disc_last_lsn_nrg (void *p_user_data);
 /* Updates internal track TOC, so we can later
    simulate ioctl(CDROMREADTOCENTRY).
  */
-static void
+static bool
 _register_mapping (_img_private_t *env, lsn_t start_lsn, uint32_t sec_count,
 		   uint64_t img_offset, uint32_t blocksize,
 		   track_format_t track_format, bool track_green)
 {
   const int track_num=env->gen.i_tracks;
-  track_info_t  *this_track=&(env->tocent[env->gen.i_tracks]);
-  _mapping_t *_map = calloc(1, sizeof (_mapping_t));
+  track_info_t  *this_track;
+  _mapping_t *_map;
+
+  if (env->gen.i_tracks >= CDIO_CD_MAX_TRACKS) {
+    cdio_warn ("NRG image has more than %d tracks", CDIO_CD_MAX_TRACKS);
+    return false;
+  }
+
+  this_track = &(env->tocent[env->gen.i_tracks]);
+  _map = calloc(1, sizeof (_mapping_t));
 
   if (_map == NULL)
-    return;
+    return false;
   _map->start_lsn  = start_lsn;
   _map->sec_count  = sec_count;
   _map->img_offset = img_offset;
@@ -171,6 +179,7 @@ _register_mapping (_img_private_t *env, lsn_t start_lsn, uint32_t sec_count,
 	      (long unsigned int) sec_count,
 	      (long unsigned int) img_offset,
 	      (long unsigned int) img_offset);
+  return true;
 }
 
 
@@ -266,6 +275,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	      int cdte_format = _entries[idx].addr_ctrl / 16;
 	      int cdte_ctrl   = _entries[idx].type >> 4;
 
+	      if (i >= CDIO_CD_MAX_TRACKS) {
+		cdio_warn ("NRG image has more than %d tracks", CDIO_CD_MAX_TRACKS);
+		free(footer_buf);
+		return false;
+	      }
+
 	      if ( COPY_PERMITTED & cdte_ctrl ) {
 		if (p_env) p_env->tocent[i].flags |= COPY_PERMITTED;
 	      } else {
@@ -316,9 +331,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 
 	      sec_count = UINT32_FROM_BE (_entries[idx + 1].lsn);
 
-	      _register_mapping (p_env, lsn, sec_count*2,
-				 (lsn+CDIO_PREGAP_SECTORS) * M2RAW_SECTOR_SIZE,
-				 M2RAW_SECTOR_SIZE, TRACK_FORMAT_XA, true);
+	      if (!_register_mapping (p_env, lsn, sec_count*2,
+				      (lsn+CDIO_PREGAP_SECTORS) * M2RAW_SECTOR_SIZE,
+				      M2RAW_SECTOR_SIZE, TRACK_FORMAT_XA, true)) {
+		free(footer_buf);
+		return false;
+	      }
 	    }
 	  } else {
 	    lsn_t lsn = UINT32_FROM_BE (_entries[0].lsn);
@@ -334,6 +352,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	      lsn_t sec_count;
 	      int cdte_format = _entries[idx].addr_ctrl >> 4;
 	      int cdte_ctrl   = _entries[idx].type >> 4;
+
+	      if (i >= CDIO_CD_MAX_TRACKS) {
+		cdio_warn ("NRG image has more than %d tracks", CDIO_CD_MAX_TRACKS);
+		free(footer_buf);
+		return false;
+	      }
 
 	      if ( COPY_PERMITTED & cdte_ctrl ) {
 		if (p_env) p_env->tocent[i].flags |= COPY_PERMITTED;
@@ -365,9 +389,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	      lsn       = UINT32_FROM_BE (_entries[idx].lsn);
 	      sec_count = UINT32_FROM_BE (_entries[idx + 1].lsn);
 
-	      _register_mapping (p_env, lsn, sec_count - lsn,
-				 (lsn + CDIO_PREGAP_SECTORS)*M2RAW_SECTOR_SIZE,
-				 M2RAW_SECTOR_SIZE, TRACK_FORMAT_XA, true);
+	      if (!_register_mapping (p_env, lsn, sec_count - lsn,
+				      (lsn + CDIO_PREGAP_SECTORS)*M2RAW_SECTOR_SIZE,
+				      M2RAW_SECTOR_SIZE, TRACK_FORMAT_XA, true)) {
+		free(footer_buf);
+		return false;
+	      }
 	    }
 	  }
 	  break;
@@ -617,8 +644,11 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	    cdio_assert (_start * blocksize == _start2);
 
 	    _start += idx * CDIO_PREGAP_SECTORS;
-	    _register_mapping (p_env, _start, _len, _start2, blocksize,
-			       track_format, track_green);
+	    if (!_register_mapping (p_env, _start, _len, _start2, blocksize,
+				   track_format, track_green)) {
+	      free(footer_buf);
+	      return false;
+	    }
 
 	  }
 	}
@@ -723,8 +753,11 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	    }
 
 	    _start += idx * CDIO_PREGAP_SECTORS;
-	    _register_mapping (p_env, _start, _len, _start2, blocksize,
-			       track_format, track_green);
+	    if (!_register_mapping (p_env, _start, _len, _start2, blocksize,
+				   track_format, track_green)) {
+	      free(footer_buf);
+	      return false;
+	    }
 	  }
 	}
 	break;
