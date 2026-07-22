@@ -7,6 +7,7 @@ check_DATA = \
 	bad-cat3.toc   \
 	bad-dir.iso    \
 	bad-file.toc   \
+	bad-fid.udf    \
 	bad-mode1.cue  \
 	bad-mode1.toc  \
 	bad-msf-1.cue  \

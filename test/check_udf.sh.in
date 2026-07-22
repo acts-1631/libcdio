@@ -46,6 +46,17 @@ if test $RC -eq 0 ; then
     rm -fr $extract_dir
 fi
 
+extract_dir=/tmp/udf-bad-fid-$$
+udf_iso=$abs_top_srcdir/test/data/bad-fid.udf
+cmd="$extract_program $udf_iso $extract_dir"
+$cmd
+RC=$?
+check_result $RC "$cmd"
+
+if test $RC -eq 0 ; then
+    rm -fr $extract_dir
+fi
+
 fname=cdimage-u2
 udf_iso=$abs_top_srcdir/test/data/${fname}.iso
 udf_iso_right=$abs_top_srcdir/test/data/${fname}.right
