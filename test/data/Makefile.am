@@ -60,6 +60,7 @@ check_DATA = \
 	t8.toc         \
 	t9.toc         \
 	test-udf1.iso  \
+	too-many-tracks.nrg \
 	udf102.iso     \
 	vcd2.toc       \
 	videocd.nrg
