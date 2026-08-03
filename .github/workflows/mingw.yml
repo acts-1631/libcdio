@@ -27,6 +27,7 @@ jobs:
           mingw-w64-${{ matrix.env }}-toolchain
           base-devel
           autotools
+          texinfo
           help2man
     - name: Build
       run: |
