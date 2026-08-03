@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2005, 2006, 2008, 2011-2013, 2017
+  Copyright (C) 2005, 2006, 2008, 2011-2013, 2017, 2026
   Rocky Bernstein <rocky@gnu.org>
 
   This program is free software: you can redistribute it and/or modify
@@ -458,7 +458,11 @@ cdio_eject_media (CdIo_t **pp_cdio)
 driver_return_code_t
 cdio_eject_media_drive (const char *psz_drive)
 {
+#ifdef HAVE_LINUX_CDROM
+  CdIo_t *p_cdio = cdio_open_am_linux(psz_drive, "MMC_RDWR");
+#else
   CdIo_t *p_cdio = cdio_open (psz_drive, DRIVER_DEVICE);
+#endif
   if (p_cdio) {
     driver_return_code_t rc;
     rc = cdio_eject_media(&p_cdio);
