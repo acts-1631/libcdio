@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2004, 2010 Rocky Bernstein <rocky@gnu.org>
+    Copyright (C) 2004, 2010, 2026 Rocky Bernstein <rocky@gnu.org>
     Modeled after GNU/Linux definitions in linux/cdrom.h
 
     This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,12 @@
 */
 
 /**
-   \file dvd.h 
+   \file dvd.h
    \brief Definitions for DVD access.
 
    The documents we make use of are described Multi-Media Commands
-   (MMC). This document generally has a numeric level number
-   appended. For example MMC-5 refers to ``Multi-Media Commands - 5'
-   which is the current version in 2010.
-
+   (MMC). We will use the MMC-6 draft 2g circa 2009 described in
+   https://www.13thmonkey.org/documentation/SCSI/mmc6r02g.pdf
 */
 
 #ifndef CDIO_DVD_H_
@@ -45,27 +43,36 @@ typedef enum cdio_dvd_structure
 } cdio_dvd_structure;
 
 /**
-    Media definitions for "DVD Book" from MMC-5 Table 400, page 419.
+    Media definitions for "DVD Book" from MMC-6 Table 399, page 403
+    (PDF page 451).
 */
 typedef enum cdio_dvd_book
 {
-	CDIO_DVD_BOOK_DVD_ROM    = 0x0, /**< DVD-ROM */
-	CDIO_DVD_BOOK_DVD_RAM    = 0x1, /**< DVD-RAM */
-	CDIO_DVD_BOOK_DVD_R      = 0x2, /**< DVD-R */
-	CDIO_DVD_BOOK_DVD_RW     = 0x3, /**< DVD-RW */
-	CDIO_DVD_BOOK_HD_DVD_ROM = 0x4, /**< HD DVD-ROM */
-	CDIO_DVD_BOOK_HD_DVD_RAM = 0x5, /**< HD DVD-RAM */
-	CDIO_DVD_BOOK_HD_DVD_R   = 0x6, /**< HD DVD-R */
-	CDIO_DVD_BOOK_DVD_PRW    = 0x9, /**< DVD+RW */
-	CDIO_DVD_BOOK_DVD_PR     = 0xa, /**< DVD+R  */
-	CDIO_DVD_BOOK_DVD_PRW_DL = 0xd, /**< DVD+RW DL  */
-	CDIO_DVD_BOOK_DVD_PR_DL  = 0xe  /**< DVD+R DL  */
+	CDIO_DVD_BOOK_DVD_ROM    = 0b0000, /**< DVD-ROM */
+	CDIO_DVD_BOOK_DVD_RAM    = 0b0001, /**< DVD-RAM */
+	CDIO_DVD_BOOK_DVD_R      = 0b0010, /**< DVD-R */
+	CDIO_DVD_BOOK_DVD_RW     = 0b0011, /**< DVD-RW */
+	CDIO_DVD_BOOK_HD_DVD_ROM = 0b0100, /**< HD DVD-ROM */
+	CDIO_DVD_BOOK_HD_DVD_RAM = 0b0101, /**< HD DVD-RAM */
+	CDIO_DVD_BOOK_HD_DVD_R   = 0b0110, /**< HD DVD-R */
+	/*                         0b0111, Reserved */
+	/*                         0b1000, Reserved */
+	CDIO_DVD_BOOK_DVD_PRW    = 0b1001, /**< DVD+RW */
+	CDIO_DVD_BOOK_DVD_PR     = 0b1010, /**< DVD+R  */
+	/*                         0b1011, Reserved */
+	/*                         0b1100, Reserved */
+	CDIO_DVD_BOOK_DVD_PRW_DL = 0b1101, /**< DVD+RW DL  */
+	CDIO_DVD_BOOK_DVD_PR_DL  = 0b1110  /**< DVD+R DL  */
+	/*                         0b1111, Reserved */
 } cdio_dvd_book;
 
+/**
+    READ DISC STRUCTURE response. Table 398 from MMC-6 2g draft.
+*/
 typedef struct cdio_dvd_layer {
   unsigned int book_version	: 4;
   unsigned int book_type	: 4;
-  unsigned int min_rate	        : 4;
+  unsigned int min_rate	        : 4; /*< This the *maximum* rate field */
   unsigned int disc_size	: 4;
   unsigned int layer_type	: 4;
   unsigned int track_path	: 1;
@@ -79,7 +86,7 @@ typedef struct cdio_dvd_layer {
 } cdio_dvd_layer_t;
 
 /**
-    Maximum number of layers in a DVD.  
+    Maximum number of layers in a DVD.
  */
 #define CDIO_DVD_MAX_LAYERS	4
 
@@ -91,7 +98,7 @@ typedef struct cdio_dvd_physical {
 
 typedef struct cdio_dvd_copyright {
   uint8_t type;
-  
+
   uint8_t layer_num;
   uint8_t cpst;
   uint8_t rmi;
@@ -99,21 +106,21 @@ typedef struct cdio_dvd_copyright {
 
 typedef struct cdio_dvd_disckey {
   uint8_t type;
-  
+
   unsigned agid	: 2;
   uint8_t value[2048];
 } cdio_dvd_disckey_t;
 
 typedef struct cdio_dvd_bca {
   uint8_t type;
-  
+
   int len;
   uint8_t value[188];
 } cdio_dvd_bca_t;
 
 typedef struct cdio_dvd_manufact {
   uint8_t type;
-  
+
   uint8_t layer_num;
   int len;
   uint8_t value[2048];
@@ -121,7 +128,7 @@ typedef struct cdio_dvd_manufact {
 
 typedef union {
   uint8_t type;
-  
+
   cdio_dvd_physical_t	physical;
   cdio_dvd_copyright_t	copyright;
   cdio_dvd_disckey_t	disckey;
