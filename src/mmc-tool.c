@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2006, 2008, 2010-2011, 2014, 2017
+  Copyright (C) 2006, 2008, 2010-2011, 2014, 2017, 2026
   Rocky Bernstein <rocky@gnu.org>
 
   This program is free software: you can redistribute it and/or modify
@@ -494,6 +494,12 @@ main(int argc, char *argv[])
       free(p_op->arg.psz);
       break;
     case OP_EJECT:
+      /* We need to open p_cdio in Read/Write mode here. */
+#ifdef HAVE_LINUX_CDROM
+      cdio_destroy(p_cdio);
+      p_cdio = cdio_open_am_linux(source_name, "MMC_RDWR");
+#endif
+
       rc = mmc_eject_media(p_cdio);
       report(stdout, "%s (mmc_eject_media): %s\n", program_name,
 	     cdio_driver_errmsg(rc));
