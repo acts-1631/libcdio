@@ -40,7 +40,6 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])],
 LIBCDIO_VERSION_NUM=20300
 AC_SUBST(LIBCDIO_VERSION_NUM)
 
-AM_MISSING_PROG(HELP2MAN, help2man, $missing_dir)
 AM_MAINTAINER_MODE
 
 AM_SANITY_CHECK
@@ -94,6 +93,22 @@ if test "x$enable_cxx" != "xno" ; then
 else
   am__fastdepCXX_TRUE='#'
   am__fastdepCXX_FALSE=
+fi
+
+# AM_MAINTAINER_MODE sets the shell variable $USE_MAINTAINER_MODE "no" when
+# --enable-maintainer-mode is not given
+if test "x$USE_MAINTAINER_MODE" != "xno"; then
+    AC_PATH_PROG([HELP2MAN], [help2man])
+    if test -z "$HELP2MAN"; then
+        AC_MSG_ERROR([help2man is required when maintainer mode is enabled.])
+    fi
+else
+    # Check for help2man even when not in maintainer mode.
+    # If it's there, we can create libcdio tool manuals.
+    AC_PATH_PROG([HELP2MAN], [help2man])
+    if test -z "$HELP2MAN"; then
+        AC_MSG_WARN([help2man is not available; libcdio tool manuals will not be created.])
+    fi
 fi
 
 dnl For iso_read test

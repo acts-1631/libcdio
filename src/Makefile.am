@@ -101,11 +101,12 @@ check-leaks: $(check_programs)
         done
 
 
-if MAINTAINER_MODE
 $(man_MANS): %.1: %$(EXEEXT) %.help2man
+if MAINTAINER_MODE
 	-$(HELP2MAN) --opt-include=$(srcdir)/$(<:.exe=).help2man --no-info --libtool -o $@ ./$<
+else
+	$(HELP2MAN) --opt-include=$(srcdir)/$(<:.exe=).help2man --no-info --libtool -o $@ ./$<
 endif
-MAINTAINERCLEANFILES = $(man_MANS)
 
 MOSTLYCLEANFILES = *.orig *.rej *.dSYM .libs
 
