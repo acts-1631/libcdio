@@ -427,7 +427,7 @@ case $host_os in
         AC_CHECK_HEADERS(linux/cdrom.h, [have_linux_cdrom_h="yes"])
 	if test "x$have_linux_cdrom_h" = "xyes"; then
 	   AC_CHECK_MEMBER([struct cdrom_generic_command.timeout],
-	     [AC_DEFINE([HAVE_CDROM_GENERIC_COMMAND_TIMEOUT], [1],
+	     [AC_DEFINE([HAVE_LINUX_CDROM_GENERIC_COMMAND_TIMEOUT], [1],
 	        [Define 1 if struct cdrom_generic_command has a timeout field])],
 	     [],
 	     [[#include <linux/cdrom.h>]])
@@ -545,7 +545,7 @@ AC_SUBST(HAVE_BSDI_CDROM)
 AC_SUBST(HAVE_DARWIN_CDROM)
 AC_SUBST(HAVE_FREEBSD_CDROM)
 AC_SUBST(HAVE_LINUX_CDROM)
-AC_SUBST(HAVE_LINUX_CDROM_TIMEOUT)
+AC_SUBST(HAVE_LINUX_CDROM_GENERIC_COMMAND_TIMEOUT)
 AC_SUBST(HAVE_SOLARIS_CDROM)
 AC_SUBST(HAVE_WIN32_CDROM)
 AC_SUBST(HAVE_OS2_CDROM)

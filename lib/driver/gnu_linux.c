@@ -1279,7 +1279,7 @@ run_mmc_cmd_linux(void *p_user_data,
                        (SCSI_MMC_DATA_WRITE == e_direction) ? CGC_DATA_WRITE :
                        CGC_DATA_NONE;
 
-#ifdef HAVE_LINUX_CDROM_TIMEOUT
+#ifdef HAVE_LINUX_CDROM_GENERIC_COMMAND_TIMEOUT
   cgc.timeout = i_timeout_ms;
 #endif
 
