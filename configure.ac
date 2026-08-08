@@ -15,7 +15,7 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-define(RELEASE_NUM, 2.3.1dev0)
+define(RELEASE_NUM, 2.4.0dev0)
 define(CDIO_VERSION_STR, $1)
 
 AC_PREREQ([2.71])
@@ -37,7 +37,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])],
 
 # FIXME: write a m4 macro to convert x.y.zjunk to x*10000 + y*100 + z
 # LIBCDIO_VERSION_NUM=`echo RELEASE_NUM | cut -d . -f 1 | tr -d a-z`
-LIBCDIO_VERSION_NUM=20300
+LIBCDIO_VERSION_NUM=20400
 AC_SUBST(LIBCDIO_VERSION_NUM)
 
 AM_MISSING_PROG(HELP2MAN, help2man, $missing_dir)
@@ -426,11 +426,11 @@ case $host_os in
         AC_CHECK_HEADERS(linux/version.h linux/major.h)
         AC_CHECK_HEADERS(linux/cdrom.h, [have_linux_cdrom_h="yes"])
 	if test "x$have_linux_cdrom_h" = "xyes"; then
-	   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
-#include <linux/cdrom.h>
-struct cdrom_generic_command test;
-int has_timeout=sizeof(test.timeout);]])],[AC_DEFINE([HAVE_LINUX_CDROM_TIMEOUT], [1],
-                   [Define 1 if timeout is in cdrom_generic_command struct])],[])
+	   AC_CHECK_MEMBER([struct cdrom_generic_command.timeout],
+	     [AC_DEFINE([HAVE_CDROM_GENERIC_COMMAND_TIMEOUT], [1],
+	        [Define 1 if struct cdrom_generic_command has a timeout field])],
+	     [],
+	     [[#include <linux/cdrom.h>]])
 	   AC_DEFINE([HAVE_LINUX_CDROM], [1],
                      [Define 1 if you have Linux-type CD-ROM support])
 	   cd_drivers="${cd_drivers}, GNU/Linux"
@@ -540,12 +540,12 @@ int main(int argc, char **argv) {
    [AC_MSG_RESULT(no)])
 dnl
 
-AC_SUBST(LINUX_CDROM_TIMEOUT)
 AC_SUBST(DARWIN_PKG_LIB_HACK)
 AC_SUBST(HAVE_BSDI_CDROM)
 AC_SUBST(HAVE_DARWIN_CDROM)
 AC_SUBST(HAVE_FREEBSD_CDROM)
 AC_SUBST(HAVE_LINUX_CDROM)
+AC_SUBST(HAVE_LINUX_CDROM_TIMEOUT)
 AC_SUBST(HAVE_SOLARIS_CDROM)
 AC_SUBST(HAVE_WIN32_CDROM)
 AC_SUBST(HAVE_OS2_CDROM)
