@@ -12,8 +12,8 @@
 /Makefile
 /Makefile.in
 /aclocal.m4
-/autom4te.cache
 /admin-tools
+/autom4te.cache
 /compile
 /config.guess
 /config.h
@@ -41,3 +41,4 @@
 /stamp-h1
 /test-driver
 /tmp
+/vscode.deb
