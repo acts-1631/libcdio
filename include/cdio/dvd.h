@@ -20,7 +20,7 @@
    \file dvd.h
    \brief Definitions for DVD access.
 
-   The documents we make use of are described Multi-Media Commands
+   The documents we make use of are described in Multi-Media Commands
    (MMC). We will use the MMC-6 draft 2g circa 2009 described in
    https://www.13thmonkey.org/documentation/SCSI/mmc6r02g.pdf
 */
