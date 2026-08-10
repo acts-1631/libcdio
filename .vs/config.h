@@ -77,7 +77,7 @@
 #undef HAVE_LINUX_CDROM_H
 
 /* Define 1 if timeout is in cdrom_generic_command struct */
-#undef HAVE_LINUX_CDROM_TIMEOUT
+#undef HAVE_LINUX_CDROM_GENERIC_COMMAND_TIMEOUT
 
 /* Define to 1 if you have the <linux/version.h> header file. */
 #undef HAVE_LINUX_VERSION_H
@@ -152,7 +152,7 @@
 #define HAVE_WIN32_CDROM 1
 
 /* Define as const if the declaration of iconv() needs const. */
-#undef ICONV_CONST 
+#undef ICONV_CONST
 
 /* Define 1 if you are compiling using MinGW */
 #undef MINGW32
