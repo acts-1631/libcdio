@@ -42,7 +42,7 @@ typedef enum cdio_dvd_structure {
 } cdio_dvd_structure;
 
 /**
-    Media definitions for "DVD Book" from MMC-6 Table 399, page 403
+    Media definitions for "DVD Book" from MMC-6 draft 2g, Table 399, page 403
     (PDF page 451).
 */
 typedef enum cdio_dvd_book {
