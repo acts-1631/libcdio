@@ -1104,7 +1104,8 @@ mmc_last_cmd_sense(const CdIo_t *p_cdio, cdio_mmc_request_sense_t **pp_sense)
     if (!p_cdio) return DRIVER_OP_UNINIT;
     gen = p_cdio->env;
     *pp_sense = NULL;
-    if (gen->scsi_mmc_sense_valid <= 0)
+    if (gen->scsi_mmc_sense_valid <= 0
+	|| (size_t) gen->scsi_mmc_sense_valid > sizeof(gen->scsi_mmc_sense))
 	return 0;
     *pp_sense = calloc(1, gen->scsi_mmc_sense_valid);
     if (*pp_sense == NULL)
