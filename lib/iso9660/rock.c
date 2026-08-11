@@ -113,6 +113,7 @@ realloc_symlink(/*in/out*/ iso9660_stat_t *p_stat, uint8_t i_grow)
     if (cont_offset >= ISO_BLOCKSIZE) FAIL;	\
     cont_size = from_733(rr->u.CE.size);	\
     if (cont_size >= ISO_BLOCKSIZE) FAIL;	\
+    if (cont_size > ISO_BLOCKSIZE - cont_offset) FAIL;\
   }
 
 #define SETUP_ROCK_RIDGE(DE, CHR, LEN)				\
