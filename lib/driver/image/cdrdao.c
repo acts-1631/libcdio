@@ -646,6 +646,8 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	/* track flags */
 	/* [NO] COPY | [NO] PRE_EMPHASIS */
       } else if (0 == strcmp ("NO", psz_keyword)) {
+	if (i_track < 0)
+	  goto not_in_global_section;
 	if (NULL != (psz_field = strtok_r(NULL, " \t\n\r", &saveptr))) {
 	  if (0 == strcmp ("COPY", psz_field)) {
 	    if (NULL != cd)
@@ -678,6 +680,8 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 
 	/* ISRC "CCOOOYYSSSSS" */
       } else if (0 == strcmp ("ISRC", psz_keyword)) {
+	if (i_track < 0)
+	  goto not_in_global_section;
 	if (NULL != (psz_field = strtok_r(NULL, "\"\t\n\r", &saveptr))) {
 	  if (NULL != cd)
 	    cd->tocent[i_track].isrc = strdup(psz_field);
@@ -687,6 +691,8 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 
 	/* SILENCE <length> */
       } else if (0 == strcmp ("SILENCE", psz_keyword)) {
+	if (i_track < 0)
+	  goto not_in_global_section;
         if (NULL != (psz_field = strtok_r(NULL, " \t\n\r", &saveptr))) {
 	      if (NULL != cd)
 		  cd->tocent[i_track].silence = cdio_mmssff_to_lba (psz_field);
