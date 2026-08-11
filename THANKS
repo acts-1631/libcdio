@@ -1,3 +1,10 @@
+acts1631
+  More bounds checking and field validation in UDF and NRG images
+
+Adrian Reber
+  Redhat Packaging
+  Fix format string mismatch, and misc bug fixes
+
 BrunoSX
   Add key `joliet-level` in cdio creation driver argument
 
@@ -16,6 +23,9 @@ Christophe Fergeau
 Dagobert Michelsen
   Solaris compilation issues and the wonderful test Solaris
   test platform opencsw.org
+
+Daniel Schwarz
+  "log-summary" option in cd-paranoia.
 
 Diego 'Flameeyes' Pettenò
   patches to FreeBSD and making Gentoo-friendly
@@ -101,15 +111,9 @@ Svend S. Sorensen <ssorensen at fastmail.fm>
   cdrdao TOC-reading and CDRWin CUE parsing code based on cuetools
   http://cuetools.sourceforge.net/
 
-xboxmediacenter team (www.xboxmediacenter.de)
- X-Box detection and XDF filesystem things
-
 Thomas Schmitt
   Recording and retrieval of SCSI sense reply. Write/burning interface.
   MMC bug fixes.
-
-Daniel Schwarz
-  "log-summary" option in cd-paranoia.
 
 Robert Kausch
   Portability fixes on Windows, and other OS's. Add mmc_get_track_isrc
@@ -123,6 +127,12 @@ Robert William Fuller
 Rodrigo Cox
   Fix incorrect track length calculation for the last track on CDs
 
+Rudi Heithbaum
+   Fix `-Wdiscarded-qualifiers` warning by retaining const qualifier from pointer
+
+Shiva Kiran Koninty
+  numerous mmc bug fixes and other libcdio improvements.
+
 Scot C. Bontrager
   mmc routine to get the ISRC information on a CD that is in the q subchannel
   but not showing up in the CDTEXT. Addition of this information to cd-info.
@@ -133,6 +143,9 @@ UltraFuzzy
   Add cdio_get_device_fd()
 
   Correct ISO 9660 timezone offsets
+
+xboxmediacenter team (www.xboxmediacenter.de)
+ X-Box detection and XDF filesystem things
 
 Yuxin Wang
    Fix buffer overrun for Joliet filenames

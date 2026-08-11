@@ -40,7 +40,7 @@
 #     public release, then set AGE to 0. A changed interface means an
 #     incompatibility with previous versions.
 
-libudf_la_CURRENT = 4
+libudf_la_CURRENT = 5
 libudf_la_REVISION = 0
 libudf_la_AGE = 0
 

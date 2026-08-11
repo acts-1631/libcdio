@@ -3,6 +3,32 @@ NEWS
 
 Here we have a summary of the major changes by release. See the git commit history or `ChangeLog` for more fine-grained changes.
 
+Version 2.4.0
+-----------------
+
+* Note incorrect field name `min_rate` should be called `max_rate`. Issue #68.
+* Apply timeout in MMC command on GNU/Linux Issue #69.
+* Fix no MMC data returned when buffer size is divisible by 256 (skr4n). Issue #58.
+* Deprecate obscure MMC set length macros (skr4n) PR #63.
+* In eject programs on GNU/Linux, cdio_open needs access mode RDWR.
+* Validate bounds in NRG images before accessing and fail when the NRG table is full. PR #631.
+* Validate UDF File Identifier Descriptor bounds (Acts1631). PR #61
+* Change references from MMC-5 to MMC-6 Draft 2g when possible.
+* At URLS for MMC6 Draft 2g and SPC-3.
+* Administrivia: Error when help2man not found in maintainer mode. Otherwise warn, and tolerate builds without help2man. Issue #65.
+* Correct the way MMC CDB allocation length values are set (skr4n). PR #60
+* Correct XA attribute flags (skr4n)
+  - Add `*SYS` values of the XA attribute flags to represent the other/world user mode bits.
+  - Fix it to use the `*OTH` values instead.
+* Use thread locals in recursion check to allow multi-threaded use PR #52
+* Correct macOS workflows
+* Fix -Wdiscarded-qualifiers warnings (heitbaum) PR #48
+* Fix `udf_read_block` docs; count blocks, not bytes (RavuAlhemio). PR #45.
+* Go over grammar and spelling in docs.
+* Go over doxygen formatting. (More should be done though).
+* start to use clang-format to format C files.
+
+
 Version 2.3.0
 -----------------
 

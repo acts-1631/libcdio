@@ -15,7 +15,7 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-define(RELEASE_NUM, 2.4.0dev0)
+define(RELEASE_NUM, 2.4.0)
 define(CDIO_VERSION_STR, $1)
 
 AC_PREREQ([2.71])
@@ -201,7 +201,7 @@ if test "x$ac_cv_sys_largefiles" = "xyes"; then
         LIBCDIO_LARGEFILE_FLAGS="-D_LARGE_FILES"
     fi
     if test "x$ac_cv_sys_largefile_source" != "xno"; then
-        LIBCDIO_LARGEFILE_FLAGS="$LIBDDIO_LARGEFILE_FLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
+        LIBCDIO_LARGEFILE_FLAGS="$LIBCDIO_LARGEFILE_FLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
     fi
     CPPFLAGS="$CPPFLAGS $LIBCDIO_LARGEFILE_FLAGS"
 fi

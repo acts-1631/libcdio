@@ -40,9 +40,9 @@
 #     public release, then set AGE to 0. A changed interface means an
 #     incompatibility with previous versions.
 
-libcdio_la_CURRENT = 20
+libcdio_la_CURRENT = 21
 libcdio_la_REVISION = 0
-libcdio_la_AGE = 1
+libcdio_la_AGE = 0
 
 EXTRA_DIST = image/Makefile \
 	mmc/Makefile \
