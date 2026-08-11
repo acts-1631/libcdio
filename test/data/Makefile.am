@@ -17,6 +17,7 @@ check_DATA = \
 	bad-msf-3.toc  \
 	bad-tracknum-exceeded.cue \
 	bad-tracknum-exceeded.toc \
+	bad-tracknum-overflow.toc \
 	cdda.bin       \
 	cdda.cue       \
 	cdda_4_5.bin   \
