@@ -101,7 +101,7 @@ cdio_is_cdrom_freebsd_ioctl(char *drive, char *mnttype)
 
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting from lsn.
    Returns 0 if no error.
  */
@@ -123,7 +123,7 @@ read_audio_sectors_freebsd_ioctl (_img_private_t *_obj, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -145,7 +145,7 @@ read_mode2_sector_freebsd_ioctl (_img_private_t *p_env, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
  */
 lsn_t
@@ -167,7 +167,7 @@ get_disc_last_lsn_freebsd_ioctl (_img_private_t *p_obj)
   return size;
 }
 
-/*!
+/**
   Eject media in CD-ROM drive. Return DRIVER_OP_SUCCESS if successful,
   DRIVER_OP_ERROR on error.
  */
@@ -188,7 +188,7 @@ eject_media_freebsd_ioctl (_img_private_t *p_env)
   return ret;
 }
 
-/*!
+/**
   Return the media catalog number MCN.
 
   Note: string is malloc'd so caller should free() then returned
@@ -223,7 +223,7 @@ get_mcn_freebsd_ioctl (const _img_private_t *p_env) {
     return NULL;
 }
 
-/*!
+/**
   Get format of track.
 
   FIXME: We're just guessing this from the GNU/Linux code.
@@ -257,7 +257,7 @@ get_track_format_freebsd_ioctl(const _img_private_t *p_env, track_t i_track)
     return TRACK_FORMAT_AUDIO;
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader

@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*! String inside frame which identifies an ISO 9660 filesystem. This
+/** String inside frame which identifies an ISO 9660 filesystem. This
     string is the "id" field of an iso9660_pvd_t or an iso9660_svd_t.
     Note should come *before* #include <cdio/iso9660.h> which does
     a #define of this name.
@@ -129,7 +129,7 @@ enum iso_extension_enum_s iso_extension_enums;
 #define SYSTEM_ID         "CD-RTOS CD-BRIDGE"
 #define VOLUME_SET_ID     ""
 
-/*!
+/**
    Change trailing blanks in str to nulls.  Str has a maximum size of
    n characters.
 */
@@ -159,7 +159,7 @@ static void
 pathtable_get_size_and_entries(const void *pt, unsigned int *size,
                                unsigned int *entries);
 
-/*!
+/**
   Get time structure from structure in an ISO 9660 directory index
   record. Even though tm_wday and tm_yday fields are not explicitly in
   idr_date, the are calculated from the other fields.
@@ -257,7 +257,7 @@ iso9660_get_dtime (const iso9660_dtime_t *idr_date, bool b_localtime,
     p_tm->TM_FIELD = tmp + ADD_CONSTANT;                                \
   }
 
-/*!
+/**
   Get "long" time in format used in ISO 9660 primary volume descriptor
   from a Unix time structure.
 */
@@ -301,7 +301,7 @@ iso9660_get_ltime (const iso9660_ltime_t *p_ldate,
   return true;
 }
 
-/*!
+/**
   Set time in format used in ISO 9660 directory index record
   from a Unix time structure. timezone is given as an offset
   correction in minutes.
@@ -338,7 +338,7 @@ iso9660_set_dtime_with_timezone (const struct tm *p_tm,
   }
 }
 
-/*!
+/**
   Set time in format used in ISO 9660 directory index record
   from a Unix time structure. */
 void
@@ -356,7 +356,7 @@ iso9660_set_dtime(const struct tm *p_tm, /*out*/ iso9660_dtime_t *p_idr_date)
   iso9660_set_dtime_with_timezone (p_tm, time_zone, p_idr_date);
 }
 
-/*!
+/**
   Set "long" time in format used in ISO 9660 primary volume descriptor
   from a Unix time structure. timezone is given as an offset
   correction in minutes.
@@ -396,7 +396,7 @@ iso9660_set_ltime_with_timezone(const struct tm *p_tm,
   }
 }
 
-/*!
+/**
   Set "long" time in format used in ISO 9660 primary volume descriptor
   from a Unix time structure. */
 void
@@ -414,7 +414,7 @@ iso9660_set_ltime(const struct tm *p_tm, /*out*/ iso9660_ltime_t *pvd_date)
   iso9660_set_ltime_with_timezone (p_tm, time_zone, pvd_date);
 }
 
-/*!
+/**
    Convert an ISO-9660 file name which is in the format usually stored
    in a ISO 9660 directory entry into what's usually listed as the
    file name in a listing.  Lowercase name, and remove trailing ;1's
@@ -432,7 +432,7 @@ iso9660_name_translate(const char *psz_oldname, char *psz_newname)
   return iso9660_name_translate_ext(psz_oldname, psz_newname, 0);
 }
 
-/*!
+/**
    Convert an ISO-9660 file name which is in the format usually stored
    in a ISO 9660 directory entry into what's usually listed as the
    file name in a listing.  Lowercase name if no Joliet Extension
@@ -482,7 +482,7 @@ iso9660_name_translate_ext(const char *psz_oldname, char *psz_newname,
   return i;
 }
 
-/*!
+/**
   Pad string src with spaces to size len and copy this to dst. If
   len is less than the length of src, dst will be truncated to the
   first len characters of src.
@@ -556,7 +556,7 @@ iso9660_strncpy_pad(char dst[], const char src[], size_t len,
   return dst;
 }
 
-/*!
+/**
    Return true if c is a DCHAR - a valid ISO-9660 level 1 character.
    These are the ASCSII capital letters A-Z, the digits 0-9 and an
    underscore.
@@ -573,7 +573,7 @@ iso9660_is_dchar (int c)
 }
 
 
-/*!
+/**
    Return true if c is an ACHAR -
    These are the DCHAR's plus some ASCII symbols including the space
    symbol.
@@ -842,7 +842,7 @@ iso9660_pathtable_init (void *pt)
   memset (pt, 0, ISO_BLOCKSIZE); /* fixme */
 }
 
-/*!
+/**
   Returns POSIX mode bitstring for a given file.
 */
 mode_t
@@ -997,7 +997,7 @@ iso9660_pathtable_m_add_entry (void *pt,
   return entrynum;
 }
 
-/*!
+/**
   Check that pathname is a valid ISO-9660 directory name.
 
   A valid directory name should not start out with a slash (/),
@@ -1042,7 +1042,7 @@ iso9660_dirname_valid_p (const char pathname[])
   return true;
 }
 
-/*!
+/**
   Check that pathname is a valid ISO-9660 pathname.
 
   A valid pathname contains a valid directory name, if one appears and
@@ -1112,7 +1112,7 @@ iso9660_pathname_valid_p (const char pathname[])
   return true;
 }
 
-/*!
+/**
   Take pathname and a version number and turn that into a ISO-9660
   pathname.  (That's just the pathname followed by ";" and the version
   number. For example, mydir/file.ext -> mydir/file.ext;1 for version
@@ -1130,7 +1130,7 @@ iso9660_pathname_isofy (const char pathname[], uint16_t version)
   return strdup (tmpbuf);
 }
 
-/*!
+/**
   Return the PVD's application ID.
   NULL is returned if there is some problem in getting this.
 */
@@ -1194,7 +1194,7 @@ iso9660_get_pvd_block_size(const iso9660_pvd_t *pvd)
   return from_723(pvd->logical_block_size);
 }
 
-/*! Return the primary volume id version number (of pvd).
+/** Return the primary volume id version number (of pvd).
     If there is an error 0 is returned.
  */
 int
@@ -1204,7 +1204,7 @@ iso9660_get_pvd_version(const iso9660_pvd_t *pvd)
   return pvd->version;
 }
 
-/*! Return the LSN of the root directory for pvd.
+/** Return the LSN of the root directory for pvd.
     If there is an error CDIO_INVALID_LSN is returned.
  */
 lsn_t
@@ -1219,7 +1219,7 @@ iso9660_get_root_lsn(const iso9660_pvd_t *pvd)
   }
 }
 
-/*!
+/**
    Return a string containing the preparer id with trailing
    blanks removed.
 */
@@ -1230,7 +1230,7 @@ iso9660_get_preparer_id(const iso9660_pvd_t *pvd)
   return strdup(strip_trail(pvd->preparer_id, ISO_MAX_PREPARER_ID));
 }
 
-/*!
+/**
    Return a string containing the publisher id with trailing
    blanks removed.
 */
@@ -1241,7 +1241,7 @@ iso9660_get_publisher_id(const iso9660_pvd_t *pvd)
   return strdup(strip_trail(pvd->publisher_id, ISO_MAX_PUBLISHER_ID));
 }
 
-/*!
+/**
    Return a string containing the PVD's system id with trailing
    blanks removed.
 */
@@ -1252,7 +1252,7 @@ iso9660_get_system_id(const iso9660_pvd_t *pvd)
   return strdup(strip_trail(pvd->system_id, ISO_MAX_SYSTEM_ID));
 }
 
-/*!
+/**
   Return the PVD's volume ID.
 */
 char *
@@ -1262,7 +1262,7 @@ iso9660_get_volume_id(const iso9660_pvd_t *pvd)
   return strdup(strip_trail(pvd->volume_id, ISO_MAX_VOLUME_ID));
 }
 
-/*!
+/**
   Return the PVD's volumeset ID.
   NULL is returned if there is some problem in getting this.
 */

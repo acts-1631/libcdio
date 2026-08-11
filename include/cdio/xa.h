@@ -21,7 +21,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*!
+/**
    \file xa.h
    \brief Things related to the ISO-9660 XA (Extended Attributes) format
 
@@ -37,7 +37,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-  /*! An enumeration for some of the XA_* \#defines below. This isn't
+  /** An enumeration for some of the XA_* \#defines below. This isn't
     really an enumeration one would really use in a program it is to
     be helpful in debuggers where wants just to refer to the XA_*
     names and get something.
@@ -79,7 +79,7 @@ extern const char ISO_XA_MARKER_STRING[sizeof("CD-XA001")-1];
 
 #define ISO_XA_MARKER_STRING    "CD-XA001"
 
-/*! \brief "Extended Architecture" according to the Philips Yellow Book.
+/** \brief "Extended Architecture" according to the Philips Yellow Book.
 
 CD-ROM EXtended Architecture is a modification to the CD-ROM
 specification that defines two new types of sectors.  CD-ROM XA was
@@ -112,12 +112,12 @@ typedef struct iso9660_xa_s
 } GNUC_PACKED iso9660_xa_t;
 
 
-  /*!
+  /**
     Returns POSIX mode bitstring for a given file.
   */
   posix_mode_t iso9660_get_posix_filemode_from_xa(uint16_t i_perms);
 
-/*!
+/**
   Returns a string interpreting the extended attribute xa_attr.
   For example:
   \verbatim
@@ -148,7 +148,7 @@ typedef struct iso9660_xa_s
 const char *
 iso9660_get_xa_attr_str (uint16_t xa_attr);
 
-/*!
+/**
   Allocates and initializes a new iso9600_xa_t variable and returns
   it. The caller must free the returned result using iso9660_xa_free().
 
@@ -158,7 +158,7 @@ iso9660_xa_t *
 iso9660_xa_init (iso9660_xa_t *_xa, uint16_t uid, uint16_t gid, uint16_t attr,
                  uint8_t filenum);
 
-/*!
+/**
   Frees the passed iso9600_xa_t structure.
 
   @see iso9660_xa

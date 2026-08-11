@@ -188,7 +188,7 @@ _log_handler (cdio_log_level_t level, const char message[])
   gl_default_cdio_log_handler (level, message);
 }
 
-/*! Prints out SCSI-MMC drive features  */
+/** Prints out SCSI-MMC drive features  */
 static void
 print_mmc_drive_level(CdIo_t *p_cdio)
 {

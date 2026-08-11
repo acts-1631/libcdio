@@ -205,7 +205,7 @@ read_audio_sectors_netbsd(void *user_data, void *data, lsn_t lsn,
         return 0;
 }
 
-/*!
+/**
    Reads a single mode1 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -217,7 +217,7 @@ _read_mode1_sector_netbsd (void *p_user_data, void *p_data, lsn_t lsn,
   return cdio_generic_read_form1_sector(p_user_data, p_data, lsn);
 }
 
-/*!
+/**
    Reads i_blocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -454,7 +454,7 @@ is_mmc_supported(void *user_data)
     return (_AM_NONE == env->access_mode) ? false : true;
 }
 
-/*!
+/**
   Return the value associated with the key "arg".
 */
 static const char *
@@ -513,7 +513,7 @@ get_num_tracks_netbsd(void *user_data)
         return TOTAL_TRACKS;
 }
 
-/*!
+/**
   Return the international standard recording code ISRC.
 
   Note: string is malloc'd so caller should free() then returned
@@ -562,7 +562,7 @@ audio_set_volume_netbsd(void *p_user_data, cdio_audio_volume_t *p_volume)
   return (ioctl(p_env->gen.fd, CDIOCSETVOL, p_volume));
 }
 
-/*!
+/**
   Get format of track.
 */
 static track_format_t
@@ -603,7 +603,7 @@ get_track_format_netbsd(void *user_data, track_t track_num)
                 return TRACK_FORMAT_AUDIO;
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -619,7 +619,7 @@ get_track_green_netbsd(void *user_data, track_t track_num)
                 == TRACK_FORMAT_XA);
 }
 
-/*!
+/**
   Return the starting MSF (minutes/secs/frames) for track number
   track_num in obj.  Track numbers usually start at something
   greater than 0, usually 1.
@@ -662,7 +662,7 @@ get_track_msf_netbsd(void *user_data, track_t track_num, msf_t *msf)
         return true;
 }
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
    @return the lsn. On error return CDIO_INVALID_LSN.
 
@@ -785,7 +785,7 @@ audio_read_subchannel_netbsd(void *p_user_data, cdio_subchannel_t *subchannel)
 #endif
 #endif /* HAVE_NETBSD_CDROM */
 
-/*!
+/**
   Return a string containing the default CD device.
  */
 char *
@@ -794,7 +794,7 @@ cdio_get_default_device_netbsd(void)
   return strdup(DEFAULT_CDIO_DEVICE);
 }
 
-/*!
+/**
   Close tray on CD-ROM.
 
   @param psz_device the CD-ROM drive to be closed.
@@ -865,7 +865,7 @@ static cdio_funcs_t _funcs = {
 };
 #endif /*HAVE_NETBSD_CDROM*/
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
@@ -921,7 +921,7 @@ cdio_open_netbsd(const char *source_name)
 
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.

@@ -226,7 +226,7 @@ check_mounts_linux(const char *mtab)
   return NULL;
 }
 
-/*!
+/**
   Get the volume of an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -240,7 +240,7 @@ audio_get_volume_linux (void *p_user_data,
   return ioctl(p_env->gen.fd, CDROMVOLREAD, p_volume);
 }
 
-/*!
+/**
   Pause playing CD through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -253,7 +253,7 @@ audio_pause_linux (void *p_user_data)
   return ioctl(p_env->gen.fd, CDROMPAUSE);
 }
 
-/*!
+/**
   Playing starting at given MSF through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -276,7 +276,7 @@ audio_play_msf_linux (void *p_user_data, msf_t *p_start_msf, msf_t *p_end_msf)
   return ioctl(p_env->gen.fd, CDROMPLAYMSF, &cdrom_msf);
 }
 
-/*!
+/**
   Playing CD through analog output at the desired track and index
 
   @param p_cdio the CD object to be acted upon.
@@ -291,7 +291,7 @@ audio_play_track_index_linux (void *p_user_data,
   return ioctl(p_env->gen.fd, CDROMPLAYTRKIND, p_track_index);
 }
 
-/*!
+/**
   Read Audio Subchannel information
 
   @param p_user_data the CD object to be acted upon.
@@ -334,7 +334,7 @@ audio_read_subchannel_linux (void *p_user_data,
   }
 }
 
-/*!
+/**
   Resume playing an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -347,7 +347,7 @@ audio_resume_linux (void *p_user_data)
   return ioctl(p_env->gen.fd, CDROMRESUME, 0);
 }
 
-/*!
+/**
   Set the volume of an audio CD.
 
   @param p_user_data the CD object to be acted upon.
@@ -360,7 +360,7 @@ audio_set_volume_linux (void *p_user_data, cdio_audio_volume_t *p_volume)
   return ioctl(p_env->gen.fd, CDROMVOLCTRL, p_volume);
 }
 
-/*!
+/**
   Stop playing an audio CD.
 
   @param p_user_data the CD object to be acted upon.
@@ -373,7 +373,7 @@ audio_stop_linux (void *p_user_data)
   return ioctl(p_env->gen.fd, CDROMSTOP);
 }
 
-/*!
+/**
   Release and free resources associated with cd for linux driver.
  */
 static void
@@ -397,7 +397,7 @@ is_mmc_supported(void *user_data)
     return (_AM_NONE == env->access_mode) ? false : true;
 }
 
-/*!
+/**
   Return the value associated with the key "arg".
 */
 static const char *
@@ -432,7 +432,7 @@ get_arg_linux (void *env, const char key[])
 
 #undef USE_LINUX_CAP
 #ifdef USE_LINUX_CAP
-/*!
+/**
   Return the the kind of drive capabilities of device.
 
   Note: string is malloc'd so caller should free() then returned
@@ -499,7 +499,7 @@ get_drive_cap_linux (const void *p_user_data,
 }
 #endif
 
-/*! Get the LSN of the first track of the last session of
+/** Get the LSN of the first track of the last session of
   on the CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -526,7 +526,7 @@ get_last_session_linux (void *p_user_data,
 
 
 
-/*!
+/**
   Find out if media has changed since the last call.
   @param p_user_data the environment object to be acted upon.
   @return 1 if media has changed since last call, 0 if not. Error
@@ -550,7 +550,7 @@ get_media_changed_linux (const void *p_user_data) {
 #endif
 }
 
-/*!
+/**
   Return the media catalog number MCN.
 
   Note: string is malloc'd so caller should free() then returned
@@ -568,7 +568,7 @@ get_mcn_linux (const void *p_user_data) {
   return strdup((char *)mcn.medium_catalog_number);
 }
 
-/*!
+/**
   Return the international standard recording code ISRC.
 
   Note: string is malloc'd so caller should free() then returned
@@ -582,7 +582,7 @@ get_track_isrc_linux (const void *p_user_data, track_t i_track) {
   return mmc_get_track_isrc( p_env->gen.cdio, i_track );
 }
 
-/*!
+/**
   Get format of track.
 */
 static track_format_t
@@ -615,7 +615,7 @@ get_track_format_linux(void *p_user_data, track_t i_track)
 
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -642,7 +642,7 @@ get_track_green_linux(void *p_user_data, track_t i_track)
   return ((p_env->tocent[i_track].cdte_ctrl & 2) != 0);
 }
 
-/*!
+/**
   Return the starting MSF (minutes/secs/frames) for track number
   track_num in obj.  Track numbers usually start at something
   greater than 0, usually 1.
@@ -679,7 +679,7 @@ get_track_msf_linux(void *p_user_data, track_t i_track, msf_t *msf)
 }
 
 
-/*!
+/**
   Check, if a device is mounted and return the target (=mountpoint)
   needed for umounting (idea taken from libunieject).
  */
@@ -724,7 +724,7 @@ static int is_mounted (const char * device, char * target) {
   return 0;
 }
 
-/*!
+/**
   Umount a filesystem specified by it's mountpoint. We must do this
   by forking and calling the umount command, because the raw umount
   (or umount2) system calls will *always* trigger an EPERM even if
@@ -759,7 +759,7 @@ static int do_umount(char * target) {
 }
 
 
-/*!
+/**
   Eject media in CD-ROM drive. Return DRIVER_OP_SUCCESS if successful,
   DRIVER_OP_ERROR on error.
  */
@@ -836,7 +836,7 @@ eject_media_linux (void *p_user_data) {
   return ret;
 }
 
-/*!
+/**
   Get disc type associated with cd object.
 */
 static discmode_t
@@ -865,7 +865,7 @@ dvd_discmode_linux (_img_private_t *p_env)
   return discmode;
 }
 
-/*!
+/**
   Get disc type associated with the cd object.
 */
 static discmode_t
@@ -1033,7 +1033,7 @@ _read_mode2_sectors (_img_private_t *p_env, void *p_buf, lba_t lba,
   return retval;
 }
 
-/*!
+/**
    Reads a single mode1 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -1044,7 +1044,7 @@ _read_mode1_sector_linux (void *p_user_data, void *p_data, lsn_t lsn,
   return cdio_generic_read_form1_sector(p_user_data, p_data, lsn);
 }
 
-/*!
+/**
    Reads i_blocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -1067,7 +1067,7 @@ _read_mode1_sectors_linux (void *p_user_data, void *p_data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -1136,7 +1136,7 @@ _read_mode2_sector_linux (void *p_user_data, void *p_data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads i_blocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -1160,7 +1160,7 @@ _read_mode2_sectors_linux (void *p_user_data, void *data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
   Read and cache the CD's Track Table of Contents and track info.
   Return false if successful or true if an error.
 */
@@ -1239,7 +1239,7 @@ read_toc_linux (void *p_user_data)
   return true;
 }
 
-/*!
+/**
   Run a SCSI MMC command.
 
   cdio          CD structure set by cdio_open().
@@ -1328,7 +1328,7 @@ run_mmc_cmd_linux(void *p_user_data,
   }
 }
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
    @return the lsn. On error return CDIO_INVALID_LSN.
 
@@ -1367,7 +1367,7 @@ get_disc_last_lsn_linux (void *p_user_data)
   return i_size;
 }
 
-/*!
+/**
   Set the arg "key" with "value" in the source device.
   Currently "source" and "access-mode" are valid keys.
   "source" sets the source device in I/O operations
@@ -1429,7 +1429,7 @@ set_speed_linux (void *p_user_data, int i_drive_speed)
 
 #endif /* HAVE_LINUX_CDROM */
 
-/*!
+/**
   Return an array of strings giving possible CD devices.
  */
 char **
@@ -1484,7 +1484,7 @@ cdio_get_devices_linux (void)
 #endif /*HAVE_LINUX_CDROM*/
 }
 
-/*!
+/**
   Return a string containing the default CD device.
  */
 char *
@@ -1533,7 +1533,7 @@ cdio_get_default_device_linux(void)
 #endif /*HAVE_LINUX_CDROM*/
 }
 
-/*!
+/**
   Close tray on CD-ROM.
 
   @param psz_device the CD-ROM drive to be closed.
@@ -1580,7 +1580,7 @@ close_tray_linux (const char *psz_device)
 }
 
 #ifdef HAVE_LINUX_CDROM
-/*!
+/**
   Produce a text composed from the system SCSI address tuple according to
   habits of Linux 2.4 and 2.6 :  "Bus,Host,Channel,Target,Lun" and store
   it in generic_img_private_t.scsi_tuple.
@@ -1652,7 +1652,7 @@ no_tuple:;
 }
 #endif
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
@@ -1667,7 +1667,7 @@ cdio_open_linux (const char *psz_source_name)
 #endif /*HAVE_LINUX_CDROM*/
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.

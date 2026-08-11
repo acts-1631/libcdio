@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*!
+/**
    \file rock.h
    \brief Things related to the Rock Ridge Interchange Protocol (RRIP)
 
@@ -35,7 +35,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/*! An enumeration for some of the ISO_ROCK_* \#defines below. This isn't
+/** An enumeration for some of the ISO_ROCK_* \#defines below. This isn't
   really an enumeration one would really use in a program it is to
   be helpful in debuggers where wants just to refer to the ISO_ROCK_*
   names and get something.
@@ -91,18 +91,18 @@ extern enum iso_rock_enums {
 
 PRAGMA_BEGIN_PACKED
 
-/*! The next two structs are used by the system-use-sharing protocol
+/** The next two structs are used by the system-use-sharing protocol
    (SUSP), in which the Rock Ridge extensions are embedded.  It is
    quite possible that other extensions are present on the disk, and
    this is fine as long as they all use SUSP. */
 
-/*! system-use-sharing protocol */
+/** system-use-sharing protocol */
 typedef struct iso_su_sp_s{
   uint8_t       magic[2];
   uint8_t       skip;
 } GNUC_PACKED iso_su_sp_t;
 
-/*! system-use extension record */
+/** system-use extension record */
 typedef struct iso_su_er_s {
   iso711_t      len_id;  /**< Identifier length. Value 10?. */
   uint8_t       len_des;
@@ -117,19 +117,19 @@ typedef struct iso_su_ce_s {
   iso733_t      size;
 } GNUC_PACKED iso_su_ce_t;
 
-/*! POSIX file attributes, PX. See Rock Ridge Section 4.1.2 */
+/** POSIX file attributes, PX. See Rock Ridge Section 4.1.2 */
 typedef struct iso_rock_px_s {
-  iso733_t st_mode;       /*! file mode permissions; same as st_mode
+  iso733_t st_mode;       /** file mode permissions; same as st_mode
                             of POSIX:5.6.1 */
-  iso733_t st_nlinks;     /*! number of links to file; same as st_nlinks
+  iso733_t st_nlinks;     /** number of links to file; same as st_nlinks
                             of POSIX:5.6.1 */
-  iso733_t st_uid;        /*! user id owner of file; same as st_uid
+  iso733_t st_uid;        /** user id owner of file; same as st_uid
                             of POSIX:5.6.1 */
-  iso733_t st_gid;        /*! group id of file; same as st_gid of
+  iso733_t st_gid;        /** group id of file; same as st_gid of
                             of POSIX:5.6.1 */
 } GNUC_PACKED iso_rock_px_t ;
 
-/*! POSIX device number, PN. A PN is mandatory if the file type
+/** POSIX device number, PN. A PN is mandatory if the file type
   recorded in the "PX" File Mode field for a Directory Record
   indicates a character or block device (ISO_ROCK_ISCHR |
   ISO_ROCK_ISBLK).  This entry is ignored for other (non-Direcotry)
@@ -144,7 +144,7 @@ typedef struct iso_rock_pn_s {
                             7.2.3 encoded */
 } GNUC_PACKED iso_rock_pn_t ;
 
-/*! These are the bits and their meanings for flags in the SL structure. */
+/** These are the bits and their meanings for flags in the SL structure. */
 typedef enum {
   ISO_ROCK_SL_CONTINUE = 1,
   ISO_ROCK_SL_CURRENT  = 2,
@@ -163,15 +163,15 @@ typedef struct iso_rock_sl_part_s {
   char text[EMPTY_ARRAY_SIZE];
 } GNUC_PACKED iso_rock_sl_part_t ;
 
-/*! Symbolic link. See Rock Ridge Section 4.1.3 */
+/** Symbolic link. See Rock Ridge Section 4.1.3 */
 typedef struct iso_rock_sl_s {
   uint8_t flags;
   iso_rock_sl_part_t link;
 } GNUC_PACKED iso_rock_sl_t ;
 
-/*! Alternate name. See Rock Ridge Section 4.1.4 */
+/** Alternate name. See Rock Ridge Section 4.1.4 */
 
-/*! These are the bits and their meanings for flags in the NM structure. */
+/** These are the bits and their meanings for flags in the NM structure. */
 typedef enum {
   ISO_ROCK_NM_CONTINUE = 1,
   ISO_ROCK_NM_CURRENT  = 2,
@@ -188,17 +188,17 @@ typedef struct iso_rock_nm_s {
   char name[EMPTY_ARRAY_SIZE];
 } GNUC_PACKED iso_rock_nm_t ;
 
-/*! Child link. See Section 4.1.5.1 */
+/** Child link. See Section 4.1.5.1 */
 typedef struct iso_rock_cl_s {
   iso733_t location;
 } GNUC_PACKED iso_rock_cl_t ;
 
-/*! Parent link. See Section 4.1.5.2 */
+/** Parent link. See Section 4.1.5.2 */
 typedef struct iso_rock_pl_s {
   iso733_t location;
 } GNUC_PACKED iso_rock_pl_t ;
 
-/*! These are the bits and their meanings for flags in the TF structure. */
+/** These are the bits and their meanings for flags in the TF structure. */
 typedef enum {
   ISO_ROCK_TF_CREATE     =  1,
   ISO_ROCK_TF_MODIFY     =  2,
@@ -220,7 +220,7 @@ typedef enum {
 #define ISO_ROCK_TF_EFFECTIVE  64
 #define ISO_ROCK_TF_LONG_FORM 128
 
-/*! Time stamp(s) for a file. See Rock Ridge Section 4.1.6 */
+/** Time stamp(s) for a file. See Rock Ridge Section 4.1.6 */
 typedef struct iso_rock_tf_s {
   uint8_t flags; /**< See ISO_ROCK_TF_* bits above. */
   uint8_t time_bytes[EMPTY_ARRAY_SIZE]; /**< A homogeneous array of
@@ -236,7 +236,7 @@ typedef struct iso_rock_tf_s {
                                            extraction.  */
 } GNUC_PACKED iso_rock_tf_t ;
 
-/*! File data in sparse format. See Rock Ridge Section 4.1.7 */
+/** File data in sparse format. See Rock Ridge Section 4.1.7 */
 typedef struct iso_rock_sf_s {
   iso733_t virtual_size_high; /**< high-order 32 bits of virtual size */
   iso733_t virtual_size_low;  /**< low-order 32 bits of virtual size */
@@ -335,7 +335,7 @@ typedef struct iso_rock_statbuf_s {
 
 PRAGMA_END_PACKED
 
-/*! return length of name field; 0: not found, -1: to be ignored */
+/** return length of name field; 0: not found, -1: to be ignored */
 int get_rock_ridge_filename(iso9660_dir_t * de,
                             /*in*/ void * p_iso,
                             /*out*/ char * retname,
@@ -344,13 +344,13 @@ int get_rock_ridge_filename(iso9660_dir_t * de,
 int parse_rock_ridge_stat(iso9660_dir_t *de,
                           /*out*/ iso9660_stat_t *p_stat);
 
-  /*!
+  /**
     Returns POSIX mode bitstring for a given file.
   */
   mode_t
   iso9660_get_posix_filemode_from_rock(const iso_rock_statbuf_t *rr);
 
-/*!
+/**
   Returns a string which interpreting the POSIX mode st_mode.
   For example:
   \verbatim

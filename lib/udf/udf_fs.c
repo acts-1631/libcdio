@@ -332,7 +332,7 @@ udf_new_dirent(udf_file_entry_t *p_udf_fe, udf_t *p_udf,
   return p_udf_dirent;
 }
 
-/*!
+/**
   Seek to a position i_start and then read i_blocks. Number of blocks read is
   returned. One normally expects the return to be equal to i_blocks.
 */
@@ -366,7 +366,7 @@ udf_read_sectors (const udf_t *p_udf, void *ptr, lsn_t i_start,
   }
 }
 
-/*!
+/**
   Open an UDF for reading. Maybe in the future we will have
   a mode. NULL is returned on error.
 
@@ -555,7 +555,7 @@ udf_get_logical_volume_id(udf_t *p_udf, /*out*/ char *psz_logvolid, unsigned int
   return logvolid_len;
 }
 
-/*!
+/**
   Get the root in p_udf. If b_any_partition is false then
   the root must be in the given partition.
   NULL is returned if the partition is not found or a root is not found or
@@ -645,7 +645,7 @@ udf_get_root (udf_t *p_udf, bool b_any_partition, partition_num_t i_partition)
   CDIO_FREE_IF_NOT_NULL(x); \
   x=NULL
 
-/*!
+/**
   Close UDF and free resources associated with p_udf.
 */
 bool
@@ -837,7 +837,7 @@ udf_readdir(udf_dirent_t *p_udf_dirent)
   return NULL;
 }
 
-/*!
+/**
   free free resources associated with p_udf_dirent.
 */
 bool

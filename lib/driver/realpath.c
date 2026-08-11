@@ -1,7 +1,7 @@
 /*
   Copyright (C) 2010, 2011
   Rocky Bernstein <rocky@gnu.org>
-  Diego 'Flameeyes' Pettenò 
+  Diego 'Flameeyes' Pettenò
   Thomas Schmitt
 
   This program is free software: you can redistribute it and/or modify
@@ -66,7 +66,7 @@
 
 #include <cdio/util.h>
 
-/*!  cdio_realpath() same as POSIX.1-2001 realpath if that's
+/**  cdio_realpath() same as POSIX.1-2001 realpath if that's
 around. If not we do poor-man's simulation of that behavior.  */
 char *cdio_realpath (const char *psz_src_path, char *psz_resolved_path) {
 
@@ -82,10 +82,10 @@ char *cdio_realpath (const char *psz_src_path, char *psz_resolved_path) {
 
   strcpy(tmp_src, psz_src_path);
 
-  /* FIXME: 
-     remove loop and change with stat before and after readlink 
+  /* FIXME:
+     remove loop and change with stat before and after readlink
      which looks direct symlink. Rely on errno to figure out other
-     non-existent or looped symlinks. 
+     non-existent or looped symlinks.
   */
   for(i = 0; i < loop_limit; i++) {
     len = readlink(tmp_src, tmp_dst, PATH_MAX);
@@ -117,7 +117,7 @@ char *cdio_realpath (const char *psz_src_path, char *psz_resolved_path) {
 #endif
 
   return psz_resolved_path;
-  
+
 }
 
 #ifdef STANDALONE

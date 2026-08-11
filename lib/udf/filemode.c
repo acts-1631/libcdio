@@ -145,7 +145,7 @@ ftypelet (mode_t bits)
   return '?';
 }
 
-/*! udf_mode_string - fill in string STR with an ls-style ASCII
+/** udf_mode_string - fill in string STR with an ls-style ASCII
    representation of the st_mode field of file stats block STATP.
    10 characters are stored in STR; no terminating null is added.
    The characters stored in STR are:

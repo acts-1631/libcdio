@@ -78,7 +78,7 @@ uint32_t mmc_timeout_ms = MMC_TIMEOUT_DEFAULT;
 */
 uint32_t mmc_read_timeout_ms = MMC_READ_TIMEOUT_DEFAULT;
 
-/*!
+/**
   Return a string containing the name of the audio state as returned from
   the Q_SUBCHANNEL.
  */

@@ -42,7 +42,7 @@
  * SUCH DAMAGE.
  */
 
-/*!
+/**
  * \file ecma_167.h
  *
  * \brief Definitions based on ECMA-167 3rd edition (June 1997)
@@ -106,11 +106,11 @@ typedef enum {
   CHARSPEC_TYPE_CS8 = 0x08,     /**< Section 1/7.2.10 */
 } udf_charspec_enum_t;
 
-typedef uint8_t  udf_Uint8_t;  /*! Section 1/7/1.1 */
-typedef uint16_t udf_Uint16_t; /*! Section 1/7.1.3 */
-typedef uint32_t udf_Uint32_t; /*! Section 1/7.1.5 */
-typedef uint64_t udf_Uint64_t; /*! Section 1/7.1.7 */
-typedef char     udf_dstring;  /*! Section 1/7.1.12 */
+typedef uint8_t  udf_Uint8_t;  /** Section 1/7/1.1 */
+typedef uint16_t udf_Uint16_t; /** Section 1/7.1.3 */
+typedef uint32_t udf_Uint32_t; /** Section 1/7.1.5 */
+typedef uint64_t udf_Uint64_t; /** Section 1/7.1.7 */
+typedef char     udf_dstring;  /** Section 1/7.1.12 */
 
 #define UDF_LENGTH_MASK 0x3fffffff
 

@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*! Common image routines.
+/** Common image routines.
 
   Because _img_private_t may vary over image formats, the routines are
   included into the image drivers after _img_private_t is defined.  In
@@ -38,7 +38,7 @@
 #include <string.h>
 #endif
 
-/*!
+/**
   Eject media -- there's nothing to do here except free resources.
   We always return DRIVER_OP_UNSUPPORTED.
  */
@@ -49,7 +49,7 @@ _eject_media_image(void *p_user_data)
   return DRIVER_OP_UNSUPPORTED;
 }
 
-/*!
+/**
   We don't need the image any more. Free all memory associated with
   it.
  */
@@ -76,7 +76,7 @@ _free_image (void *p_user_data)
   free(p_env);
 }
 
-/*!
+/**
   Return the value associated with the key "arg".
 */
 const char *
@@ -107,7 +107,7 @@ _get_arg_image (void *user_data, const char key[])
   return NULL;
 }
 
-/*!
+/**
   Return CD-Text object
  */
 cdtext_t *
@@ -121,7 +121,7 @@ _get_cdtext_image (void *user_data)
   return p_env->cdtext;
 }
 
-/*!
+/**
   Get disc type associated with cd_obj.
 */
 discmode_t
@@ -131,7 +131,7 @@ _get_discmode_image (void *p_user_data)
   return p_env->disc_mode;
 }
 
-/*!
+/**
   Return the the kind of drive capabilities of device.
 
  */
@@ -160,7 +160,7 @@ _get_drive_cap_image (const void *user_data,
   *p_misc_cap  = CDIO_DRIVE_CAP_MISC_FILE;
 }
 
-/*!
+/**
   Return the number of of the first track.
   CDIO_INVALID_TRACK is returned on error.
 */
@@ -175,7 +175,7 @@ _get_first_track_num_image(void *p_user_data)
   return p_env->gen.toc_init ? p_env->gen.i_first_track : CDIO_INVALID_TRACK;
 }
 
-/*!
+/**
   Find out if media has changed since the last call.
   @param p_user_data the CD object to be acted upon.
   @return 1 if media has changed since last call, 0 if not. Error
@@ -189,7 +189,7 @@ get_media_changed_image(const void *p_user_data)
   return 0;
 }
 
-/*!
+/**
   Return the media catalog number (MCN) from the CD or NULL if there
   is none or we don't have the ability to get it.
 
@@ -205,7 +205,7 @@ _get_mcn_image(const void *p_user_data)
   return strdup(p_env->psz_mcn);
 }
 
-/*!
+/**
   Return the number of tracks.
 */
 track_t
@@ -216,7 +216,7 @@ _get_num_tracks_image(void *p_user_data)
   return p_env->gen.i_tracks;
 }
 
-/*!
+/**
   Return the starting MSF (minutes/secs/frames) for the track number
   track_num in obj.  Tracks numbers start at 1.
   The "leadout" track is specified either by
@@ -241,7 +241,7 @@ _get_track_msf_image(void *p_user_data, track_t i_track, msf_t *msf)
     return false;
 }
 
-/*! Return number of channels in track: 2 or 4; -2 if not
+/** Return number of channels in track: 2 or 4; -2 if not
   implemented or -1 for error.
   Not meaningful if track is not an audio track.
 */
@@ -253,7 +253,7 @@ get_track_channels_image(const void *p_user_data, track_t i_track)
 	  & FOUR_CHANNEL_AUDIO ) ? 4 : 2;
 }
 
-/*! Return 1 if copy is permitted on the track, 0 if not, or -1 for error.
+/** Return 1 if copy is permitted on the track, 0 if not, or -1 for error.
   Is this meaningful if not an audio track?
 */
 track_flag_t
@@ -264,7 +264,7 @@ get_track_copy_permit_image(void *p_user_data, track_t i_track)
 	   & COPY_PERMITTED ) ? CDIO_TRACK_FLAG_TRUE : CDIO_TRACK_FLAG_FALSE;
 }
 
-/*! Return 1 if track has pre-emphasis, 0 if not, or -1 for error.
+/** Return 1 if track has pre-emphasis, 0 if not, or -1 for error.
   Is this meaningful if not an audio track?
 
   pre-emphasis is a non linear frequency response.
@@ -277,7 +277,7 @@ get_track_preemphasis_image(const void *p_user_data, track_t i_track)
 	   & PRE_EMPHASIS ) ? CDIO_TRACK_FLAG_TRUE : CDIO_TRACK_FLAG_FALSE;
 }
 
-/*! Return the starting LBA for the pregap for track number i_track.
+/** Return the starting LBA for the pregap for track number i_track.
   Track numbers start at 1.
   CDIO_INVALID_LBA is returned on error.
 */
@@ -301,7 +301,7 @@ get_track_pregap_lba_image(const void *p_user_data, track_t i_track)
   return pregap;
 }
 
-/*!
+/**
   Return the International Standard Recording Code (ISRC) for track number
   i_track in p_cdio.  Track numbers start at 1.
 
@@ -321,7 +321,7 @@ get_track_isrc_image(const void *p_user_data, track_t i_track)
   }
 }
 
-/*!
+/**
   Read a data sector
 
   @param p_cdio object to read from
@@ -368,7 +368,7 @@ read_data_sectors_image ( void *p_user_data, void *p_buf,
 }
 
 
-/*!
+/**
   Set the arg "key" with "value" in the source device.
   Currently "source" to set the source device in I/O operations
   is the only valid key.

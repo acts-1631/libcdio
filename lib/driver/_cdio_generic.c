@@ -65,7 +65,7 @@
 #define CDIO_LSEEK lseek
 #endif
 
-/*!
+/**
   Eject media -- there's nothing to do here. We always return -2.
   Should we also free resources?
  */
@@ -75,7 +75,7 @@ cdio_generic_unimplemented_eject_media (void *p_user_data) {
   return DRIVER_OP_UNSUPPORTED;
 }
 
-/*!
+/**
   Set the blocksize for subsequent reads.
 */
 driver_return_code_t
@@ -85,7 +85,7 @@ cdio_generic_unimplemented_set_blocksize (void *p_user_data,
   return DRIVER_OP_UNSUPPORTED;
 }
 
-/*!
+/**
   Set the drive speed.
 */
 driver_return_code_t
@@ -95,7 +95,7 @@ cdio_generic_unimplemented_set_speed (void *p_user_data, int i_speed) {
 }
 
 
-/*!
+/**
   Release and free resources associated with cd.
  */
 void
@@ -120,7 +120,7 @@ cdio_generic_free (void *p_user_data)
   free (p_env);
 }
 
-/*!
+/**
   Initialize CD device.
  */
 bool
@@ -149,7 +149,7 @@ cdio_generic_init (void *user_data, int open_flags)
   return true;
 }
 
-/*!
+/**
    Reads a single form1 sector from cd device into data starting
    from lsn.
  */
@@ -161,7 +161,7 @@ cdio_generic_read_form1_sector (void * user_data, void *data, lsn_t lsn)
   return cdio_generic_read(user_data, data, CDIO_CD_FRAMESIZE);
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   Is in fact libc's lseek()/lseek64().
@@ -173,7 +173,7 @@ cdio_generic_lseek (void *user_data, off_t offset, int whence)
   return CDIO_LSEEK(p_env->fd, offset, whence);
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   Is in fact libc's read().
@@ -185,7 +185,7 @@ cdio_generic_read (void *user_data, void *buf, size_t size)
   return read(p_env->fd, buf, size);
 }
 
-/*!
+/**
   Release and free resources associated with stream or disk image.
 */
 void
@@ -202,7 +202,7 @@ cdio_generic_stdio_free (void *p_user_data)
 }
 
 
-/*!
+/**
   Return true if source_name could be a device containing a CD-ROM.
 */
 bool
@@ -217,7 +217,7 @@ cdio_is_device_generic(const char *source_name)
   return (S_ISBLK(buf.st_mode) || S_ISCHR(buf.st_mode));
 }
 
-/*!
+/**
   Like above, but don't give a warning device doesn't exist.
 */
 bool
@@ -230,7 +230,7 @@ cdio_is_device_quiet_generic(const char *source_name)
   return (S_ISBLK(buf.st_mode) || S_ISCHR(buf.st_mode));
 }
 
-/*!
+/**
   Add/allocate a drive to the end of drives.
   Use cdio_free_device_list() to free this device_list.
 */
@@ -311,7 +311,7 @@ get_cdtext_generic (void *p_user_data)
   return p_env->cdtext;
 }
 
-/*!
+/**
   Get disc type associated with cd object.
 */
 discmode_t
@@ -346,7 +346,7 @@ get_discmode_generic (void *p_user_data )
   return get_discmode_cd_generic(p_user_data);
 }
 
-/*!
+/**
   Get disc type associated with cd object.
 */
 discmode_t
@@ -420,7 +420,7 @@ get_discmode_cd_generic (void *p_user_data )
   return discmode;
 }
 
-/*!
+/**
   Return the number of of the first track.
   CDIO_INVALID_TRACK is returned on error.
 */
@@ -436,7 +436,7 @@ get_first_track_num_generic(void *p_user_data)
 }
 
 
-/*!
+/**
   Return the number of tracks in the current medium.
 */
 track_t
@@ -451,7 +451,7 @@ get_num_tracks_generic(void *p_user_data)
 }
 
 
-/*!
+/**
   Read CD-Text information for a CdIo_t object .
 
   return pointer to raw cdtext on success,
@@ -465,7 +465,7 @@ read_cdtext_generic(void *p_env)
   return mmc_read_cdtext ( p_user_data->cdio );
 }
 
-/*! Return number of channels in track: 2 or 4; -2 if not
+/** Return number of channels in track: 2 or 4; -2 if not
   implemented or -1 for error.
   Not meaningful if track is not an audio track.
 */
@@ -476,7 +476,7 @@ get_track_channels_generic(const void *p_user_data, track_t i_track)
   return p_env->track_flags[i_track].channels;
 }
 
-/*! Return 1 if copy is permitted on the track, 0 if not, or -1 for error.
+/** Return 1 if copy is permitted on the track, 0 if not, or -1 for error.
   Is this meaningful if not an audio track?
 */
 track_flag_t
@@ -486,7 +486,7 @@ get_track_copy_permit_generic(void *p_user_data, track_t i_track)
   return p_env->track_flags[i_track].copy_permit;
 }
 
-/*! Return 1 if track has pre-emphasis, 0 if not, or -1 for error.
+/** Return 1 if track has pre-emphasis, 0 if not, or -1 for error.
   Is this meaningful if not an audio track?
 
   pre-emphasis is a non linear frequency response.
@@ -498,7 +498,7 @@ get_track_preemphasis_generic(const void *p_user_data, track_t i_track)
   return p_env->track_flags[i_track].preemphasis;
 }
 
-/*!
+/**
   Return the underlying device file descriptor.
  */
 int

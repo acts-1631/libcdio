@@ -148,7 +148,7 @@ typedef struct _SCSI_PASS_THROUGH_WITH_BUFFERS {
 
 #define OP_TIMEOUT_MS 60
 
-/*!
+/**
   Pause playing CD through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -170,7 +170,7 @@ audio_pause_win32ioctl (void *p_user_data)
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
   Playing starting at given MSF through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -204,7 +204,7 @@ audio_play_msf_win32ioctl (void *p_user_data, msf_t *p_start_msf,
 
 }
 
-/*!
+/**
   Read Audio Subchannel information
 
   @param p_cdio the CD object to be acted upon.

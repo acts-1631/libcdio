@@ -55,14 +55,14 @@ typedef struct {
 
 } _img_private_t;
 
-/*!
+/**
   Pause playing CD through analog output
 
   @param p_cdio the CD object to be acted upon.
 */
 driver_return_code_t audio_pause_win32ioctl (void *p_user_data);
 
-/*!
+/**
   Playing starting at given MSF through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -70,7 +70,7 @@ driver_return_code_t audio_pause_win32ioctl (void *p_user_data);
 driver_return_code_t audio_play_msf_win32ioctl (void *p_user_data,
 						msf_t *p_start_msf,
 						msf_t *p_end_msf);
-/*!
+/**
   Resume playing an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -78,12 +78,12 @@ driver_return_code_t audio_play_msf_win32ioctl (void *p_user_data,
 */
 driver_return_code_t audio_resume_win32ioctl (void *p_user_data);
 
-/*!
+/**
   Get disc type associated with cd object.
 */
 discmode_t get_discmode_win32ioctl (_img_private_t *p_env);
 
-/*!
+/**
   Get the volume settings of an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -93,7 +93,7 @@ driver_return_code_t
 audio_get_volume_win32ioctl ( void *p_user_data,
 			      /*out*/ cdio_audio_volume_t *p_volume);
 
-/*!
+/**
   Read Audio Subchannel information
 
   @param p_cdio the CD object to be acted upon.
@@ -103,7 +103,7 @@ driver_return_code_t
 audio_read_subchannel_win32ioctl (void *p_user_data,
 				  cdio_subchannel_t *p_subchannel);
 
-/*!
+/**
   Set the volume of an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -112,7 +112,7 @@ audio_read_subchannel_win32ioctl (void *p_user_data,
 driver_return_code_t
 audio_stop_win32ioctl ( void *p_user_data );
 
-/*!
+/**
   Set the volume of an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -122,7 +122,7 @@ driver_return_code_t
 audio_set_volume_win32ioctl ( void *p_user_data,
 			      cdio_audio_volume_t *p_volume);
 
-/*!
+/**
   Close the tray of a CD-ROM
 
   @param p_user_data the CD object to be acted upon.
@@ -130,20 +130,20 @@ audio_set_volume_win32ioctl ( void *p_user_data,
 */
 driver_return_code_t close_tray_win32ioctl (const char *psz_win32_drive);
 
-/*!
+/**
    Reads an audio device using the DeviceIoControl method into data
    starting from lsn.  Returns 0 if no error.
 */
 driver_return_code_t read_audio_sectors_win32ioctl (_img_private_t *p_obj,
 				  void *p_data, lsn_t lsn, unsigned int nblocks);
-/*!
+/**
    Reads a single mode2 sector using the DeviceIoControl method into
    data starting from lsn. Returns 0 if no error.
  */
 int read_mode2_sector_win32ioctl (_img_private_t *p_env, void *p_data,
 				  lsn_t lsn, bool b_form2);
 
-/*!
+/**
    Reads a single mode1 sector using the DeviceIoControl method into
    data starting from lsn. Returns 0 if no error.
  */
@@ -152,7 +152,7 @@ int read_mode1_sector_win32ioctl (_img_private_t *p_env, void *p_data,
 
 const char *is_cdrom_win32ioctl (const char drive_letter);
 
-/*!
+/**
   Run a SCSI MMC command.
 
   env	        private CD structure
@@ -174,18 +174,18 @@ int run_mmc_cmd_win32ioctl( void *p_user_data,
 			    cdio_mmc_direction_t e_direction,
 			    unsigned int i_buf, /*in/out*/ void *p_buf );
 
-/*!
+/**
   Initialize internal structures for CD device.
  */
 bool init_win32ioctl (_img_private_t *p_env);
 
-/*!
+/**
   Read and cache the CD's Track Table of Contents and track info.
   Return true if successful or false if an error.
 */
 bool read_toc_win32ioctl (_img_private_t *p_env);
 
-/*!
+/**
   Get the LSN of the first track of the last session of
   on the CD.
  */
@@ -193,17 +193,17 @@ driver_return_code_t
 get_last_session_win32ioctl (void *p_user_data,
                              /*out*/ lsn_t *i_last_session);
 
-/*!
+/**
   Read CD-Text binary data.
  */
 uint8_t *read_cdtext_win32ioctl (void *p_user_data);
 
-/*!
+/**
   Read CD-Text and return cdtext_t structure.
  */
 cdtext_t *get_cdtext_win32ioctl (void *p_user_data);
 
-/*!
+/**
   Return the media catalog number MCN.
 
   Note: string is malloc'd so caller should free() then returned
@@ -212,7 +212,7 @@ cdtext_t *get_cdtext_win32ioctl (void *p_user_data);
  */
 char *get_mcn_win32ioctl (const _img_private_t *p_env);
 
-/*!
+/**
   Return the international standard recording code ISRC.
 
   Note: string is malloc'd so caller should free() then returned
@@ -222,7 +222,7 @@ char *get_mcn_win32ioctl (const _img_private_t *p_env);
 char *get_track_isrc_win32ioctl (const _img_private_t *p_env,
 				 track_t i_track);
 
-/*!
+/**
   Return the the kind of drive capabilities of device.
 
   Note: string is malloc'd so caller should free() then returned
@@ -234,7 +234,7 @@ void get_drive_cap_aspi (const _img_private_t *p_env,
 			 cdio_drive_write_cap_t *p_write_cap,
 			 cdio_drive_misc_cap_t  *p_misc_cap);
 
-/*!
+/**
   Return the the kind of drive capabilities of device.
 
   Note: string is malloc'd so caller should free() then returned
@@ -246,7 +246,7 @@ void get_drive_cap_win32ioctl (const _img_private_t *p_env,
 			       cdio_drive_write_cap_t *p_write_cap,
 			       cdio_drive_misc_cap_t  *p_misc_cap);
 
-/*!
+/**
   Get the format (XA, DATA, AUDIO) of a track.
 */
 track_format_t get_track_format_win32ioctl(const _img_private_t *p_env,

@@ -25,12 +25,13 @@
    The documents we make use of are described in several
    specifications made by the SCSI committee T10
    http://www.t10.org. In particular, SCSI Primary Commands (SPC),
-   SCSI Block Commands (SBC), and Multi-Media Commands (MMC). These
-   documents generally have a numeric level number appended. For
-   example SPC-3 refers to ``SCSI Primary Commands - 3'.
+   SCSI Block Commands (SBC), and Multi-Media Commands (MMC).
 
-   In year 2010 the current versions were SPC-3, SBC-2, MMC-5.
+   We will use the MMC-6 draft 2g circa 2009 described in
+   https://www.13thmonkey.org/documentation/SCSI/mmc6r02g.pdf
 
+   For SPC-3, we use the draft found at:
+   https://www.13thmonkey.org/documentation/SCSI/spc3r23.pdf
 */
 
 #ifndef CDIO_MMC_H_
@@ -157,13 +158,13 @@ extern "C" {
   /**
       Group 2 Commands (CDB's here are 10-bytes)
   */
-  CDIO_MMC_GPCMD_READ_FORMAT_CAPACITIES = 0x23, /**< MMC-5 Section 6.24 */
-  CDIO_MMC_GPCMD_READ_CAPACITIY         = 0x25, /**< MMC-5 Section 6.19 */
+  CDIO_MMC_GPCMD_READ_FORMAT_CAPACITIES = 0x23, /**< MMC-6 Section 6.23 READ FORMAT CAPABILITIES Command */
+  CDIO_MMC_GPCMD_READ_CAPACITIY         = 0x25, /**< MMC-6 2g Section 6.18 READ CAPACITY Command */
   CDIO_MMC_GPCMD_READ_10                = 0x28, /**< Read data from drive
                                                    (10 bytes). */
   CDIO_MMC_GPCMD_WRITE_10               = 0x2a,
   CDIO_MMC_GPCMD_SEEK_10                = 0x2b,
-  CDIO_MMC_GPCMD_ERASE_10               = 0x2c, /**< MMC5 Section 6.4 */
+  CDIO_MMC_GPCMD_ERASE_10               = 0x2c, /**< MMC5 Section 6.4; Removed from MMC6 */
   CDIO_MMC_GPCMD_WRITE_AND_VERIFY_10    = 0x2e,
   CDIO_MMC_GPCMD_VERIFY_10              = 0x2f,
   CDIO_MMC_GPCMD_SYNCHRONIZE_CACHE      = 0x35,
@@ -237,7 +238,7 @@ extern "C" {
                                                    handled by Plextor drives.
                                                 */
   CDIO_MMC_GPCMD_WRITE_12               = 0xaa,
-  CDIO_MMC_GPCMD_READ_MEDIA_SERIAL_12   = 0xab, /**< MMC-5 Section 6.25 */
+  CDIO_MMC_GPCMD_READ_MEDIA_SERIAL_12   = 0xab, /**< MMC-6 2g Section 6.24 READ MEDIA SERIAL NUMBER Command */
   CDIO_MMC_GPCMD_GET_PERFORMANCE        = 0xac,
   CDIO_MMC_GPCMD_READ_DVD_STRUCTURE     = 0xad, /**< Get DVD structure info
                                                    from media (12 bytes). */
