@@ -11,7 +11,8 @@ Version 2.4.0
 * Fix no MMC data returned when buffer size is divisible by 256 (skr4n). Issue #58.
 * Deprecate obscure MMC set length macros (skr4n) PR #63.
 * In eject programs on GNU/Linux, cdio_open needs access mode RDWR.
-* Validate bounds in NRG images before accessing and fail when the NRG table is full. PR #631.
+* More ISO field validation in RockRidge (Acts1631). PR #78, #81.
+* Validate bounds in disk images reading (Acts1631). PRs #63, #79, #80.
 * Validate UDF File Identifier Descriptor bounds (Acts1631). PR #61
 * Change references from MMC-5 to MMC-6 Draft 2g when possible.
 * At URLS for MMC6 Draft 2g and SPC-3.
@@ -22,7 +23,7 @@ Version 2.4.0
   - Fix it to use the `*OTH` values instead.
 * Use thread locals in recursion check to allow multi-threaded use PR #52
 * Correct macOS workflows
-* Fix -Wdiscarded-qualifiers warnings (heitbaum) PR #48
+* Fix `-Wdiscarded-qualifiers` warnings (heitbaum) PR #48
 * Fix `udf_read_block` docs; count blocks, not bytes (RavuAlhemio). PR #45.
 * Go over grammar and spelling in docs.
 * Go over doxygen formatting. (More should be done though).

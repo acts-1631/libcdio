@@ -1,5 +1,5 @@
-acts1631
-  More bounds checking and field validation in UDF and NRG images
+Acts1631
+  More bounds checking and field validation in UDF and images readers (Nero, ISO9660, cdrdao)
 
 Adrian Reber
   Redhat Packaging
