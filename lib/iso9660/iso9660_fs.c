@@ -853,9 +853,16 @@ _iso9660_dir_to_statbuf (iso9660_dir_t *p_iso9660_dir,
   lsn_t extent_lsn;
   bool first_extent;
 
-  if (!dir_len) return NULL;
+  if (dir_len < sizeof(iso9660_dir_t)) return NULL;
 
   i_fname = from_711(p_iso9660_dir->filename.len);
+  {
+    unsigned int su_offset = sizeof(iso9660_dir_t) + i_fname;
+    if (su_offset & 1)
+      su_offset++;
+    if (su_offset > dir_len)
+      return NULL;
+  }
 
   /* .. string in statbuf is one longer than in p_iso9660_dir's listing '\1' */
   stat_len = sizeof(iso9660_stat_t) + i_fname + 2;
@@ -974,12 +981,6 @@ _iso9660_dir_to_statbuf (iso9660_dir_t *p_iso9660_dir,
   }
 
   iso9660_get_dtime(&(p_iso9660_dir->recording_time), true, &(p_stat->tm));
-
-  if (dir_len < sizeof(iso9660_dir_t)) {
-    iso9660_stat_free(p_stat);
-    return NULL;
-  }
-
 
   {
     int su_length = iso9660_get_dir_len(p_iso9660_dir)
