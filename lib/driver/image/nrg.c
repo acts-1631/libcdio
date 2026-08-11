@@ -186,17 +186,20 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 {
   off_t footer_start;
   off_t size;
+  size_t footer_len;
   char *footer_buf = NULL;
   if (!p_env) return false;
   size = cdio_stream_stat (p_env->gen.data_source);
-  if (-1 == size) return false;
+  if (size < (off_t) sizeof (_footer_t)) return false;
 
   {
     _footer_t buf;
     cdio_assert (sizeof (buf) == 12);
 
-    cdio_stream_seek (p_env->gen.data_source, size - sizeof (buf), SEEK_SET);
-    cdio_stream_read (p_env->gen.data_source, (void *) &buf, sizeof (buf), 1);
+    if (cdio_stream_seek (p_env->gen.data_source, size - sizeof (buf), SEEK_SET)
+        || cdio_stream_read (p_env->gen.data_source, (void *) &buf,
+                             sizeof (buf), 1) != sizeof (buf))
+      return false;
 
     if (buf.v50.ID == UINT32_TO_BE (NERO_ID)) {
       cdio_debug ("detected Nero version 5.0 (32-bit offsets) NRG magic");
@@ -210,25 +213,54 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
       return false;
     }
 
-    cdio_debug (".NRG footer start = %ld, length = %ld",
-	       (long) footer_start, (long) (size - footer_start));
+    if (footer_start < 0 || footer_start > size) {
+      cdio_log (log_level, "invalid NRG footer offset");
+      return false;
+    }
 
-    cdio_assert ((size - footer_start) <= 4096);
+    footer_len = (size_t) (size - footer_start);
+    cdio_debug (".NRG footer start = %ld, length = %lu",
+               (long) footer_start, (unsigned long) footer_len);
 
-    footer_buf = calloc(1, (size_t)(size - footer_start));
+    if (footer_len > 4096) {
+      cdio_log (log_level, "NRG footer is too large");
+      return false;
+    }
 
-    cdio_stream_seek (p_env->gen.data_source, footer_start, SEEK_SET);
-    cdio_stream_read (p_env->gen.data_source, footer_buf,
-		      (size_t)(size - footer_start), 1);
+    footer_buf = calloc(1, footer_len);
+    if (!footer_buf)
+      return false;
+
+    if (cdio_stream_seek (p_env->gen.data_source, footer_start, SEEK_SET)
+        || cdio_stream_read (p_env->gen.data_source, footer_buf,
+                             footer_len, 1) != footer_len) {
+      free(footer_buf);
+      return false;
+    }
   }
   {
-    int pos = 0;
+    size_t pos = 0;
 
-    while (pos < size - footer_start) {
+    while (pos < footer_len) {
+      uint32_t chunk_len;
       _chunk_t *chunk = (void *) (footer_buf + pos);
-      uint32_t opcode = UINT32_FROM_BE (chunk->id);
+      uint32_t opcode;
 
       bool break_out = false;
+
+      if (footer_len - pos < sizeof (*chunk)) {
+        cdio_log (log_level, "truncated NRG footer chunk header");
+        free(footer_buf);
+        return false;
+      }
+
+      chunk_len = UINT32_FROM_BE (chunk->len);
+      if (chunk_len > footer_len - pos - sizeof (*chunk)) {
+        cdio_log (log_level, "truncated NRG footer chunk");
+        free(footer_buf);
+        return false;
+      }
+      opcode = UINT32_FROM_BE (chunk->id);
 
       switch (opcode) {
 
@@ -788,9 +820,14 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
       if (break_out)
 	break;
 
-      pos += 8;
-      pos += UINT32_FROM_BE (chunk->len);
+      pos += sizeof (*chunk) + chunk_len;
     }
+  }
+
+  if (p_env->gen.i_tracks == 0) {
+    cdio_log (log_level, "NRG footer contains no tracks");
+    free(footer_buf);
+    return false;
   }
 
   /* Fake out leadout track. */
