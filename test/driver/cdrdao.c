@@ -83,6 +83,7 @@ main(int argc, const char *argv[])
     "bad-file.toc",
     "bad-mode1.toc",
     "bad-tracknum-exceeded.toc",
+    "bad-tracknum-overflow.toc"
     "bad-pretrack-isrc.toc"
   };
   int ret=0;

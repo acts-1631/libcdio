@@ -18,6 +18,7 @@ check_DATA = \
 	bad-msf-3.toc  \
 	bad-tracknum-exceeded.cue \
 	bad-tracknum-exceeded.toc \
+	bad-tracknum-overflow.toc \
 	bad-pretrack-isrc.toc \
 	cdda.bin       \
 	cdda.cue       \

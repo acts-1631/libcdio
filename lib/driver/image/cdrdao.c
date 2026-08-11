@@ -411,7 +411,7 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 
 	/* TRACK <track-mode> [<sub-channel-mode>] */
       } else if (0 == strcmp ("TRACK", psz_keyword)) {
-        if (i_track > CDIO_CD_MAX_TRACKS) {
+        if (i_track >= CDIO_CD_MAX_TRACKS - 1) {
 	  cdio_log(log_level,
 		   "%s line %d:",
 		   psz_cue_name, i_line);
