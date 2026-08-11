@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*!
+/**
  * \file cdtext.h
  *
  * \brief The top-level header for CD-Text information. Applications
@@ -37,7 +37,7 @@ extern "C" {
 #define MIN_CDTEXT_FIELD          0
 #define MAX_CDTEXT_FIELDS         10
 
-/*! \typedef enum cdtext_field_t
+/** \typedef enum cdtext_field_t
 
   \brief Enumeration of CD-TEXT text fields.
 */
@@ -55,7 +55,7 @@ typedef enum {
   CDTEXT_FIELD_INVALID        =  MAX_CDTEXT_FIELDS /**< INVALID FIELD*/
 } cdtext_field_t;
 
-/*! \typedef enum cdtext_genre_t
+/** \typedef enum cdtext_genre_t
 
   \brief Enumeration of possible genre codes.
 */
@@ -91,7 +91,7 @@ typedef enum {
   CDTEXT_GENRE_WORLD_MUSIC    = 28    /**< World Music */
 } cdtext_genre_t;
 
-/*! \typedef typedef enum cdtext_lang_t
+/** \typedef typedef enum cdtext_lang_t
 
     \brief Enumeration of possible CD-TEXT languages.
 
@@ -210,24 +210,24 @@ typedef enum {
 
 } cdtext_lang_t;
 
-/*!
+/**
   \typedef struct cdtext_s cdtext_t
 
   \brief Opaque type for CD-Text.
 */
 typedef struct cdtext_s cdtext_t;
 
-/*!
+/**
   Return string representation of the given genre code.
 */
 const char *cdtext_genre2str (cdtext_genre_t i);
 
-/*!
+/**
   Return string representation of the given language code.
 */
 const char *cdtext_lang2str (cdtext_lang_t i);
 
-/*!
+/**
   Return the language code of a given language string representation.
   This is the inverse of cdtext_lang2str().
 
@@ -239,12 +239,12 @@ const char *cdtext_lang2str (cdtext_lang_t i);
 */
 cdtext_lang_t cdtext_str2lang (const char *lang);
 
-/*!
+/**
   Return string representation of given field type.
 */
 const char *cdtext_field2str (cdtext_field_t i);
 
-/*!
+/**
   Initialize a new \p cdtext_t structure.
 
   When the structure is no longer needed, release the
@@ -252,7 +252,7 @@ const char *cdtext_field2str (cdtext_field_t i);
 */
 cdtext_t *cdtext_init (void);
 
-/*!
+/**
   Fill a cdtext_t object with text pack bytes as they were handed out by the
   CD drive, but without the 4-byte header which the drive prepended.
 
@@ -286,14 +286,14 @@ cdtext_t *cdtext_init (void);
 */
 int cdtext_data_init(cdtext_t *p_cdtext, uint8_t *wdata, size_t i_data);
 
-/*!
+/**
   Free memory associated with the given \p cdtext_t object.
 
   @param p_cdtext the CD-TEXT object
 */
 void cdtext_destroy (cdtext_t *p_cdtext);
 
-/*!
+/**
   Returns a copy of the return value of cdtext_get_const or NULL.
 
   Must be freed using cdio_free() when done.
@@ -301,7 +301,7 @@ void cdtext_destroy (cdtext_t *p_cdtext);
 */
 char *cdtext_get (const cdtext_t *p_cdtext, cdtext_field_t key, track_t track);
 
-/*!
+/**
   Returns value of the given field.
 
   NULL is returned if key is CDTEXT_INVALID or the field is not set.
@@ -314,35 +314,35 @@ char *cdtext_get (const cdtext_t *p_cdtext, cdtext_field_t key, track_t track);
 const char *cdtext_get_const (const cdtext_t *p_cdtext, cdtext_field_t field,
                               track_t track);
 
-/*!
+/**
   Returns the discs genre code.
 
   @param p_cdtext the CD-TEXT object
 */
 cdtext_genre_t cdtext_get_genre (const cdtext_t *p_cdtext);
 
-/*!
+/**
   Returns the currently active language.
 
   @param p_cdtext the CD-TEXT object
 */
 cdtext_lang_t cdtext_get_language (const cdtext_t *p_cdtext);
 
-/*!
+/**
   Returns the first track number.
 
   @param p_cdtext the CD-TEXT object
 */
 track_t cdtext_get_first_track(const cdtext_t *p_cdtext);
 
-/*!
+/**
   Returns the last track number.
 
   @param p_cdtext the CD-TEXT object
 */
 track_t cdtext_get_last_track(const cdtext_t *p_cdtext);
 
-/*!
+/**
   Try to select the given language.
 
   @param p_cdtext the CD-TEXT object
@@ -352,7 +352,7 @@ track_t cdtext_get_last_track(const cdtext_t *p_cdtext);
 */
 bool cdtext_select_language(cdtext_t *p_cdtext, cdtext_lang_t language);
 
-/*!
+/**
 
   @deprecated Use cdtext_list_languages_v2()
 
@@ -371,7 +371,7 @@ bool cdtext_select_language(cdtext_t *p_cdtext, cdtext_lang_t language);
 */
 cdtext_lang_t *cdtext_list_languages (const cdtext_t *p_cdtext);
 
-/*!
+/**
   Returns an array of available languages or NULL.
   The index of an array element may be used to select the corresponding
   language block by call cdtext_set_language_index().
@@ -394,7 +394,7 @@ cdtext_lang_t *cdtext_list_languages (const cdtext_t *p_cdtext);
 */
 cdtext_lang_t *cdtext_list_languages_v2(cdtext_t *p_cdtext);
 
-/*!
+/**
   Select the given language by block index. See cdtext_list_languages_v2().
   If the index is bad, or no language block with that index was read:
   select the default language at index 0 and return false.
@@ -407,7 +407,7 @@ cdtext_lang_t *cdtext_list_languages_v2(cdtext_t *p_cdtext);
 bool
 cdtext_set_language_index(cdtext_t *p_cdtext, int idx);
 
-/*!
+/**
   Sets the given field at the given track to the given value.
 
   Recodes to UTF-8 if charset is not \p NULL.

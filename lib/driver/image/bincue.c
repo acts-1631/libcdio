@@ -89,7 +89,7 @@ static lsn_t get_disc_last_lsn_bincue(void *p_user_data);
 #include "image_common.h"
 static bool parse_cuefile(_img_private_t *cd, const char *toc_name);
 
-/*!
+/**
   Initialize image structures.
  */
 static bool
@@ -132,7 +132,7 @@ _init_bincue(_img_private_t *p_env)
   return true;
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   Would be libc's seek() but we have to adjust for the extra track header
@@ -186,7 +186,7 @@ _lseek_bincue (void *p_user_data, off_t offset, int whence)
   }
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   FIXME:
@@ -241,7 +241,7 @@ _read_bincue (void *p_user_data, void *data, size_t size)
   return final_size;
 }
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
  */
 static lsn_t
@@ -924,7 +924,7 @@ parse_cuefile (_img_private_t *cd, const char *psz_cue_name)
 
 }
 
-/*!
+/**
    Reads a single audio sector from CD device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -946,7 +946,7 @@ _read_audio_sectors_bincue (void *p_user_data, void *data, lsn_t lsn,
   return ret == 0;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -972,7 +972,7 @@ _read_mode1_sector_bincue (void *p_user_data, void *data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads nblocks of mode1 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -995,7 +995,7 @@ _read_mode1_sectors_bincue (void *p_user_data, void *data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads a single mode1 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -1032,7 +1032,7 @@ _read_mode2_sector_bincue (void *p_user_data, void *data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -1090,7 +1090,7 @@ static void Win32Glob(const char* pattern, const char* szCurPath, char ***drives
 }
 #endif
 
-/*!
+/**
   Return an array of strings giving possible BIN/CUE disk images.
  */
 char **
@@ -1118,7 +1118,7 @@ cdio_get_devices_bincue (void)
   return drives;
 }
 
-/*!
+/**
   Return a string containing the default CD device.
  */
 char *
@@ -1146,7 +1146,7 @@ get_hwinfo_bincue ( const CdIo_t *p_cdio, /*out*/ cdio_hwinfo_t *hw_info)
 
 }
 
-/*!
+/**
   Return the number of tracks in the current medium.
   CDIO_INVALID_TRACK is returned on error.
 */
@@ -1164,7 +1164,7 @@ _get_track_format_bincue(void *p_user_data, track_t i_track)
   return p_env->tocent[i_track-p_env->gen.i_first_track].track_format;
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -1185,7 +1185,7 @@ _get_track_green_bincue(void *p_user_data, track_t i_track)
   return p_env->tocent[i_track-p_env->gen.i_first_track].track_green;
 }
 
-/*!
+/**
   Return the starting LSN track number
   i_track in obj.  Track numbers start at 1.
   The "leadout" track is specified either by
@@ -1207,7 +1207,7 @@ _get_lba_track_bincue(void *p_user_data, track_t i_track)
     return CDIO_INVALID_LBA;
 }
 
-/*!
+/**
   Return corresponding BIN file if psz_cue_name is a cue file or NULL
   if not a CUE file.
 */
@@ -1248,7 +1248,7 @@ cdio_is_cuefile(const char *psz_cue_name)
   return NULL;
 }
 
-/*!
+/**
   Return corresponding CUE file if psz_bin_name is a bin file or NULL
   if not a BIN file.
 */
@@ -1277,7 +1277,7 @@ cdio_is_binfile(const char *psz_bin_name)
   return NULL;
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
@@ -1291,7 +1291,7 @@ cdio_open_am_bincue (const char *psz_source_name, const char *psz_access_mode)
   return cdio_open_bincue(psz_source_name);
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.

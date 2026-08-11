@@ -107,12 +107,12 @@ struct cdtext_blocksize_s
 typedef struct cdtext_pack_s cdtext_pack_t;
 typedef struct cdtext_blocksize_s cdtext_blocksize_t;
 
-/*! Structure for CD-TEXT of a track. */
+/** Structure for CD-TEXT of a track. */
 struct cdtext_track_s {
   char *field[MAX_CDTEXT_FIELDS];
 };
 
-/*! Structure for CD-TEXT of a block. */
+/** Structure for CD-TEXT of a block. */
 struct cdtext_block_s {
   struct cdtext_track_s track[CDTEXT_NUM_TRACKS_MAX]; /**< 0: disc; 1..99: tracks */
   cdtext_genre_t genre_code;                          /**< genre code of the disc */
@@ -122,7 +122,7 @@ struct cdtext_block_s {
   track_t        last_track;                          /**< last track number      */
 };
 
-/*! Structure for CD-TEXT of a disc.
+/** Structure for CD-TEXT of a disc.
 
   @see cdtext_init, cdtext_destroy, cdtext_get, and cdtext_set.
  */
@@ -134,7 +134,7 @@ struct cdtext_s {
 
 int cdtext_read_pack (cdtext_pack_t *pack, const uint8_t *data);
 
-/*!
+/**
   returns enum of field if key is a CD-Text keyword,
   returns CDTEXT_FIELD_INVALID otherwise.
 */

@@ -108,7 +108,7 @@ cdio_is_cdrom(char *drive, char *mnttype)
   return cdio_is_cdrom_freebsd_ioctl(drive, mnttype);
 }
 
-/*!
+/**
    Reads i_blocks of audio sectors from cd device into data starting from lsn.
    Returns 0 if no error.
  */
@@ -133,7 +133,7 @@ read_audio_sectors_freebsd (void *p_user_data, void *p_buf, lsn_t i_lsn,
   return DRIVER_OP_ERROR;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
    from i_lsn. Returns 0 if no error.
  */
@@ -157,7 +157,7 @@ read_mode2_sector_freebsd (void *p_user_data, void *data, lsn_t i_lsn,
   return DRIVER_OP_ERROR;
 }
 
-/*!
+/**
    Reads i_blocks of mode2 sectors from cd device into data starting
    from lsn.
  */
@@ -189,7 +189,7 @@ read_mode2_sectors_freebsd (void *p_user_data, void *p_data, lsn_t i_lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
   @return the lsn. On error return CDIO_INVALID_LSN.
  */
@@ -214,7 +214,7 @@ get_disc_last_lsn_freebsd (void *p_obj)
   return DRIVER_OP_ERROR;
 }
 
-/*!
+/**
   Set the arg "key" with "value" in the source device.
   Currently "source" and "access-mode" are valid keys.
   "source" sets the source device in I/O operations
@@ -262,7 +262,7 @@ set_speed_freebsd (void *p_user_data, int i_speed)
 #endif
 }
 
-/*!
+/**
   Read and cache the CD's Track Table of Contents and track info.
   Return false if unsuccessful;
 */
@@ -313,7 +313,7 @@ read_toc_freebsd (void *p_user_data)
   return true;
 }
 
-/*!
+/**
   Get the volume of an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -327,7 +327,7 @@ audio_get_volume_freebsd (void *p_user_data,
   return ioctl(p_env->gen.fd, CDIOCGETVOL, p_volume);
 }
 
-/*!
+/**
   Pause playing CD through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -340,7 +340,7 @@ audio_pause_freebsd (void *p_user_data)
   return ioctl(p_env->gen.fd, CDIOCPAUSE);
 }
 
-/*!
+/**
   Playing starting at given MSF through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -363,7 +363,7 @@ audio_play_msf_freebsd (void *p_user_data, msf_t *p_start_msf,
   return ioctl(p_env->gen.fd, CDIOCPLAYMSF, &freebsd_play_msf);
 }
 
-/*!
+/**
   Playing CD through analog output at the desired track and index
 
   @param p_user_data the CD object to be acted upon.
@@ -396,7 +396,7 @@ audio_play_track_index_freebsd (void *p_user_data,
 
 }
 
-/*!
+/**
   Read Audio Subchannel information
 
   @param p_user_data the CD object to be acted upon.
@@ -437,7 +437,7 @@ audio_read_subchannel_freebsd (void *p_user_data,
 }
 #endif
 
-/*!
+/**
   Resume playing an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -450,7 +450,7 @@ audio_resume_freebsd (void *p_user_data)
   return ioctl(p_env->gen.fd, CDIOCRESUME, 0);
 }
 
-/*!
+/**
   Set the volume of an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -464,7 +464,7 @@ audio_set_volume_freebsd (void *p_user_data,
   return ioctl(p_env->gen.fd, CDIOCSETVOL, p_volume);
 }
 
-/*!
+/**
   Eject media. Return 1 if successful, 0 otherwise.
  */
 static int
@@ -486,7 +486,7 @@ eject_media_freebsd (void *p_user_data)
   return 0;
 }
 
-/*!
+/**
   Stop playing an audio CD.
 
   @param p_user_data the CD object to be acted upon.
@@ -499,7 +499,7 @@ audio_stop_freebsd (void *p_user_data)
   return ioctl(p_env->gen.fd, CDIOCSTOP);
 }
 
-/*!
+/**
   Produce a text composed from the system SCSI address tuple according to
   habits of Linux 2.4 and 2.6 :  "Bus,Host,Channel,Target,Lun" and store
   it in generic_img_private_t.scsi_tuple.
@@ -556,7 +556,7 @@ is_mmc_supported(void *user_data)
 }
 
 
-/*!
+/**
   Return the value associated with the key "arg".
 */
 static const char *
@@ -589,7 +589,7 @@ get_arg_freebsd (void *user_data, const char key[])
   return NULL;
 }
 
-/*!
+/**
   Return the media catalog number MCN.
 
   Note: string is malloc'd so caller should free() then returned
@@ -616,7 +616,7 @@ get_mcn_freebsd (const void *p_user_data) {
   return NULL;
 }
 
-/*!
+/**
   Return the international standard recording code ISRC.
 
   Note: string is malloc'd so caller should free() then returned
@@ -664,7 +664,7 @@ get_drive_cap_freebsd (const void *p_user_data,
   }
 }
 
-/*!
+/**
   Run a SCSI MMC command.
 
   p_user_data   internal CD structure.
@@ -704,7 +704,7 @@ run_mmc_cmd_freebsd( void *p_user_data, unsigned int i_timeout_ms,
   return DRIVER_OP_ERROR;
 }
 
-/*!
+/**
   Get format of track.
 
   FIXME: We're just guessing this from the GNU/Linux code.
@@ -737,7 +737,7 @@ get_track_format_freebsd(void *p_user_data, track_t i_track)
 
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -761,7 +761,7 @@ get_track_green_freebsd(void *user_data, track_t i_track)
   return ((p_env->tocent[i_track-FIRST_TRACK_NUM].entry.control & 2) != 0);
 }
 
-/*!
+/**
   Return the starting LSN track number
   i_track in obj.  Track numbers start at 1.
   The "leadout" track is specified either by
@@ -786,7 +786,7 @@ get_track_lba_freebsd(void *user_data, track_t i_track)
 
 #endif /* HAVE_FREEBSD_CDROM */
 
-/*!
+/**
   Return an array of strings giving possible CD devices.
  */
 char **
@@ -859,7 +859,7 @@ cdio_get_devices_freebsd (void)
 #endif /*HAVE_FREEBSD_CDROM*/
 }
 
-/*!
+/**
   Return a string containing the default CD device if none is specified.
  */
 char *
@@ -916,7 +916,7 @@ cdio_get_default_device_freebsd(void)
 #endif /*HAVE_FREEBSD_CDROM*/
 }
 
-/*!
+/**
   Close tray on CD-ROM.
 
   @param psz_device the CD-ROM drive to be closed.
@@ -941,7 +941,7 @@ close_tray_freebsd (const char *psz_device)
 #endif /*HAVE_FREEBSD_CDROM*/
 }
 
-/*! Find out if media has changed since the last call.  @param
+/** Find out if media has changed since the last call.  @param
   p_user_data the environment of the CD object to be acted upon.
   @return 1 if media has changed since last call, 0 if not. Error
   return codes are the same as driver_return_code_t
@@ -1094,7 +1094,7 @@ static int freebsd_dev_lock(int dev_fd, char *devname,
 
 #endif /*HAVE_FREEBSD_CDROM*/
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
@@ -1106,7 +1106,7 @@ cdio_open_freebsd (const char *psz_source_name)
 }
 
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.

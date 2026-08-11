@@ -97,7 +97,7 @@ typedef struct {
   struct cdrom_tochdr    tochdr;
 } _img_private_t;
 
-/*!
+/**
   Return the international standard recording code ISRC.
 
   Note: string is malloc'd so caller should free() then returned
@@ -137,7 +137,7 @@ str_to_access_mode_solaris(const char *psz_access_mode)
 }
 
 
-/*!
+/**
   Pause playing CD through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -150,7 +150,7 @@ audio_pause_solaris (void *p_user_data)
   return ioctl(p_env->gen.fd, CDROMPAUSE);
 }
 
-/*!
+/**
   Playing starting at given MSF through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -173,7 +173,7 @@ audio_play_msf_solaris (void *p_user_data, msf_t *p_start_msf,
   return ioctl(p_env->gen.fd, CDROMPLAYMSF, &solaris_msf);
 }
 
-/*!
+/**
   Playing CD through analog output at the desired track and index
 
   @param p_cdio the CD object to be acted upon.
@@ -188,7 +188,7 @@ audio_play_track_index_solaris (void *p_user_data,
   return ioctl(p_env->gen.fd, CDROMPLAYTRKIND, p_track_index);
 }
 
-/*!
+/**
   Read Audio Subchannel information
 
   @param p_cdio the CD object to be acted upon.
@@ -229,7 +229,7 @@ audio_read_subchannel_solaris (void *p_user_data,
   }
 }
 
-/*!
+/**
   Resume playing an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -243,7 +243,7 @@ audio_resume_solaris (void *p_user_data)
   return ioctl(p_env->gen.fd, CDROMRESUME, 0);
 }
 
-/*!
+/**
   Resume playing an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -257,7 +257,7 @@ audio_set_volume_solaris (void *p_user_data,
   return ioctl(p_env->gen.fd, CDROMVOLCTRL, p_volume);
 }
 
-/*!
+/**
   Stop playing an audio CD.
 
   @param p_user_data the CD object to be acted upon.
@@ -334,7 +334,7 @@ set_scsi_tuple_solaris (_img_private_t *p_env)
   return 1;
 }
 
-/*!
+/**
   Initialize CD device.
  */
 static bool
@@ -353,7 +353,7 @@ init_solaris (_img_private_t *p_env)
   return true;
 }
 
-/*!
+/**
   Run a SCSI MMC command.
 
   p_user_data   internal CD structure.
@@ -442,7 +442,7 @@ run_mmc_cmd_solaris(void *p_user_data, unsigned int i_timeout_ms,
     return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads audio sectors from CD device into data starting from lsn.
    Returns 0 if no error.
 
@@ -494,7 +494,7 @@ _read_audio_sectors_solaris (void *p_user_data, void *data, lsn_t i_lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads a single mode1 sector from cd device into data starting
    from i_lsn.
  */
@@ -510,7 +510,7 @@ _read_mode1_sector_solaris (void *p_env, void *data, lsn_t i_lsn,
 #endif
 }
 
-/*!
+/**
    Reads i_blocks of mode2 sectors from cd device into data starting
    from i_lsn.
  */
@@ -532,7 +532,7 @@ _read_mode1_sectors_solaris (void *p_user_data, void *p_data, lsn_t i_lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting from lsn.
  */
 static driver_return_code_t
@@ -590,7 +590,7 @@ _read_mode2_sector_solaris (void *p_user_data, void *p_data, lsn_t i_lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads i_blocks of mode2 sectors from cd device into data starting
    from i_lsn.
  */
@@ -613,7 +613,7 @@ _read_mode2_sectors_solaris (void *p_user_data, void *data, lsn_t i_lsn,
 }
 
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
    @return the size. On error return CDIO_INVALID_LSN.
  */
@@ -638,7 +638,7 @@ get_disc_last_lsn_solaris (void *p_user_data)
   return size;
 }
 
-/*!
+/**
   Set the arg "key" with "value" in the source device.
   Currently "source" and "access-mode" are valid keys.
   "source" sets the source device in I/O operations
@@ -667,7 +667,7 @@ _set_arg_solaris (void *p_user_data, const char key[], const char value[])
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
   Read and cache the CD's Track Table of Contents and track info.
   Return true if successful or false if an error.
 */
@@ -720,7 +720,7 @@ read_toc_solaris (void *p_user_data)
   return true;
 }
 
-/*!
+/**
   Eject media in CD drive. If successful, as a side effect we
   also free obj.
  */
@@ -751,7 +751,7 @@ is_mmc_supported(void *user_data)
     return (_AM_NONE == env->access_mode) ? false : true;
 }
 
-/*!
+/**
   Return the value associated with the key "arg".
 */
 static const char *
@@ -782,7 +782,7 @@ get_arg_solaris (void *p_user_data, const char key[])
   return NULL;
 }
 
-/*!
+/**
   Get the block size used in read requests, via ioctl.
   @return the blocksize if > 0; error if <= 0
  */
@@ -803,7 +803,7 @@ get_blocksize_solaris (void *p_user_data) {
 }
 
 #ifdef HAVE_SOLARIS_CDROM
-/*!
+/**
   Return a string containing the default CD device if none is specified.
   This call does not assume a fixed default drive address but rather uses
   the first drive that gets enumerated by cdio_get_devices_solaris_cXtYdZs2().
@@ -825,7 +825,7 @@ cdio_get_default_cXtYdZs2(void)
 }
 #endif
 
-/*!
+/**
   Return a string containing the default CD device if none is specified.
  */
 char *
@@ -870,7 +870,7 @@ cdio_get_default_device_solaris(void)
   return strdup(DEFAULT_CDIO_DEVICE);
 }
 
-/*!
+/**
   Get disc type associated with cd object.
 */
 
@@ -989,7 +989,7 @@ get_discmode_solaris (void *p_user_data)
   return discmode;
 }
 
-/*!
+/**
   Return the session number of the last on the CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -1011,7 +1011,7 @@ get_last_session_solaris (void *p_user_data,
   }
 }
 
-/*!
+/**
   Get format of track.
 */
 static track_format_t
@@ -1044,7 +1044,7 @@ get_track_format_solaris(void *p_user_data, track_t i_track)
 
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -1073,7 +1073,7 @@ get_track_green_solaris(void *p_user_data, track_t i_track)
   return ((p_env->tocent[i_track].cdte_ctrl & 2) != 0);
 }
 
-/*!
+/**
   Return the starting MSF (minutes/secs/frames) for track number
   track_num in obj.  Track numbers usually start at something
   greater than 0, usually 1.
@@ -1107,7 +1107,7 @@ get_track_msf_solaris(void *p_user_data, track_t i_track, msf_t *msf)
   }
 }
 
-/*!
+/**
   Get the block size used in read requests, via ioctl.
   @return the blocksize if > 0; error if <= 0
  */
@@ -1137,7 +1137,7 @@ set_speed_solaris (void *p_user_data, int i_speed)
 }
 
 #else
-/*!
+/**
   Return a string containing the default VCD device if none is specified.
  */
 char *
@@ -1148,7 +1148,7 @@ cdio_get_default_device_solaris(void)
 
 #endif /* HAVE_SOLARIS_CDROM */
 
-/*!
+/**
   Close tray on CD-ROM.
 
   @param psz_device the CD-ROM drive to be closed.
@@ -1177,7 +1177,7 @@ close_tray_solaris (const char *psz_device)
 }
 
 #ifdef HAVE_SOLARIS_CDROM
-/*!
+/**
   Return an array of strings giving possible CD devices.
   New method after demise of vold in 2006.
  */
@@ -1285,7 +1285,7 @@ ex:;
 }
 #endif /*HAVE_SOLARIS_CDROM*/
 
-/*!
+/**
   Return an array of strings giving possible CD devices.
  */
 char **
@@ -1344,7 +1344,7 @@ cdio_get_devices_solaris (void)
 #endif /*HAVE_SOLARIS_CDROM*/
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
@@ -1355,7 +1355,7 @@ cdio_open_solaris (const char *psz_source_name)
   return cdio_open_am_solaris(psz_source_name, NULL);
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.

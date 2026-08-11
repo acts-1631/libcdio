@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*!
+/**
   Header for image drivers. In contrast to image_common.h which contains
   routines, this header like most C headers does not depend on anything
   defined before it is included.
@@ -39,7 +39,7 @@
 #include "cdio_private.h"
 #include <cdio/sector.h>
 
-/*!
+/**
   The universal format for information about a track for CD image readers
   It may be that some fields can be derived from other fields.
   Over time this structure may get cleaned up. Possibly this can be

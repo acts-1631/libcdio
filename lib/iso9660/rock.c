@@ -160,7 +160,7 @@ is_rr_dd_enabled(void * p_image) {
   return !(p_header->u_flags & CDIO_HEADER_FLAGS_DISABLE_RR_DD);
 }
 
-/*!
+/**
   Get
   @return length of name field; 0: not found, -1: to be ignored
 */
@@ -419,7 +419,7 @@ _getbuf (void)
   return _buf[_i];
 }
 
-/*!
+/**
   Returns a string which interpreting the POSIX mode st_mode.
   For example:
   \verbatim
@@ -500,7 +500,7 @@ iso9660_get_rock_attr_str(posix_mode_t st_mode)
   return result;
 }
 
-/*!
+/**
   Returns POSIX mode bitstring for a given file.
 */
 mode_t

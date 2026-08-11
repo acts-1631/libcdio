@@ -91,7 +91,7 @@ extern const char* is_cdrom_aspi(const char drive_letter);
 # undef lseek
 #endif
 
-/*!
+/**
   Set the volume of an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -108,7 +108,7 @@ audio_get_volume_win32 ( void *p_user_data,
   }
 }
 
-/*!
+/**
   Pause playing CD through analog output
 
   @param p_cdio the CD object to be acted upon.
@@ -123,7 +123,7 @@ audio_pause_win32 (void *p_user_data)
   }
 }
 
-/*!
+/**
   Playing CD through analog output at the given MSF.
 
   @param p_cdio the CD object to be acted upon.
@@ -138,7 +138,7 @@ audio_play_msf_win32 (void *p_user_data, msf_t *p_start_msf, msf_t *p_end_msf)
   }
 }
 
-/*!
+/**
   Read Audio Subchannel information
 
   @param p_cdio the CD object to be acted upon.
@@ -155,7 +155,7 @@ audio_read_subchannel_win32 (void *p_user_data,
   }
 }
 
-  /*!
+  /**
     Resume playing an audio CD.
 
     @param p_cdio the CD object to be acted upon.
@@ -171,7 +171,7 @@ audio_resume_win32 (void *p_user_data)
   }
 }
 
-/*!
+/**
   Set the volume of an audio CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -277,7 +277,7 @@ is_cdrom_win32(const char drive_letter) {
   }
 }
 
-/*!
+/**
   Run a SCSI MMC command.
 
   env	        private CD structure
@@ -309,7 +309,7 @@ run_mmc_cmd_win32( void *p_user_data, unsigned int i_timeout_ms,
   }
 }
 
-/*!
+/**
   Initialize CD device.
  */
 static bool
@@ -358,7 +358,7 @@ init_win32 (void *p_user_data)
   return b_ret;
 }
 
-/*!
+/**
   Release and free resources associated with cd.
  */
 static void
@@ -379,7 +379,7 @@ free_win32 (void *p_user_data)
   free (p_env);
 }
 
-/*!
+/**
    Reads an audio device into data starting from lsn.
    Returns 0 if no error.
  */
@@ -400,7 +400,7 @@ read_audio_sectors (void *p_user_data, void *p_buf, lsn_t i_lsn,
   }
 }
 
-/*!
+/**
    Reads an audio device into data starting from lsn.
    Returns 0 if no error.
  */
@@ -418,7 +418,7 @@ read_data_sectors_win32 (void *p_user_data, void *p_buf, lsn_t i_lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads a single mode1 sector from cd device into data starting from
    lsn. Returns 0 if no error.
  */
@@ -449,7 +449,7 @@ read_mode1_sector_win32 (void *p_user_data, void *p_buf, lsn_t lsn,
   }
 }
 
-/*!
+/**
    Reads nblocks of mode1 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -480,7 +480,7 @@ read_mode1_sectors_win32 (void *p_user_data, void *p_buf, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -519,7 +519,7 @@ read_mode2_sector_win32 (void *p_user_data, void *data, lsn_t lsn,
   }
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -541,7 +541,7 @@ read_mode2_sectors_win32 (void *p_user_data, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
  */
 static lsn_t
@@ -552,7 +552,7 @@ get_disc_last_lsn_win32 (void *p_user_data)
   return p_env->tocent[p_env->gen.i_tracks].start_lsn;
 }
 
-/*!
+/**
   Set the key "arg" to "value" in source device.
 */
 static int
@@ -586,7 +586,7 @@ set_arg_win32 (void *p_user_data, const char key[], const char value[])
   return 0;
 }
 
-/*!
+/**
   Read and cache the CD's Track Table of Contents and track info.
   Return true if successful or false if an error.
 */
@@ -604,7 +604,7 @@ read_toc_win32 (void *p_user_data)
   return ret;
 }
 
-/*!
+/**
   Close media tray.
  */
 static driver_return_code_t
@@ -637,7 +637,7 @@ open_close_media_win32 (const char *psz_win32_drive, DWORD command_flags)
 #endif
 }
 
-/*!
+/**
   Eject media.
  */
 static driver_return_code_t
@@ -678,7 +678,7 @@ is_mmc_supported(void *user_data)
     return false;
 }
 
-/*!
+/**
   Return the value associated with the key "arg".
 */
 static const char *
@@ -739,7 +739,7 @@ get_cdtext_win32 (void *p_user_data)
   }
 }
 
-/*!
+/**
   Return the media catalog number MCN.
 
   Note: string is malloc'd so caller should free() then returned
@@ -757,7 +757,7 @@ _cdio_get_mcn (const void *p_user_data) {
   }
 }
 
-/*!
+/**
   Return the international standard recording code ISRC.
 
   Note: string is malloc'd so caller should free() then returned
@@ -775,7 +775,7 @@ _cdio_get_track_isrc (const void *p_user_data, track_t i_track) {
   }
 }
 
-/*!
+/**
   Get format of track.
 */
 static track_format_t
@@ -799,7 +799,7 @@ _cdio_get_track_format(void *p_obj, track_t i_track)
   }
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -832,7 +832,7 @@ _cdio_get_track_green(void *p_obj, track_t i_track)
   return ((p_env->tocent[i_track-p_env->gen.i_first_track].Control & 2) != 0);
 }
 
-/*!
+/**
   Return the starting MSF (minutes/secs/frames) for track number
   i_tracks in obj.  Track numbers start at 1.
   The "leadout" track is specified either by
@@ -864,7 +864,7 @@ _cdio_get_track_msf(void *p_user_data, track_t i_tracks, msf_t *p_msf)
 
 #endif /* HAVE_WIN32_CDROM */
 
-/*!
+/**
   Return an array of strings giving possible CD devices.
  */
 char **
@@ -906,7 +906,7 @@ cdio_get_devices_win32 (void)
 #endif /*HAVE_WIN32_CDROM*/
 }
 
-/*!
+/**
   Return a string containing the default CD device if none is specified.
   if CdIo is NULL (we haven't initialized a specific device driver),
   then find a suitable one and return the default device for that.
@@ -931,7 +931,7 @@ cdio_get_default_device_win32(void)
 }
 
 #ifdef HAVE_WIN32_CDROM
-/*!
+/**
   Return the underlying device HANDLE.
  */
 static int
@@ -943,7 +943,7 @@ get_device_fd_win32(void *p_user_data) {
 }
 #endif
 
-/*!
+/**
   Return true if source_name could be a device containing a CD-ROM and
   we are on a MS Windows platform.
 */
@@ -991,7 +991,7 @@ close_tray_win32 (const char *psz_win32_drive)
 #endif /* HAVE_WIN32_CDROM*/
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
@@ -1010,7 +1010,7 @@ cdio_open_win32 (const char *psz_source_name)
 #endif /* HAVE_WIN32_CDROM */
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.

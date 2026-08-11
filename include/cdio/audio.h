@@ -30,7 +30,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-  /*! This struct is used by the cdio_audio_read_subchannel */
+  /** This struct is used by the cdio_audio_read_subchannel */
   typedef struct cdio_subchannel_s
   {
     uint8_t format;
@@ -43,14 +43,14 @@ extern "C" {
     msf_t   rel_addr;
   } cdio_subchannel_t;
 
-  /*! This struct is used by cdio_audio_get_volume and cdio_audio_set_volume */
+  /** This struct is used by cdio_audio_get_volume and cdio_audio_set_volume */
   typedef struct cdio_audio_volume_s
   {
     uint8_t level[4];
   } cdio_audio_volume_t;
 
 
-  /*! This struct is used by the CDROMPLAYTRKIND ioctl */
+  /** This struct is used by the CDROMPLAYTRKIND ioctl */
   typedef struct cdio_track_index_s
   {
     uint8_t	i_start_track;	/**< start track */
@@ -59,7 +59,7 @@ extern "C" {
     uint8_t	i_end_index;	/**< end index */
   } cdio_track_index_t;
 
-  /*!
+  /**
     Get volume of an audio CD.
 
     @param p_cdio the CD object to be acted upon.
@@ -72,19 +72,19 @@ extern "C" {
   driver_return_code_t cdio_audio_get_volume (CdIo_t *p_cdio,  /*out*/
 					      cdio_audio_volume_t *p_volume);
 
-  /*!
+  /**
     Return the number of seconds (discarding frame portion) of an MSF
   */
   uint32_t cdio_audio_get_msf_seconds(msf_t *p_msf);
 
-  /*!
+  /**
     Pause playing CD through analog output
 
     @param p_cdio the CD object to be acted upon.
   */
   driver_return_code_t cdio_audio_pause (CdIo_t *p_cdio);
 
-  /*!
+  /**
     Playing CD through analog output at the given MSF.
 
     @param p_cdio the CD object to be acted upon.
@@ -95,7 +95,7 @@ extern "C" {
 					    /*in*/msf_t *p_start_msf,
 					    /*in*/ msf_t *p_end_msf);
 
-  /*!
+  /**
     Playing CD through analog output at the desired track and index
 
     @param p_cdio the CD object to be acted upon.
@@ -104,7 +104,7 @@ extern "C" {
   driver_return_code_t cdio_audio_play_track_index
   ( CdIo_t *p_cdio,  cdio_track_index_t *p_track_index);
 
-  /*!
+  /**
     Get subchannel information.
 
     @param p_cdio the CD object to be acted upon.
@@ -113,7 +113,7 @@ extern "C" {
   driver_return_code_t cdio_audio_read_subchannel (CdIo_t *p_cdio,
 						   /*out*/ cdio_subchannel_t *p_subchannel);
 
-  /*!
+  /**
     Resume playing an audio CD.
 
     @param p_cdio the CD object to be acted upon.
@@ -121,7 +121,7 @@ extern "C" {
   */
   driver_return_code_t cdio_audio_resume (CdIo_t *p_cdio);
 
-  /*!
+  /**
     Set volume of an audio CD.
 
     @param p_cdio the CD object to be acted upon.
@@ -131,7 +131,7 @@ extern "C" {
   driver_return_code_t cdio_audio_set_volume (CdIo_t *p_cdio, /*out*/
 					      cdio_audio_volume_t *p_volume);
 
-  /*!
+  /**
     Stop playing an audio CD.
 
     @param p_cdio the CD object to be acted upon.

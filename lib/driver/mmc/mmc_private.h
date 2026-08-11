@@ -17,7 +17,7 @@
 
 #include <cdio/mmc.h>
 
-/*! Convert milliseconds to seconds taking the ceiling value, i.e.
+/** Convert milliseconds to seconds taking the ceiling value, i.e.
     1002 milliseconds gets rounded to 2 seconds.
 */
 #define SECS2MSECS 1000
@@ -32,7 +32,7 @@ msecs2secs(unsigned int msecs)
   MMC CdIo Operations which a driver may use.
   These are not directly user-accessible.
 ************************************************************/
-/*!
+/**
   Read Audio Subchannel information
 
   @param p_user_data the CD object to be acted upon.
@@ -42,13 +42,13 @@ driver_return_code_t
 audio_read_subchannel_mmc ( void *p_user_data,
 			    cdio_subchannel_t *p_subchannel);
 
-/*!
+/**
   Get the block size for subsequent read requests, via a SCSI MMC
   MODE_SENSE 6 command.
 */
 int get_blocksize_mmc (void *p_user_data);
 
-/*!
+/**
   Get the lsn of the end of the CD
 
   @return the lsn. On error return CDIO_INVALID_LSN.
@@ -67,7 +67,7 @@ char *get_track_isrc_mmc (const void *p_user_data, track_t i_track);
 
 driver_return_code_t get_tray_status (const void *p_user_data);
 
-/*! Read just the user data part of some sort of data sector (via
+/** Read just the user data part of some sort of data sector (via
     mmc_read_cd).
 
     @param p_user_data object to read from
@@ -118,7 +118,7 @@ int mmc_set_blocksize_mmc_private ( const void *p_env, const
 				    mmc_run_cmd_fn_t run_mmc_cmd,
 				    uint16_t i_blocksize );
 
-/*!
+/**
   Get the DVD type associated with cd object.
 */
 discmode_t
@@ -126,7 +126,7 @@ mmc_get_dvd_struct_physical_private ( void *p_env,
 				      mmc_run_cmd_fn_t run_mmc_cmd,
 				      cdio_dvd_struct_t *s );
 
-/*!
+/**
   On input a MODE_SENSE command was issued and we have the results
   in p. We interpret this and return a bit mask set according to the
   capabilities.

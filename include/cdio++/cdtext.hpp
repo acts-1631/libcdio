@@ -21,7 +21,7 @@
  *  should not be #included directly.
  */
 
-/*! Return string representation of the enum values above */
+/** Return string representation of the enum values above */
 const char *field2str (cdtext_field_t i)
 {
   return cdtext_field2str (i);
@@ -37,7 +37,7 @@ const char *lang2str (cdtext_lang_t i)
   return cdtext_lang2str (i);
 }
 
-/*! returns an allocated string associated with the given field.  NULL is
+/** returns an allocated string associated with the given field.  NULL is
   returned if key is CDTEXT_INVALID or the field is not set.
 
   The user needs to free the string using cdio_free() when done with it.
@@ -51,7 +51,7 @@ char *get (cdtext_field_t key, track_t i_track)
   return cdtext_get (p_cdtext, key, i_track);
 }
 
-/*! returns a const string associated with the given field.  NULL is
+/** returns a const string associated with the given field.  NULL is
   returned if key is CDTEXT_INVALID or the field is not set.
 
   Don't use the string when the cdtext object (i.e. the CdIo_t object
@@ -66,7 +66,7 @@ const char *getConst (cdtext_field_t key, track_t i_track)
   return cdtext_get_const (p_cdtext, key, i_track);
 }
 
-/*!
+/**
   sets cdtext's keyword entry to field
 */
 void set (cdtext_field_t key, track_t i_track, const uint8_t *value, const char *charset)
@@ -74,7 +74,7 @@ void set (cdtext_field_t key, track_t i_track, const uint8_t *value, const char 
   cdtext_set (p_cdtext, key, value, i_track, charset);
 }
 
-/*!
+/**
   returns the selected language
 */
 cdtext_lang_t getLanguage()
@@ -82,7 +82,7 @@ cdtext_lang_t getLanguage()
   return cdtext_get_language(p_cdtext);
 }
 
-/*!
+/**
   selects a language
 */
 bool selectLanguage(cdtext_lang_t lang)
@@ -90,7 +90,7 @@ bool selectLanguage(cdtext_lang_t lang)
   return cdtext_select_language(p_cdtext, lang);
 }
 
-/*!
+/**
   selects a language by index rather than language code
 */
 bool setLanguageIndex(int idx)
@@ -98,7 +98,7 @@ bool setLanguageIndex(int idx)
   return cdtext_set_language_index(p_cdtext, idx);
 }
 
-/*!
+/**
 
   @deprecated. Use listLanguagesV2(), see cdio/cdtext.h
 
@@ -109,7 +109,7 @@ cdtext_lang_t *listLanguages()
   return cdtext_list_languages(p_cdtext);
 }
 
-/*!
+/**
   returns a pointer to an array with 8 elements which indicate available
   languages
 */

@@ -14,7 +14,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*! Audio (via line output) related routines. */
+/** Audio (via line output) related routines. */
 
 
 #ifdef HAVE_CONFIG_H
@@ -29,23 +29,23 @@
 
 /* Return the number of seconds (discarding frame portion) of an MSF */
 uint32_t
-cdio_audio_get_msf_seconds(msf_t *p_msf) 
+cdio_audio_get_msf_seconds(msf_t *p_msf)
 {
-  return 
+  return
     cdio_from_bcd8(p_msf->m)*CDIO_CD_SECS_PER_MIN + cdio_from_bcd8(p_msf->s);
 }
 
-/*!
+/**
   Get volume of an audio CD.
-  
+
   @param p_cdio the CD object to be acted upon.
-  
+
 */
-driver_return_code_t 
+driver_return_code_t
 cdio_audio_get_volume (CdIo_t *p_cdio,  /*out*/ cdio_audio_volume_t *p_volume)
 {
   cdio_audio_volume_t temp_audio_volume;
-  
+
   if (!p_cdio) return DRIVER_OP_UNINIT;
 
   if (!p_volume) p_volume = &temp_audio_volume;
@@ -55,13 +55,13 @@ cdio_audio_get_volume (CdIo_t *p_cdio,  /*out*/ cdio_audio_volume_t *p_volume)
     return DRIVER_OP_UNSUPPORTED;
   }
 }
-/*!
+/**
   Playing CD through analog output
-  
+
   @param p_cdio the CD object to be acted upon.
 */
-driver_return_code_t 
-cdio_audio_pause (CdIo_t *p_cdio) 
+driver_return_code_t
+cdio_audio_pause (CdIo_t *p_cdio)
 {
   if (!p_cdio) return DRIVER_OP_UNINIT;
 
@@ -72,12 +72,12 @@ cdio_audio_pause (CdIo_t *p_cdio)
   }
 }
 
-/*!
+/**
   Playing CD through analog output at the given MSF.
-  
+
   @param p_cdio the CD object to be acted upon.
 */
-driver_return_code_t 
+driver_return_code_t
 cdio_audio_play_msf (CdIo_t *p_cdio, msf_t *p_start_msf, msf_t *p_end_msf)
 {
   if (!p_cdio) return DRIVER_OP_UNINIT;
@@ -89,12 +89,12 @@ cdio_audio_play_msf (CdIo_t *p_cdio, msf_t *p_start_msf, msf_t *p_end_msf)
   }
 }
 
-/*!
+/**
   Playing CD through analog output
-  
+
   @param p_cdio the CD object to be acted upon.
 */
-driver_return_code_t 
+driver_return_code_t
 cdio_audio_play_track_index (CdIo_t *p_cdio, cdio_track_index_t *p_track_index)
 {
   if (!p_cdio) return DRIVER_OP_UNINIT;
@@ -106,12 +106,12 @@ cdio_audio_play_track_index (CdIo_t *p_cdio, cdio_track_index_t *p_track_index)
   }
 }
 
-/*!
+/**
   Get subchannel information.
-  
+
   @param p_cdio the CD object to be acted upon.
 */
-driver_return_code_t 
+driver_return_code_t
 cdio_audio_read_subchannel (CdIo_t *p_cdio, cdio_subchannel_t *p_subchannel)
 {
   if (!p_cdio) return DRIVER_OP_UNINIT;
@@ -123,13 +123,13 @@ cdio_audio_read_subchannel (CdIo_t *p_cdio, cdio_subchannel_t *p_subchannel)
   }
 }
 
-/*!
+/**
   Resume playing an audio CD.
-  
+
   @param p_cdio the CD object to be acted upon.
-  
+
 */
-driver_return_code_t 
+driver_return_code_t
 cdio_audio_resume (CdIo_t *p_cdio)
 {
   if (!p_cdio) return DRIVER_OP_UNINIT;
@@ -141,13 +141,13 @@ cdio_audio_resume (CdIo_t *p_cdio)
   }
 }
 
-/*!
+/**
   Set volume of an audio CD.
-  
+
   @param p_cdio the CD object to be acted upon.
-  
+
 */
-driver_return_code_t 
+driver_return_code_t
 cdio_audio_set_volume (CdIo_t *p_cdio, cdio_audio_volume_t *p_volume)
 {
   if (!p_cdio) return DRIVER_OP_UNINIT;
@@ -159,13 +159,13 @@ cdio_audio_set_volume (CdIo_t *p_cdio, cdio_audio_volume_t *p_volume)
   }
 }
 
-/*!
+/**
   Resume playing an audio CD.
-  
+
   @param p_cdio the CD object to be acted upon.
-  
+
 */
-driver_return_code_t 
+driver_return_code_t
 cdio_audio_stop (CdIo_t *p_cdio)
 {
   if (!p_cdio) return DRIVER_OP_UNINIT;
@@ -178,7 +178,7 @@ cdio_audio_stop (CdIo_t *p_cdio)
 }
 
 
-/* 
+/*
  * Local variables:
  *  c-file-style: "gnu"
  *  tab-width: 8

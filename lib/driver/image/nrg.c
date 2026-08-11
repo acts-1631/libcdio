@@ -16,7 +16,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*! This code implements low-level access functions for the Nero native
+/** This code implements low-level access functions for the Nero native
    CD-image format residing inside a disk file (*.nrg).
 */
 
@@ -841,7 +841,7 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
   return true;
 }
 
-/*!
+/**
   Initialize image structures.
  */
 static bool
@@ -872,7 +872,7 @@ _init_nrg (_img_private_t *p_env)
 
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   Would be libc's seek() but we have to adjust for the extra track header
@@ -916,7 +916,7 @@ _lseek_nrg (void *p_user_data, off_t offset, int whence)
   return cdio_stream_seek(p_env->gen.data_source, real_offset, whence);
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   FIXME:
@@ -930,7 +930,7 @@ _read_nrg (void *p_user_data, void *buf, size_t size)
   return cdio_stream_read(p_env->gen.data_source, buf, size, 1);
 }
 
-/*!
+/**
   Get the size of the CD in logical block address (LBA) units.
 
   @param p_cdio the CD object queried
@@ -944,7 +944,7 @@ get_disc_last_lsn_nrg (void *p_user_data)
   return p_env->size;
 }
 
-/*!
+/**
    Reads a single audio sector from CD device into data starting
    from LSN.
  */
@@ -1050,7 +1050,7 @@ _read_mode1_sector_nrg (void *p_user_data, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
  */
@@ -1122,7 +1122,7 @@ _read_mode2_sector_nrg (void *p_user_data, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -1162,7 +1162,7 @@ _free_nrg (void *p_user_data)
   _free_image(p_user_data);
 }
 
-/*!
+/**
   Eject media -- there's nothing to do here except free resources.
   We always return 2.
  */
@@ -1208,7 +1208,7 @@ static void Win32Glob(const char* pattern, const char* szCurPath, char ***drives
 }
 #endif
 
-/*!
+/**
   Return an array of strings giving possible NRG disk images.
  */
 char **
@@ -1236,7 +1236,7 @@ cdio_get_devices_nrg (void)
   return drives;
 }
 
-/*!
+/**
   Return a string containing the default CD device.
  */
 char *
@@ -1264,7 +1264,7 @@ get_hwinfo_nrg ( const CdIo *p_cdio, /*out*/ cdio_hwinfo_t *hw_info)
 
 }
 
-/*!
+/**
   Return the number of tracks in the current medium.
   CDIO_INVALID_TRACK is returned on error.
 */
@@ -1290,7 +1290,7 @@ get_track_format_nrg(void *p_user_data, track_t track_num)
   return p_env->tocent[track_num-1].track_format;
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -1310,7 +1310,7 @@ _get_track_green_nrg(void *p_user_data, track_t track_num)
   return p_env->tocent[track_num-1].track_green;
 }
 
-/*!
+/**
   Check that a NRG file is valid.
 */
 bool
@@ -1349,7 +1349,7 @@ cdio_is_nrg(const char *psz_nrg)
   return is_nrg;
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
