@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2005, 2006, 2008, 2011-2013, 2017
+  Copyright (C) 2005, 2006, 2008, 2011-2013, 2017, 2026
   Rocky Bernstein <rocky@gnu.org>
 
   This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*! device- and driver-related routines. */
+/** device- and driver-related routines. */
 
 
 #ifdef HAVE_CONFIG_H
@@ -326,7 +326,7 @@ cdio_driver_describe(driver_id_t driver_id)
   return CdIo_all_drivers[driver_id].describe;
 }
 
-/*!
+/**
   Initialize CD Reading and control routines. Should be called first.
   May be implicitly called by other routines if not called first.
 */
@@ -354,7 +354,7 @@ cdio_init(void)
   return true;
 }
 
-/*!
+/**
   Free any resources associated with cdio.
 */
 void
@@ -369,7 +369,7 @@ cdio_destroy (CdIo_t *p_cdio)
   free (p_cdio);
 }
 
-/*!
+/**
   Close media tray in CD drive if there is a routine to do so.
 
   @param psz_drive the name of CD-ROM to be closed. If NULL, we will
@@ -423,7 +423,7 @@ cdio_close_tray (const char *psz_orig_drive, /*in/out*/ driver_id_t
   return DRIVER_OP_UNSUPPORTED;
 }
 
-/*!
+/**
   Eject media in CD drive if there is a routine to do so.
 
   @param p_cdio the CD object to be acted upon.
@@ -448,7 +448,7 @@ cdio_eject_media (CdIo_t **pp_cdio)
   }
 }
 
-/*!
+/**
   Eject media in CD drive if there is a routine to do so. If you want
   to scan for any CD-ROM and eject that, pass NULL for psz_drive.
 
@@ -458,7 +458,11 @@ cdio_eject_media (CdIo_t **pp_cdio)
 driver_return_code_t
 cdio_eject_media_drive (const char *psz_drive)
 {
+#ifdef HAVE_LINUX_CDROM
+  CdIo_t *p_cdio = cdio_open_am_linux(psz_drive, "MMC_RDWR");
+#else
   CdIo_t *p_cdio = cdio_open (psz_drive, DRIVER_DEVICE);
+#endif
   if (p_cdio) {
     driver_return_code_t rc;
     rc = cdio_eject_media(&p_cdio);
@@ -469,7 +473,7 @@ cdio_eject_media_drive (const char *psz_drive)
   }
 }
 
-/*!
+/**
   Free device list returned by cdio_get_devices or
   cdio_get_devices_with_cap.
 */
@@ -486,7 +490,7 @@ cdio_free_device_list (char * ppsz_device_list[])
 }
 
 
-/*!
+/**
   Return a string containing the default CD device if none is specified.
   if p_cdio is NULL (we haven't initialized a specific device driver),
   then find a suitable one and return the default device for that.
@@ -515,7 +519,7 @@ cdio_get_default_device (const CdIo_t *p_cdio)
   }
 }
 
-/*!
+/**
   Return a string containing the default CD device if none is specified.
   if p_driver_id is DRIVER_UNKNOWN or DRIVER_DEVICE
   then find a suitable one set the default device for that.
@@ -560,7 +564,7 @@ cdio_get_device_fd (CdIo_t *p_cdio)
   }
 }
 
-/*!Return an array of device names. If you want a specific
+/**Return an array of device names. If you want a specific
   devices, dor a driver give that device, if you want hardware
   devices, give DRIVER_DEVICE and if you want all possible devices,
   image drivers and hardware drivers give DRIVER_UNKNOWN.
@@ -604,7 +608,7 @@ cdio_get_devices_ret (/*in/out*/ driver_id_t *p_driver_id)
   }
 }
 
-/*!
+/**
   Return an array of device names in search_devices that have at
   least the capabilities listed by cap.  If search_devices is NULL,
   then we'll search all possible CD drives.
@@ -702,7 +706,7 @@ cdio_get_devices_with_cap_ret (/*in*/ char* search_devices[],
   return ppsz_drives_ret;
 }
 
-/*!
+/**
   Return the the kind of drive capabilities of device.
 
   Note: string is malloc'd so caller should free() then returned
@@ -725,7 +729,7 @@ cdio_get_drive_cap (const CdIo_t *p_cdio,
   }
 }
 
-/*!
+/**
   Return the the kind of drive capabilities of device.
 
   Note: string is malloc'd so caller should free() then returned
@@ -751,7 +755,7 @@ cdio_get_drive_cap_dev (const char *device,
 }
 
 
-/*!
+/**
   Return a string containing the name of the driver in use.
   if CdIo is NULL (we haven't initialized a specific device driver),
   then return NULL.
@@ -763,7 +767,7 @@ cdio_get_driver_name (const CdIo_t *p_cdio)
   return cdio_get_driver_name_from_id(p_cdio->driver_id);
 }
 
-/*!
+/**
   Return a string containing the name of the driver in use from the driver_id.
   if CdIo is NULL (we haven't initialized a specific device driver),
   then return NULL.
@@ -774,7 +778,7 @@ cdio_get_driver_name_from_id (driver_id_t driver_id)
   return CdIo_all_drivers[driver_id].name;
 }
 
-/*!
+/**
   Return the driver id.
   if CdIo is NULL (we haven't initialized a specific device driver),
   then return DRIVER_UNKNOWN.
@@ -786,7 +790,7 @@ cdio_get_driver_id (const CdIo_t *p_cdio)
   return p_cdio->driver_id;
 }
 
-/*!
+/**
   Return a string containing the name of the driver in use.
   if CdIo is NULL (we haven't initialized a specific device driver),
   then return NULL.
@@ -804,7 +808,7 @@ cdio_get_hwinfo (const CdIo_t *p_cdio, cdio_hwinfo_t *hw_info)
   }
 }
 
-/*!
+/**
   Return the session number of the last on the CD.
 
   @param p_cdio the CD object to be acted upon.
@@ -819,7 +823,7 @@ driver_return_code_t cdio_get_last_session (CdIo_t *p_cdio,
   return DRIVER_OP_UNSUPPORTED;
 }
 
-/*!
+/**
   Find out if media has changed since the last call.
   @param p_cdio the CD object to be acted upon.
   @return 1 if media has changed since last call, 0 if not. Error
@@ -933,7 +937,7 @@ cdio_is_device(const char *psz_source, driver_id_t driver_id)
 }
 
 
-/*! Sets up to read from place specified by source_name and
+/** Sets up to read from place specified by source_name and
   driver_id. This should be called before using any other routine,
   except cdio_init. This will call cdio_init, if that hasn't been
   done previously.
@@ -946,7 +950,7 @@ cdio_open (const char *orig_source_name, driver_id_t driver_id)
   return cdio_open_am(orig_source_name, driver_id, NULL);
 }
 
-/*! Sets up to read from place specified by source_name and
+/** Sets up to read from place specified by source_name and
   driver_id. This should be called before using any other routine,
   except cdio_init. This will call cdio_init, if that hasn't been
   done previously.
@@ -1007,7 +1011,7 @@ cdio_open_am (const char *psz_orig_source, driver_id_t driver_id,
 }
 
 
-/*!
+/**
   Set up CD-ROM for reading. The device_name is
   the some sort of device name.
 
@@ -1020,7 +1024,7 @@ cdio_open_cd (const char *psz_source)
   return cdio_open_am_cd(psz_source, NULL);
 }
 
-/*!
+/**
   Set up CD-ROM for reading. The device_name is
   the some sort of device name.
 
@@ -1044,7 +1048,7 @@ cdio_open_am_cd (const char *psz_source, const char *psz_access_mode)
   return scan_for_driver(cdio_device_drivers, psz_source, psz_access_mode);
 }
 
-/*!
+/**
   Set the blocksize for subsequent reads.
 */
 driver_return_code_t
@@ -1055,7 +1059,7 @@ cdio_set_blocksize ( const CdIo_t *p_cdio, int i_blocksize )
   return p_cdio->op.set_blocksize(p_cdio->env, i_blocksize);
 }
 
-/*!
+/**
   Set the drive speed.
 
   @param p_cdio          CD structure set by cdio_open().

@@ -56,7 +56,7 @@ udf_get_file_entry(const udf_dirent_t *p_udf_dirent,
   return true;
 }
 
-/*!
+/**
   Return the file id descriptor of the given file.
 */
 bool udf_get_fileid_descriptor(const udf_dirent_t *p_udf_dirent,
@@ -73,7 +73,7 @@ bool udf_get_fileid_descriptor(const udf_dirent_t *p_udf_dirent,
 }
 
 
-/*!
+/**
   Return the number of hard links of the file. Return 0 if error.
 */
 uint16_t udf_get_link_count(const udf_dirent_t *p_udf_dirent)
@@ -84,7 +84,7 @@ uint16_t udf_get_link_count(const udf_dirent_t *p_udf_dirent)
   return 0; /* Error. Non-error case handled above. */
 }
 
-/*!
+/**
   Return the file length the file. Return 2147483647L if error.
 */
 uint64_t udf_get_file_length(const udf_dirent_t *p_udf_dirent)
@@ -95,7 +95,7 @@ uint64_t udf_get_file_length(const udf_dirent_t *p_udf_dirent)
   return 2147483647L; /* Error. Non-error case handled above. */
 }
 
-/*!
+/**
   Return true if the file is a directory.
 */
 bool

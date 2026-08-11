@@ -196,7 +196,7 @@ const char *cdtext_language[MAX_CDTEXT_LANGUAGE_CODE + 1] =
   "Amharic"
 };
 
-/*!
+/**
   Return string representation of given field type.
 */
 const char *
@@ -208,7 +208,7 @@ cdtext_field2str(cdtext_field_t i)
     return cdtext_field[i];
 }
 
-/*!
+/**
   Return string representation of the given genre code.
 */
 const char *
@@ -220,7 +220,7 @@ cdtext_genre2str(cdtext_genre_t i)
     return cdtext_genre[i];
 }
 
-/*!
+/**
   Return string representation of the given language code.
 */
 const char *
@@ -233,7 +233,7 @@ cdtext_lang2str(cdtext_lang_t i)
   return "INVALID";
 }
 
-/*!
+/**
   Free memory associated with the given cdtext_t object.
 
   @param p_cdtext the CD-TEXT object
@@ -259,7 +259,7 @@ cdtext_destroy(cdtext_t *p_cdtext)
   free(p_cdtext);
 }
 
-/*!
+/**
   Returns a copy of the return value of cdtext_get_const or NULL.
 
   Must be freed using cdio_free() when done.
@@ -275,7 +275,7 @@ cdtext_get(const cdtext_t *p_cdtext, cdtext_field_t field, track_t track)
     return strdup(ret);
 }
 
-/*!
+/**
   Returns value of the given field.
 
   NULL is returned if key is CDTEXT_INVALID or the field is not set.
@@ -296,7 +296,7 @@ cdtext_get_const(const cdtext_t *p_cdtext, cdtext_field_t field, track_t track)
   return p_cdtext->block[p_cdtext->block_i].track[track].field[field];
 }
 
-/*!
+/**
   Returns the discs genre code.
 
   @param p_cdtext the CD-TEXT object
@@ -309,7 +309,7 @@ cdtext_get_genre(const cdtext_t *p_cdtext)
   return p_cdtext->block[p_cdtext->block_i].genre_code;
 }
 
-/*!
+/**
   Returns the currently active language.
 
   @param p_cdtext the CD-TEXT object
@@ -322,7 +322,7 @@ cdtext_get_language(const cdtext_t *p_cdtext)
   return p_cdtext->block[p_cdtext->block_i].language_code;
 }
 
-/*!
+/**
   Returns the first track number.
 
   @param p_cdtext the CD-TEXT object
@@ -335,7 +335,7 @@ cdtext_get_first_track(const cdtext_t *p_cdtext)
   return p_cdtext->block[p_cdtext->block_i].first_track;
 }
 
-/*!
+/**
   Returns the last track number.
 
   @param p_cdtext the CD-TEXT object
@@ -348,7 +348,7 @@ cdtext_get_last_track(const cdtext_t *p_cdtext)
   return p_cdtext->block[p_cdtext->block_i].last_track;
 }
 
-/*!
+/**
   @deprecated Use cdtext_list_languages_v2()
 
   Returns a list of available languages or NULL.
@@ -386,7 +386,7 @@ cdtext_lang_t
   return avail;
 }
 
-/*!
+/**
   Returns an array of available languages or NULL.
   The index of an array element may be used to select the corresponding
   language block by call cdtext_set_language_index().
@@ -421,7 +421,7 @@ cdtext_lang_t
   return p_cdtext->languages;
 }
 
-/*!
+/**
   Select the given language by block index. See cdtext_list_languages_v2().
   If the index is bad, or no language block with that index was read:
   select the default language at index 0 and return false.
@@ -445,7 +445,7 @@ cdtext_set_language_index(cdtext_t *p_cdtext, int idx)
   return true;
 }
 
-/*!
+/**
   Try to select the given language.
   Select default language if specified is not available or invalid and
   return false.
@@ -475,7 +475,7 @@ cdtext_select_language(cdtext_t *p_cdtext, cdtext_lang_t language)
   return false;
 }
 
-/*!
+/**
   Initialize a new cdtext structure.
 
   When the structure is no longer needed, release the
@@ -509,7 +509,7 @@ cdtext_t
   return p_cdtext;
 }
 
-/*!
+/**
   Returns associated cdtext_field_t if field is a CD-TEXT keyword.
 
   Internal function.
@@ -530,7 +530,7 @@ cdtext_is_field (const char *key)
   return CDTEXT_FIELD_INVALID;
 }
 
-/*!
+/**
   Return the language code of a given language string representation.
   This is the inverse of cdtext_lang2str().
 
@@ -555,7 +555,7 @@ cdtext_str2lang (const char *lang)
   return CDTEXT_LANGUAGE_INVALID;
 }
 
-/*!
+/**
   Sets the given field at the given track to the given value.
 
   Recodes to UTF-8 if charset is not NULL.
@@ -590,7 +590,7 @@ cdtext_set(cdtext_t *p_cdtext, cdtext_field_t key, const uint8_t *value,
 
 #define CDTEXT_COMPARE_CHAR(buf, c, db) ((buf)[0] == c && (! db || (buf)[1] == c) )
 
-/*!
+/**
   Read a binary CD-TEXT and fill a cdtext struct.
 
   @param p_cdtext the CD-TEXT object
@@ -876,7 +876,7 @@ cdtext_data_init(cdtext_t *p_cdtext, uint8_t *wdata, size_t i_data)
 }
 
 
-/*!
+/**
   Fills cdtext_pack_t with information read from p_data
 
   @param p_pack out

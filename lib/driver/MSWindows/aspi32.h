@@ -44,20 +44,20 @@
 
 #define SS_INVALID_SRB            0xE0  // Invalid parameter set in SRB
 #define SS_OLD_MANAGER            0xE1  // ASPI manager doesn't support Windows
-#define SS_BUFFER_ALIGN           0xE1  // Buffer not aligned (replaces 
+#define SS_BUFFER_ALIGN           0xE1  // Buffer not aligned (replaces
                                         // OLD_MANAGER in Win32)
 #define SS_ILLEGAL_MODE           0xE2  // Unsupported Windows mode
 #define SS_NO_ASPI                0xE3  // No ASPI managers resident
 #define SS_FAILED_INIT            0xE4  // ASPI for windows failed init
-#define SS_ASPI_IS_BUSY           0xE5  // No resources available to execute 
+#define SS_ASPI_IS_BUSY           0xE5  // No resources available to execute
                                         // cmd
 #define SS_BUFFER_TOO_BIG         0xE6  // Buffer size to big to handle!
-#define SS_MISMATCHED_COMPONENTS  0xE7  // The DLLs/EXEs of ASPI don't version 
+#define SS_MISMATCHED_COMPONENTS  0xE7  // The DLLs/EXEs of ASPI don't version
                                         // check
 #define SS_NO_ADAPTERS            0xE8  // No host adapters to manage
-#define SS_INSUFFICIENT_RESOURCES 0xE9  // Couldn't allocate resources needed 
+#define SS_INSUFFICIENT_RESOURCES 0xE9  // Couldn't allocate resources needed
                                         // to init
-#define SS_ASPI_IS_SHUTDOWN       0xEA  // Call came to ASPI after 
+#define SS_ASPI_IS_SHUTDOWN       0xEA  // Call came to ASPI after
                                         // PROCESS_DETACH
 #define SS_BAD_INSTALL            0xEB  // The DLL or other components are installed wrong
 
@@ -164,12 +164,12 @@ typedef struct                     // Offset
 }
 SRB_HAInquiry;
 
-/*! 
+/**
   Get disc type associated with cd object.
 */
 discmode_t get_discmode_aspi (_img_private_t *p_env);
 
-/*!
+/**
   Return the the kind of drive capabilities of device.
 
   Note: string is malloc'd so caller should free() then returned
@@ -178,63 +178,62 @@ discmode_t get_discmode_aspi (_img_private_t *p_env);
  */
 char * get_mcn_aspi (const _img_private_t *env);
 
-/*!  
-  Get the format (XA, DATA, AUDIO) of a track. 
+/**
+  Get the format (XA, DATA, AUDIO) of a track.
 */
-track_format_t get_track_format_aspi(const _img_private_t *env, 
-				     track_t i_track); 
+track_format_t get_track_format_aspi(const _img_private_t *env,
+				     track_t i_track);
 
-/*!
+/**
   Initialize internal structures for CD device.
  */
 bool init_aspi (_img_private_t *env);
 
 const char *is_cdrom_aspi(const char drive_letter);
 
-/*!
+/**
    Reads an audio device using the DeviceIoControl method into data
    starting from lsn.  Returns 0 if no error.
  */
-int read_audio_sectors_aspi (_img_private_t *obj, void *data, lsn_t lsn, 
+int read_audio_sectors_aspi (_img_private_t *obj, void *data, lsn_t lsn,
 			     unsigned int nblocks);
-/*!
+/**
    Reads a single mode1 sector using the DeviceIoControl method into
    data starting from lsn. Returns 0 if no error.
  */
-int read_mode1_sector_aspi (_img_private_t *env, void *data, 
+int read_mode1_sector_aspi (_img_private_t *env, void *data,
 			    lsn_t lsn, bool b_form2);
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
-   from lsn. Returns 0 if no error. 
+   from lsn. Returns 0 if no error.
  */
-int read_mode2_sector_aspi (_img_private_t *env, void *data, lsn_t lsn, 
+int read_mode2_sector_aspi (_img_private_t *env, void *data, lsn_t lsn,
 			    bool b_form2);
 
-/*! 
+/**
   Read and cache the CD's Track Table of Contents and track info.
   Return true if successful or false if an error.
 */
 bool read_toc_aspi (_img_private_t *env);
 
-/*!
-  Run a SCSI MMC command. 
- 
-  env	        private CD structure 
+/**
+  Run a SCSI MMC command.
+
+  env	        private CD structure
   i_timeout     time in milliseconds we will wait for the command
-                to complete. If this value is -1, use the default 
+                to complete. If this value is -1, use the default
 		time-out value.
   p_buf	        Buffer for data, both sending and receiving
   i_buf	        Size of buffer
   e_direction	direction the transfer is to go.
-  cdb	        CDB bytes. All values that are needed should be set on 
+  cdb	        CDB bytes. All values that are needed should be set on
                 input. We'll figure out what the right CDB length should be.
 
   Return 0 if command completed successfully.
  */
-int run_mmc_cmd_aspi( void *p_user_data, 
+int run_mmc_cmd_aspi( void *p_user_data,
 		      unsigned int i_timeout,
-		      unsigned int i_cdb, 
+		      unsigned int i_cdb,
 		      const mmc_cdb_t * p_cdb,
-		      cdio_mmc_direction_t e_direction, 
+		      cdio_mmc_direction_t e_direction,
 		      unsigned int i_buf, /*in/out*/ void *p_buf );
-

@@ -174,7 +174,7 @@ have_aspi( HMODULE *hASPI,
   return true;
 }
 
-/*!
+/**
   Get disc type associated with cd object.
 */
 discmode_t
@@ -352,7 +352,7 @@ is_cdrom_aspi(const char drive_letter)
   return NULL;
 }
 
-/*!
+/**
   Initialize CD device.
  */
 bool
@@ -471,7 +471,7 @@ init_aspi (_img_private_t *env)
   return false;
 }
 
-/*!
+/**
   Run a SCSI MMC command.
 
   env           private CD structure
@@ -554,7 +554,7 @@ run_mmc_cmd_aspi( void *p_user_data, unsigned int i_timeout_ms,
 }
 
 
-/*!
+/**
    Reads nblocks sectors from cd device into data starting from lsn.
    Returns 0 if no error.
  */
@@ -616,7 +616,7 @@ read_sectors_aspi (_img_private_t *p_env, void *data, lsn_t lsn,
                           &cdb, SCSI_MMC_DATA_READ, i_buf*nblocks, data);
 }
 
-/*!
+/**
    Reads an audio device into data starting from lsn.
    Returns 0 if no error.
  */
@@ -631,7 +631,7 @@ read_audio_sectors_aspi (_img_private_t *p_env, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -645,7 +645,7 @@ read_mode2_sector_aspi (_img_private_t *p_env, void *data, lsn_t lsn,
                                1);
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -656,7 +656,7 @@ read_mode1_sector_aspi (_img_private_t *p_env, void *data, lsn_t lsn,
   return read_sectors_aspi(p_env, data, lsn, CDIO_MMC_READ_TYPE_MODE1, 1);
 }
 
-/*!
+/**
   Read and cache the CD's Track Table of Contents and track info.
   Return true if successful or false if an error.
 */
@@ -737,7 +737,7 @@ read_toc_aspi (_img_private_t *p_env)
 
 /* Eject media will eventually get removed from _cdio_win32.c */
 #if 0
-/*!
+/**
   Eject media. Return 1 if successful, 0 otherwise.
  */
 int
@@ -776,7 +776,7 @@ wnaspi32_eject_media (void *user_data) {
 }
 #endif
 
-/*!
+/**
   Get format of track.
 */
 track_format_t

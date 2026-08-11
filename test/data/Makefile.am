@@ -7,6 +7,7 @@ check_DATA = \
 	bad-cat3.toc   \
 	bad-dir.iso    \
 	bad-file.toc   \
+	bad-fid.udf    \
 	bad-mode1.cue  \
 	bad-mode1.toc  \
 	bad-msf-1.cue  \
@@ -18,6 +19,7 @@ check_DATA = \
 	bad-tracknum-exceeded.cue \
 	bad-tracknum-exceeded.toc \
 	bad-tracknum-overflow.toc \
+	bad-pretrack-isrc.toc \
 	cdda.bin       \
 	cdda.cue       \
 	cdda_4_5.bin   \
@@ -60,6 +62,7 @@ check_DATA = \
 	t8.toc         \
 	t9.toc         \
 	test-udf1.iso  \
+	too-many-tracks.nrg \
 	udf102.iso     \
 	vcd2.toc       \
 	videocd.nrg

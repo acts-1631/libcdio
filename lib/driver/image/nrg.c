@@ -16,7 +16,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*! This code implements low-level access functions for the Nero native
+/** This code implements low-level access functions for the Nero native
    CD-image format residing inside a disk file (*.nrg).
 */
 
@@ -79,17 +79,25 @@ static lsn_t get_disc_last_lsn_nrg (void *p_user_data);
 /* Updates internal track TOC, so we can later
    simulate ioctl(CDROMREADTOCENTRY).
  */
-static void
+static bool
 _register_mapping (_img_private_t *env, lsn_t start_lsn, uint32_t sec_count,
 		   uint64_t img_offset, uint32_t blocksize,
 		   track_format_t track_format, bool track_green)
 {
   const int track_num=env->gen.i_tracks;
-  track_info_t  *this_track=&(env->tocent[env->gen.i_tracks]);
-  _mapping_t *_map = calloc(1, sizeof (_mapping_t));
+  track_info_t  *this_track;
+  _mapping_t *_map;
+
+  if (env->gen.i_tracks >= CDIO_CD_MAX_TRACKS) {
+    cdio_warn ("NRG image has more than %d tracks", CDIO_CD_MAX_TRACKS);
+    return false;
+  }
+
+  this_track = &(env->tocent[env->gen.i_tracks]);
+  _map = calloc(1, sizeof (_mapping_t));
 
   if (_map == NULL)
-    return;
+    return false;
   _map->start_lsn  = start_lsn;
   _map->sec_count  = sec_count;
   _map->img_offset = img_offset;
@@ -171,6 +179,7 @@ _register_mapping (_img_private_t *env, lsn_t start_lsn, uint32_t sec_count,
 	      (long unsigned int) sec_count,
 	      (long unsigned int) img_offset,
 	      (long unsigned int) img_offset);
+  return true;
 }
 
 
@@ -186,17 +195,20 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 {
   off_t footer_start;
   off_t size;
+  size_t footer_len;
   char *footer_buf = NULL;
   if (!p_env) return false;
   size = cdio_stream_stat (p_env->gen.data_source);
-  if (-1 == size) return false;
+  if (size < (off_t) sizeof (_footer_t)) return false;
 
   {
     _footer_t buf;
     cdio_assert (sizeof (buf) == 12);
 
-    cdio_stream_seek (p_env->gen.data_source, size - sizeof (buf), SEEK_SET);
-    cdio_stream_read (p_env->gen.data_source, (void *) &buf, sizeof (buf), 1);
+    if (cdio_stream_seek (p_env->gen.data_source, size - sizeof (buf), SEEK_SET)
+        || cdio_stream_read (p_env->gen.data_source, (void *) &buf,
+                             sizeof (buf), 1) != sizeof (buf))
+      return false;
 
     if (buf.v50.ID == UINT32_TO_BE (NERO_ID)) {
       cdio_debug ("detected Nero version 5.0 (32-bit offsets) NRG magic");
@@ -210,25 +222,54 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
       return false;
     }
 
-    cdio_debug (".NRG footer start = %ld, length = %ld",
-	       (long) footer_start, (long) (size - footer_start));
+    if (footer_start < 0 || footer_start > size) {
+      cdio_log (log_level, "invalid NRG footer offset");
+      return false;
+    }
 
-    cdio_assert ((size - footer_start) <= 4096);
+    footer_len = (size_t) (size - footer_start);
+    cdio_debug (".NRG footer start = %ld, length = %lu",
+               (long) footer_start, (unsigned long) footer_len);
 
-    footer_buf = calloc(1, (size_t)(size - footer_start));
+    if (footer_len > 4096) {
+      cdio_log (log_level, "NRG footer is too large");
+      return false;
+    }
 
-    cdio_stream_seek (p_env->gen.data_source, footer_start, SEEK_SET);
-    cdio_stream_read (p_env->gen.data_source, footer_buf,
-		      (size_t)(size - footer_start), 1);
+    footer_buf = calloc(1, footer_len);
+    if (!footer_buf)
+      return false;
+
+    if (cdio_stream_seek (p_env->gen.data_source, footer_start, SEEK_SET)
+        || cdio_stream_read (p_env->gen.data_source, footer_buf,
+                             footer_len, 1) != footer_len) {
+      free(footer_buf);
+      return false;
+    }
   }
   {
-    int pos = 0;
+    size_t pos = 0;
 
-    while (pos < size - footer_start) {
+    while (pos < footer_len) {
+      uint32_t chunk_len;
       _chunk_t *chunk = (void *) (footer_buf + pos);
-      uint32_t opcode = UINT32_FROM_BE (chunk->id);
+      uint32_t opcode;
 
       bool break_out = false;
+
+      if (footer_len - pos < sizeof (*chunk)) {
+        cdio_log (log_level, "truncated NRG footer chunk header");
+        free(footer_buf);
+        return false;
+      }
+
+      chunk_len = UINT32_FROM_BE (chunk->len);
+      if (chunk_len > footer_len - pos - sizeof (*chunk)) {
+        cdio_log (log_level, "truncated NRG footer chunk");
+        free(footer_buf);
+        return false;
+      }
+      opcode = UINT32_FROM_BE (chunk->id);
 
       switch (opcode) {
 
@@ -265,6 +306,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	      lsn_t sec_count;
 	      int cdte_format = _entries[idx].addr_ctrl / 16;
 	      int cdte_ctrl   = _entries[idx].type >> 4;
+
+	      if (i >= CDIO_CD_MAX_TRACKS) {
+		cdio_warn ("NRG image has more than %d tracks", CDIO_CD_MAX_TRACKS);
+		free(footer_buf);
+		return false;
+	      }
 
 	      if ( COPY_PERMITTED & cdte_ctrl ) {
 		if (p_env) p_env->tocent[i].flags |= COPY_PERMITTED;
@@ -316,9 +363,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 
 	      sec_count = UINT32_FROM_BE (_entries[idx + 1].lsn);
 
-	      _register_mapping (p_env, lsn, sec_count*2,
-				 (lsn+CDIO_PREGAP_SECTORS) * M2RAW_SECTOR_SIZE,
-				 M2RAW_SECTOR_SIZE, TRACK_FORMAT_XA, true);
+	      if (!_register_mapping (p_env, lsn, sec_count*2,
+				      (lsn+CDIO_PREGAP_SECTORS) * M2RAW_SECTOR_SIZE,
+				      M2RAW_SECTOR_SIZE, TRACK_FORMAT_XA, true)) {
+		free(footer_buf);
+		return false;
+	      }
 	    }
 	  } else {
 	    lsn_t lsn = UINT32_FROM_BE (_entries[0].lsn);
@@ -334,6 +384,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	      lsn_t sec_count;
 	      int cdte_format = _entries[idx].addr_ctrl >> 4;
 	      int cdte_ctrl   = _entries[idx].type >> 4;
+
+	      if (i >= CDIO_CD_MAX_TRACKS) {
+		cdio_warn ("NRG image has more than %d tracks", CDIO_CD_MAX_TRACKS);
+		free(footer_buf);
+		return false;
+	      }
 
 	      if ( COPY_PERMITTED & cdte_ctrl ) {
 		if (p_env) p_env->tocent[i].flags |= COPY_PERMITTED;
@@ -365,9 +421,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	      lsn       = UINT32_FROM_BE (_entries[idx].lsn);
 	      sec_count = UINT32_FROM_BE (_entries[idx + 1].lsn);
 
-	      _register_mapping (p_env, lsn, sec_count - lsn,
-				 (lsn + CDIO_PREGAP_SECTORS)*M2RAW_SECTOR_SIZE,
-				 M2RAW_SECTOR_SIZE, TRACK_FORMAT_XA, true);
+	      if (!_register_mapping (p_env, lsn, sec_count - lsn,
+				      (lsn + CDIO_PREGAP_SECTORS)*M2RAW_SECTOR_SIZE,
+				      M2RAW_SECTOR_SIZE, TRACK_FORMAT_XA, true)) {
+		free(footer_buf);
+		return false;
+	      }
 	    }
 	  }
 	  break;
@@ -617,8 +676,11 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	    cdio_assert (_start * blocksize == _start2);
 
 	    _start += idx * CDIO_PREGAP_SECTORS;
-	    _register_mapping (p_env, _start, _len, _start2, blocksize,
-			       track_format, track_green);
+	    if (!_register_mapping (p_env, _start, _len, _start2, blocksize,
+				   track_format, track_green)) {
+	      free(footer_buf);
+	      return false;
+	    }
 
 	  }
 	}
@@ -723,8 +785,11 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	    }
 
 	    _start += idx * CDIO_PREGAP_SECTORS;
-	    _register_mapping (p_env, _start, _len, _start2, blocksize,
-			       track_format, track_green);
+	    if (!_register_mapping (p_env, _start, _len, _start2, blocksize,
+				   track_format, track_green)) {
+	      free(footer_buf);
+	      return false;
+	    }
 	  }
 	}
 	break;
@@ -788,9 +853,14 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
       if (break_out)
 	break;
 
-      pos += 8;
-      pos += UINT32_FROM_BE (chunk->len);
+      pos += sizeof (*chunk) + chunk_len;
     }
+  }
+
+  if (p_env->gen.i_tracks == 0) {
+    cdio_log (log_level, "NRG footer contains no tracks");
+    free(footer_buf);
+    return false;
   }
 
   /* Fake out leadout track. */
@@ -808,7 +878,7 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
   return true;
 }
 
-/*!
+/**
   Initialize image structures.
  */
 static bool
@@ -839,7 +909,7 @@ _init_nrg (_img_private_t *p_env)
 
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   Would be libc's seek() but we have to adjust for the extra track header
@@ -883,7 +953,7 @@ _lseek_nrg (void *p_user_data, off_t offset, int whence)
   return cdio_stream_seek(p_env->gen.data_source, real_offset, whence);
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   FIXME:
@@ -897,7 +967,7 @@ _read_nrg (void *p_user_data, void *buf, size_t size)
   return cdio_stream_read(p_env->gen.data_source, buf, size, 1);
 }
 
-/*!
+/**
   Get the size of the CD in logical block address (LBA) units.
 
   @param p_cdio the CD object queried
@@ -911,7 +981,7 @@ get_disc_last_lsn_nrg (void *p_user_data)
   return p_env->size;
 }
 
-/*!
+/**
    Reads a single audio sector from CD device into data starting
    from LSN.
  */
@@ -1017,7 +1087,7 @@ _read_mode1_sector_nrg (void *p_user_data, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
  */
@@ -1089,7 +1159,7 @@ _read_mode2_sector_nrg (void *p_user_data, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -1129,7 +1199,7 @@ _free_nrg (void *p_user_data)
   _free_image(p_user_data);
 }
 
-/*!
+/**
   Eject media -- there's nothing to do here except free resources.
   We always return 2.
  */
@@ -1175,7 +1245,7 @@ static void Win32Glob(const char* pattern, const char* szCurPath, char ***drives
 }
 #endif
 
-/*!
+/**
   Return an array of strings giving possible NRG disk images.
  */
 char **
@@ -1203,7 +1273,7 @@ cdio_get_devices_nrg (void)
   return drives;
 }
 
-/*!
+/**
   Return a string containing the default CD device.
  */
 char *
@@ -1231,7 +1301,7 @@ get_hwinfo_nrg ( const CdIo *p_cdio, /*out*/ cdio_hwinfo_t *hw_info)
 
 }
 
-/*!
+/**
   Return the number of tracks in the current medium.
   CDIO_INVALID_TRACK is returned on error.
 */
@@ -1257,7 +1327,7 @@ get_track_format_nrg(void *p_user_data, track_t track_num)
   return p_env->tocent[track_num-1].track_format;
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -1277,7 +1347,7 @@ _get_track_green_nrg(void *p_user_data, track_t track_num)
   return p_env->tocent[track_num-1].track_green;
 }
 
-/*!
+/**
   Check that a NRG file is valid.
 */
 bool
@@ -1316,7 +1386,7 @@ cdio_is_nrg(const char *psz_nrg)
   return is_nrg;
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.

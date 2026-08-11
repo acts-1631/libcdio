@@ -15,7 +15,7 @@
 This manual documents @code{libcdio}, the GNU CD Input, Output, and Control
 Library.
 
-Copyright @copyright{} 2003-2008, 2010, 2012-2014, 2025 Rocky
+Copyright @copyright{} 2003-2008, 2010, 2012-2014, 2025-2026 Rocky
 Bernstein and Herbert Valerio Riedel.
 
 @quotation
@@ -89,11 +89,11 @@ Indices
 @chapter History
 
 As a result of the repressive Digital Millennium Copyright Act, DMCA,
-I became aware of Video CD's (VCD's). Video CD's are not subject to
+I became aware of Video CD's (VCD's). Video CDs are not subject to
 the DMCA and therefore enjoy the protection afforded by copyright but
-no more. But in order for VCD's to be competitive with DVD's, good
+no more. But in order for VCD's to be competitive with DVDs, good
 tools -- including GPL tools -- are needed for authoring and playing
-them. And so through VCD's, I became aware of the excellent Video CD
+them. And so through VCDs, I became aware of the excellent Video CD
 tools by Herbert Valerio Riedel which form the @kbd{vcdimager}
 package.
 
@@ -104,11 +104,11 @@ state of Video CD handling in existing VCD players: @code{xine},
 playback control, menu selections, or playing still frames and
 segments from track 1.
 
-Version 0.7.12 of vcdimager was very impressive, however it lacked
+Version 0.7.12 of vcdimager was very impressive; however, it lacked
 exportable libraries that could be used in other projects. So with the
 blessing and encouragement of Herbert Valerio Riedel, I took to
 extract and create libraries from this code base. The result was two
-libraries: one to extract information from a VCD which I called
+libraries: one to extract information from a VCD, which I called
 libvcdinfo, and another to do the reading and control of a VCD. Well,
 actually, at this point I should say that a Video CD is really just
 Video put on a existing well-established Compact Disc or CD format. So
@@ -153,28 +153,28 @@ framebuffer, audio output, mouse, and keyboard. With SDL, it is easy
 to write portable games which run on ...
 @end quotation
 
-Many of the media players mentioned above do in fact can make use of
+Many of the media players mentioned above can, in fact, make use of
 the SDL library but for @emph{video} output only. Because the encapsulation
-is over @emph{many} kinds of I/O (video, joysticks, mice, as well as CD's),
-I believe that the level of control provided for CD a little bit
-limited. (However to be fair, it may have only been intended for games
+is over @emph{many} kinds of I/O (video, joysticks, mice, as well as CDs),
+I believe that the level of control provided for CD is a little bit
+limited. (However, to be fair, it may have only been intended for games
 and may be suitable for that).  Applications that just want the CD
-reading and control portion I think will find quite a bit overhead.
+reading and control portion, I think, will find quite a bit of overhead.
 
 Another related project is J@"org Schilling's SCSI library. You can
 use that to make a non-SCSI CD-ROM act like one that understands SCSI
-MMC commands which is a neat thing to do. However it is a little weird
+MMC commands, which is a neat thing to do. However, it is a little weird
 to have to install drivers just so you can run a particular user-level
 program. Installing drivers often requires special privileges and
-permissions and it is pervasive on a system. It is a little sad that
-along the way to creating such a SCSI library a library similar to
+permissions, and it is pervasive on a system. It is a little sad that
+along the way to creating such a SCSI library, a library similar to
 @value{libcdio} wasn't created which could be used. Were that the
 case, this library certainly never would have been written.
 
-At the OS level there is the ``A Linux CD-ROM Standard'' by David van
+At the OS level, there is the ``A Linux CD-ROM Standard'' by David van
 Leeuwen from around 1999. This defines a set of definitions and
 ioctl's that mask hardware differences of various Compact Disc
-hardware. It is a great idea, however this ``standard'' lacked
+hardware. It is a great idea; however, this ``standard'' lacked
 adoption on OS's other than GNU/Linux. Or maybe it's the case that the
 standard on other OS's lacked adoption on GNU/Linux. For example on
 FreeBSD there is a ``Common Access Method'' (CAM) used for all SCSI
@@ -182,24 +182,24 @@ access which seems not to be adopted in GNU/Linux.@footnote{And I'm
 thankful for that since, at least for MMC commands, it is
 inordinately complicated and in some places arcane.}
 
-Finally at the hardware level where a similar chaos exists, there has
+Finally, at the hardware level where a similar chaos exists, there has
 been an attempt to do something similar with the MMC (multimedia
 commands). This attempts to provide a uniform command set for CD
 devices like PostScript does for printer commands.@footnote{I wrote
 ``attempts'' because over time the command set has changed and now
 there are several different commands to do a particular function like
 read a CD table of contents and some hardware understands some of the
-version of the commands set but might not others} In contrast to
+versions of the command set but might not others.} In contrast to
 PostScript where there one in theory can write a PostScript program in
 a uniform ASCII representation and send that to a printer, for MMC
 although there are common internal structures defined, there is no
 common syntax for representing the structures or an OS-independent
-library or API for issuing MMC-commands which a programmer would need
+library or API for issuing MMC commands which a programmer would need
 to use. Instead, each Operating System has its own interface.  For
-example Adaptec's ASPI or Microsoft's DeviceIoControl on Microsoft
+example, Adaptec's ASPI or Microsoft's DeviceIoControl on Microsoft
 Windows, or IOKit for Apple's OS/X, or FreeBSD's CAM. I've been
 positively awed at how many different variations and differing levels
-of complexity, there are for doing basically the same thing. The ease
+of complexity there are for doing basically the same thing. The ease
 with which one can issue an MMC command from a program varies from easy to very
 difficult. And mastering the boilerplate code to issue an MMC command
 on one OS doesn't help much in figuring out how to do it on
@@ -218,10 +218,10 @@ ISO-9660 filesystems.
 
 Some support for disk-image types like cdrdao's TOC, CDRWIN's BIN/CUE
 and Ahead Nero's NRG format is available, so applications that use this
-library also have the ability to read disc images as though they were
+library also can read disc images as though they were
 CDs.
 
-@command{libcdio} also provides a way to issue SCSI ``MultiMedia
+@command{libcdio} also provides a way to issue SCSI ``Multimedia
 Commands'', MMC.  MMC is supported by many hardware CD-ROM
 manufacturers; and in some cases where a CD-ROM doesn't understand MMC
 directly, some Operating Systems (such as GNU/Linux, Solaris, or
@@ -340,7 +340,7 @@ Historically, @code{libcdio} did not support write access to
 drives. In conjunction with additional work in a separate project
 @code{libburn}, Thomas Schmitt has modified @code{libcdio} to enable
 sending SCSI write commands on some of the drivers. This enables other
-programs like @code{libburn} to write to CD's, DVD's and Blu-Ray
+programs like @code{libburn} to write to CDs, DVDs and Blu-Ray
 discs.
 
 For the OS drivers which are lacking write access, volunteers are
@@ -356,8 +356,8 @@ example @url{http://www.pctechguide.com/08cd-rom.htm} or
 We give just enough background here to cover Compact Discs and Compact
 Disc formats that are handled by this library.
 
-The Sony and Philips Corporations invented and Compact Disc (CD) in
-the early 1980s. The specifications for the layout is often referred
+The Sony and Philips Corporations invented the Compact Disc (CD) in
+the early 1980s. The specifications for the layout are often referred
 to by the color of the cover on the specification.
 
 @menu
@@ -380,9 +380,9 @@ The first type of CD that was produced was the Compact Disc Digital
 Audio (CD-DA) or just plain ``audio CD''. The specification, ICE 60908
 (formerly IEC 908) is commonly called the ``Red Book'',
 @cite{@url{http://en.wikipedia.org/wiki/Red_Book_(audio_CD_standard)}}. Music
-CD's are recorded in this format which basically allows for around 74
+CD's are recorded in this format, which basically allows for around 74
 minutes of audio per disc and for that information to be split up into
-tracks. Tracks are broken up into "sectors" and each sector contains
+tracks. Tracks are broken up into "sectors," and each sector contains
 up to 2,352 bytes. To play one 44.1 kHz CD-DA sampled audio second, 75
 sectors are used.
 
@@ -391,15 +391,15 @@ the fact that 75 sectors are used in a second of playing of
 sound. (And for almost every other CD format and application the MSF
 format doesn't make that much sense).
 
-In @value{libcdio} when you you want to read an audio sector, you call
+In @value{libcdio} when you want to read an audio sector, you call
 @code{cdio_read_audio_sector()} or @code{cdio_read_audio_sectors()}.
 
 @cindex subchannel
-In addition the the audio data ``channel'' a provision for other
+In addition to the audio data ``channel,'' a provision for other
 information or @term{subchannel} information) can be stored in a
 sector. Other subchannels include a Media Catalog Number (also
-abbreviated as MCN and sometimes a UPC), or album meta data (also
-called CD-Text). Karioke graphics can also be stored in a format
+abbreviated as MCN and sometimes a UPC), or album metadata (also
+called CD-Text). Karaoke graphics can also be stored in a format
 called @term{CD+G}.
 
 @node CD Text
@@ -408,16 +408,16 @@ called @term{CD+G}.
 @cindex CD+G
 
 CD Text is an extension to the CD-DA standard that adds the ability to
-album and track meta data (titles, artist/performer names, song
+album and track metadata (titles, artist/performer names, song
 titles) and graphical (e.g. Karaoke) information.  For an
-alternative way to get album and track meta-data see @xref{CDDB}.
+alternative way to get album and track metadata see @xref{CDDB}.
 
 Information is stored in such a way that it doesn't interfere with the
 normal operation of any CD players or CDROM drives. There are two
 different parts of the CD where the data can be stored.
 
 The first place the information can be recorded is in the R-W sub
-codes in the lead in area of the CD.  This information is stored as a
+codes in the lead-in area of the CD.  This information is stored as a
 single block of data and is the format. The method for reading this
 data from a CDROM drive is covered under the Sony proposal to the MMC
 specification. The format of the data is partially covered in the MMC
@@ -430,7 +430,7 @@ Broadcasting (DAB), and virtually the same as the data standard for
 the MiniDisc.
 
 The second place the information can be recorded is in the R-W sub
-codes in the program area of the CD giving a data capacity of roughly
+codes in the program area of the CD, giving a data capacity of roughly
 31MB. CD+G (CD w/graphics) uses this method.
 
 The methods for reading this data from a CD-ROM drive were first
@@ -450,15 +450,15 @@ information and how it is encoded.
 @subsection Internet CD Database (CDDB)
 @cindex CDDB
 
-CDDB is an database on the Internet of of CD album/track, artist, and
+CDDB is an database on the Internet of CD album/track, artist, and
 genre information similar to CD Text information. Using track
 information (number of tracks and length of the tracks), devices that
-have access to the Internet can query for meta information and
+have access to the Internet can query for metadata and
 contribute information for CD's where there is no existing
 information.  When storage is available (such as you'd expect for any
 program using @value{libcdio}, the information is often saved for
-later use when the Internet is not available; people tend request the
-same information since they via programs play the same music.
+later use when the Internet is not available; people tend to request the
+same information since they play the same music via programs.
 
 Obtaining CD meta information when none is encoded in an audio CD is
 useful in media players or making one's own compilations from audio
@@ -478,8 +478,8 @@ and it's what we use in our applications that need it.
 @node Yellow Book
 @section Yellow Book (CD-ROM Digital Data)
 The CD-ROM specification or the ``Yellow Book'' followed a few years
-later (Standards ISO/IEC 10149), and describes the extension of CD's
-to store computer data, i.e. CD-ROM (Compact Disk Read Only Memory).
+later (Standards ISO/IEC 10149), and describes the extension of CDs
+to store computer data, i.e., CD-ROM (Compact Disk Read Only Memory).
 
 The specification in the Yellow Book defines two modes: Mode 1 and
 Mode 2.
@@ -510,7 +510,7 @@ manufacturers met at the High Sierra Hotel and Casino in Lake Tahoe,
 NV, in 1985, to define a standard for storing data on CDs. This format
 was nicknamed High Sierra Format. In a slightly modified form, it was
 later adopted as ISO the ISO 9660 standard. This standard is further
-broken down into 3 "levels", the higher the level, the more
+broken down into 3 "levels"; the higher the level, the more
 permissive.
 
 @node ISO 9660 Level 1
@@ -536,7 +536,7 @@ written in multiple packets with packet-writing software.
 
 There have been extensions to the ISO 9660 CD-ROM file
 format. One extension is Microsoft's Joliet specification, designed to
-resolve a deficiencies in the original ISO 9660 Level 1 file
+resolve deficiencies in the original ISO 9660 Level 1 file
 system, and in particular to support the long file names used in
 Windows 95 and subsequent versions of Windows.
 
@@ -597,7 +597,7 @@ and correcting code. This is necessary because data CDs
 cannot tolerate the loss of a handful of bits now and then, the way
 audio CDs can.
 
-In @value{libcdio} when you you want to read a mode1
+In @value{libcdio}, when you want to read a mode1
 sector you call the @code{cdio_read_mode1_sector()} or
 @code{cdio_read_mode1_sectors()}.
 
@@ -616,7 +616,7 @@ original data CD standards known as CD-ROM Extended Architecture, or
 CD-ROM XA.  CD-ROM XA formats currently in use are CD-I Bridge
 formats, Photo CD, Video CD, and Sony's PlayStation.
 
-In @value{libcdio} when you you want to read a mode1
+In @value{libcdio} when you want to read a mode1
 sector you call the @code{cdio_read_mode2_sector()} or
 @code{cdio_read_mode2_sectors()}.
 
@@ -666,20 +666,20 @@ sector you call the @code{cdio_read_mode2_sector()} or
 * NRG Format::
 @end menu
 
-In both the @command{cdrdao} and bin/cue formats there is one meta-file with
+In both the @command{cdrdao} and bin/cue formats, there is one meta-file with
 extensions @code{.toc} or @code{.cue} respectively and one or more
 files (often with the extension @code{.bin}) which contain the
 content of tracks. The format of the track data is often
 interchangeable between the two formats.  For example, in
 @value{libcdio}'s regression tests we make use of this to reduce the
-size of the test data and just provide alternate meta-data files
+size of the test data and just provide alternate metadata files
 (@code{.toc} or @code{.cue}).
 
 In contrast to the first two formats, the NRG format consists of a
 single file. This has the advantage of being a self-contained
 unit: in the other two formats the meta file can refer
 to a file that can't be found. A disadvantage of the NRG format
-is that the metadata can't be easily viewed or modified say in a text
+is that the metadata can't be easily viewed or modified, say in a text
 file as it can be with the first two formats. In conjunction with this
 disadvantage is another disadvantage that the format is not
 documented, so how @value{libcdio} interprets an NRG image is based on
@@ -705,7 +705,7 @@ format.
 @subsection CDRDAO Grammar
 
 Below are the lexical tokens and grammar for a cdrdao TOC. It was
-taken from the cdrdao's pacct grammar; the token and nonterminal names
+taken from cdrdao's pacct grammar; the token and nonterminal names
 are the same.
 
 @example
@@ -933,7 +933,7 @@ have a gap between them, a block or sector does not. (In
 @code{CDIO_CD_FRAMESIZE_RAW}).
 
 A Compact Disc has a limit on the number of blocks or sectors.  This
-value is defined by constant @code{CDIO_CD_MAX_LSN} in
+value is defined by the constant @code{CDIO_CD_MAX_LSN} in
 @file{cdio/sector.h}.
 
 One can address a block in one of three formats. The oldest format
@@ -943,12 +943,12 @@ suited in audio (Red Book) applications. In @value{libcdio}, the type
 @code{msf_t} can be used to declare variables to hold such
 values. Minute, second, and frame values are one byte @emph{and stored
 BCD notation}.@footnote{Perhaps this is a @value{libcdio} design
-flaw. It was originally done I guess because it was convenient for
+flaw. It was originally done, I guess, because it was convenient for
 VCDs.} There are @value{libcdio} conversion routines
 @code{cdio_from_bcd8()} and @code{cdio_to_bcd8()} to convert the
 minute, second, and frame values into or out of integers. If you want
 to print a field in a BCD-encoded MSF, one can use the format
-specifier @code{%x} @emph{(not @code{%d})} and things will come out
+specifier @code{%x} @emph{(not @code{%d})}, and things will come out
 right.
 
 In the MSF notation, there are 75 ``frames'' in a ``second,'' and the
@@ -1021,7 +1021,7 @@ non-audio information known as the @term{Q sub-channel}.  The
 it should display while it is playing the block of audio data in which
 the @term{Q sub-channel} data is embedded.  Near the end of some
 tracks, the @term{Q sub-channel} may instruct the CD player to update
-the track number to the next track and display a count down to the
+the track number to the next track and display a countdown to the
 next track, often starting at -2 seconds and proceeding to zero.  This
 is known as an audio track @term{pre-gap}.  It may either contain
 silence, or as previously discussed--in the case of live
@@ -1153,13 +1153,13 @@ the C Preprocessor values from @code{config.h} (created by configure).
 This header can be used to consult exactly how libcdio was built. Initially
 I had selected ``interesting'' values, but this became too hard to maintain.
 
-One set of values that libdio needs internally is the whether the CPU
+One set of values that libdio needs internally is whether the CPU
 that was used to compile libcdio is BigEndian or not; it can get this
 from libcdio's @code{config.h} which is not installed and preferred or
 @code{cdio/cdio_config.h}.
 
-Some of the libcdio programs like the demo programs include
-@code{config.h} for the generic reasons that the configuration-created
+Some of the libcdio programs, like the demo programs, include
+@code{config.h} for the generic reason that the configuration-created
 @code{config.h} file is used: to figure out what headers are available.
 For example, do we have @code{<unistd.h>}?
 
@@ -1168,7 +1168,7 @@ The file @code{config.h} is generated by an autotools-generated
 previously.
 
 Later, the demo programs include @code{<cdio.h>} to get libcdio headers.
-But because libcdio needs some of the same information like the BigEndian
+But because libcdio needs some of the same information, like the BigEndian
 value, this creates a duplicate include.
 
 The way I get around this in the demo programs is by defining @code{__CDIO_CONFIG_H__} after
@@ -1801,7 +1801,7 @@ may get messages about C Preprocessor symbols getting redefined in the
 @node Example 7
 @section Example 7: Using the CD Paranoia library for CD-DA reading
 
-The below program reads CD-DA data. For a more complete program to add
+The program below reads CD-DA data. For a more complete program to add
 a WAV header so that the CD can be played from a copy on a hard disk,
 see the corresponding distribution program.
 
@@ -1946,15 +1946,15 @@ highest are:
 
 @item @code{CDIO_LOG_DEBUG} (value 1)
 
-These are of a debugging nature and are give the most verbose output.
+These are of a debugging nature and give the most verbose output.
 
 @item @code{CDIO_LOG_INFO} (value 2)
 
-These are informational message.
+These are informational messages.
 
 @item @code{CDIO_LOG_WARN} (value 3)
 
-These are warning message. Not an error, per se, but something that
+These are warning messages. Not an error, per se, but something that
 might be of concern.
 
 @item @code{CDIO_LOG_ERROR} (value 4)
@@ -1973,7 +1973,7 @@ Setting a lower or more verbose log level will cause higher-level
 messages to appear, but not those that are less than the set verbosity
 level. The ``debug'' level is the lowest. So setting
 @code{cdio_loglevel_default} to level causes all other levels of
-messages to be displayed. However setting the verbosity level to
+messages to be displayed. However, setting the verbosity level to
 ``warn'' will cause debug and informational messages (lower
 level messages) to be ignored while still showing warning, error, and
 fatal error messages.
@@ -1982,7 +1982,7 @@ Another thing that can be done is to write a custom log handler that
 will be used instead of @command{libcdio}'s default handlers. Using
 this, you have complete control of how you want logging to be handled.
 
-Here is an example adapted from example program @command{logging.c}.
+Here is an example adapted from the example program @command{logging.c}.
 
 @smallexample
 #include <stdio.h>
@@ -2057,11 +2057,11 @@ main(int argc, const char *argv[])
 The @code{example} directory contains some simple examples of the use
 of the @value{libcdio} library.
 
-A larger more-complicated example are the @command{cd-drive},
+A larger, more complicated example is the @command{cd-drive},
 @command{cd-info}, @command{cd-read}, @command{iso-info} and
 @command{iso-info} programs in the @command{src} directory.
 
-Descriptions of the sample are as follows...
+Descriptions of the samples are as follows...
 
 @table @code
 
@@ -2075,7 +2075,7 @@ A program to test if a CD has been changed since the last change test.
 
 @item @code{cd-eject.c}
 
-A a stripped-down "eject" command to open or close a CD-ROM tray.
+A stripped-down "eject" command to open or close a CD-ROM tray.
 
 @item @code{cdtext.c}
 
@@ -2088,15 +2088,15 @@ is and what CD drives are available.
 
 @item @code{eject.c}
 
-A program eject a CD from a CD-ROM drive and then close the door again.
+A program to eject a CD from a CD-ROM drive and then close the door again.
 
 @item @code{isofile.c}
 
-A program to show using libiso9660 to extract a file from an ISO-9660 image.
+A program to show how to use libiso9660 to extract a file from an ISO-9660 image.
 
 @item @code{isofile2.c}
 
-A program to show using libiso9660 to extract a file from a CDRWIN cue/bin CD image.
+A program to show how to use libiso9660 to extract a file from a CDRWIN cue/bin CD image.
 
 @item @code{C++/isofile2.cpp}
 
@@ -2108,7 +2108,7 @@ A program showing fuzzy ISO-9660 detection/reading.
 
 @item @code{isolist.c}
 
-A program to show using @code{libiso9660} to list files in a
+A program to show how to use @code{libiso9660} to list files in a
 	directory of an ISO-9660 image.
 
 @item @code{C++/isolist.cpp}
@@ -2121,7 +2121,7 @@ A program showing fuzzy ISO-9660 detection/reading.
 
 @item @code{logging.c}
 
-A program to show to to set log verbosity levels and how to write a
+A program to show how to set log verbosity levels and how to write a
 custom log handler.
 
 @item @code{mmc1.c}
@@ -2140,7 +2140,7 @@ SCSI-MMC @code{GET_CONFIGURATION} command.
 @item @code{mmc2a.c}
 
 Prints MMC @command{MODE_SENSE} page 2A parameters.
-Page 2a are the CD/DVD Capabilities and Mechanical Status.
+Page 2A is the CD/DVD Capabilities and Mechanical Status.
 
 @item @code{C++/mmc2.cpp}
 
@@ -2154,8 +2154,8 @@ A program to show using libcdio's version of the CD-DA paranoia.
 
 A program to show using libcdio's version of the CD-DA paranoia
 library. But in this version, we'll open a cdio object before calling
-paranoia's open. I imagine in many cases such as media players this
-may be what will be done since, one may want to get CDDB/CD-Text info
+paranoia's open. I imagine in many cases, such as media players, this
+may be what will be done since one may want to get CDDB/CD-Text info
 beforehand.
 
 @item @code{tracks.c}
@@ -2180,12 +2180,12 @@ an optional CD-location.
 
 @item @code{udf1.c}
 
-A program to show using libudf to list files in a directory of an UDF
+A program to show how to use libudf to list files in a directory of a UDF
 image.
 
 @item @code{udf2.c}
 
-A program to show using libudf to extract a file from an UDF image.
+A program to show how to use libudf to extract a file from a UDF image.
 
 @end table
 
@@ -2203,24 +2203,24 @@ A program to show using libudf to extract a file from an UDF image.
 @node cd-drive
 @section @samp{cd-drive}
 
-@samp{cd-drive} lists out drive information, what features drive
+@samp{cd-drive} lists drive information, what features the drive
 supports, and information about what hardware drivers are available.
 
 @node cd-info
 @section @samp{cd-info}
 
-@samp{cd-info} will print out the structure of a CD medium which could
-either be a Compact Disc in a CD ROM or an CD image. It can try to
+@samp{cd-info} will print out the structure of a CD medium, which could
+either be a Compact Disc in a CD ROM or a CD image. It can try to
 analyze the medium to give characteristics of the medium, such as how
 many tracks are in the CD and the format of each track, whether a CD
-contains a Video CD, CD-DA, PhotoCD, whether a track has an ISO-9660
+contains a Video CD, CD-DA, PhotoCD, or whether a track has an ISO-9660
 filesystem.
 
 @node cd-read
 @section @samp{cd-read}
 
-@samp{cd-info} can be used to read blocks a CD medium which could
-either be a Compact Disc in a CD ROM or an CD image. You specify the
+@samp{cd-info} can be used to read blocks from a CD medium, which could
+either be a Compact Disc in a CD ROM or a CD image. You specify the
 beginning and ending LSN and what mode format to use in the reading.
 
 @node iso-info
@@ -2246,14 +2246,14 @@ image.
 * Microsoft:: Microsoft Windows ioctl and ASPI
 * Solaris:: Solaris ATAPI and SCSI
 * FreeBSD:: FreeBSD ioctl and CAM
-* OS X::  OSX (non-exclussive access)
+* OS X::  OSX (non-exclusive access)
 @end menu
 
 @node SCSI mess
 @section SCSI, SCSI commands, and MMC commands
 
 Historically, SCSI referred to a class of hardware devices and device
-controllers, bus technology and the data cables and protocols which
+controllers, bus technology, and the data cables and protocols which
 attached to such devices. This is now called ``Parallel SCSI''.
 
 A specification standard grew out of the @emph{commands} that
@@ -2262,7 +2262,7 @@ technologies including Parallel SCSI, ATA/ATAPI, Serial ATA, Universal
 Serial Bus (USB versions 1.1 and 2.0), and High Performance Serial Bus
 (IEEE 1394, 1394A, and 1394B).
 
-Another similar class of hardware devices and controllers is called ATA
+Another similar class of hardware devices and controllers is called ATA, 
 and a command interface to that is called ATAPI (ATA Packetized
 Interface). ATAPI provides a mechanism for transferring and executing
 SCSI commands.
@@ -2270,7 +2270,7 @@ SCSI commands.
 MMC (Multimedia commands) is a specification which adds special SCSI
 commands for CD, DVD, Blu-Ray devices.
 
-If your optical drive understands MMC commands as most do nowadays,
+If your optical drive understands MMC commands, as most do nowadays,
 this probably gives the most flexibility in control. SCSI and ATAPI
 CD-ROM devices generally support a fairly large set of MMC
 commands. Unfortunately, on most Operating Systems one may need to do
@@ -2281,11 +2281,11 @@ The name ``SCSI MMC'' is often found in the literature in
 specifications and on the Internet. The ``SCSI'' part is probably a
 little bit misleading because a drive can understand ``SCSI MMC''
 commands but not use a SCSI bus protocol---ATAPI CD-ROMs are one such
-broad class of examples. In fact there are drivers to ``encapsulate''
-non-SCSI drives to make them act like more like SCSI drives, such as
+broad class of examples. In fact, there are drivers to ``encapsulate''
+non-SCSI drives to make them act more like SCSI drives, such as
 by adding SCSI address naming.
 
-For clarity and precision we will use the term ``MMC'' rather than
+For clarity and precision, we will use the term ``MMC'' rather than
 ``SCSI MMC''.
 
 One of the problems with MMC is that there are so many different
@@ -2313,7 +2313,7 @@ the command (actually in MMC jargon this is called a ``CDB''
 or command descriptor block). So for example there is a 6-byte ``MODE
 SELECT'' often called ``MODE SELECT 6'' and a 10-byte ``MODE SELECT''
 often called ``MODE SELECT 10''. Presumably the 6-byte command came
-first and it was discovered that there was some deficiency causing the
+first, and it was discovered that there was some deficiency causing the
 longer command. In @value{libcdio} where there are two formats we add
 the suffix in the name, e.g. @code{CDIO_MMC_GPCMD_MODE_SELECT_6} or
 @code{CDIO_MMC_GPCMD_MODE_SELECT_10}.
@@ -2324,11 +2324,11 @@ through at the OS programming API. However in @value{libcdio}, you
 just give the opcode in @code{scsi_mmc_run_cmd()} and we'll do the
 work to figure out how many bytes of the CDB are used.
 
-Down the line it is hoped that @value{libcdio} will have a way to
+Down the line, it is hoped that @value{libcdio} will have a way to
 remove a distinction between the various alternative and
 alternative-size MMC commands. In @code{cdio/scsi-mmc.h} you will
-find a little bit of this for example via the routine
-@code{scsi_mmc_get_drive_cap()}. However much more work is needed.
+find a little bit of this, for example via the routine
+@code{scsi_mmc_get_drive_cap()}. However, much more work is needed.
 
 Finally, in @code{libcdio} there is a driver access mode (not a
 driver) called ``MMC''. It tells the specific drivers to use MMC
@@ -2339,20 +2339,20 @@ commands instead of other OS-specific mechanisms.
 
 There are several ways that you can open a CD-ROM drive for
 subsequent use.  Each way is called an @emph{access
-mode}. Historically libcdio only supported a reading kind of
+mode}. Historically, libcdio only supported a reading kind of
 access.
 
-Adding the ability to writing to a drive for ``burning'' is being added
+Adding the ability to write to a drive for ``burning'' is being added
 by Thomas Schmitt, and this is accomplished by opening the drive in a
 read-write mode. Currently writing modes are only supported via the
 MMC command interface. Under this, one can get exclusive read-write
 access or non-exclusive read-write access. The names of these two
 modes are @code{MMC_RDWR_EXCL} and @code{MMC_RDWR} respectively.
 
-On various OS's often there are two kinds of read modes that are
+On various OS's often two kinds of read modes are
 supported, one which uses MMC commands and one which uses some sort of
-OS-specific native command interface. For example on Unix, there is
-often a access mode associated with issuing an device-specific
+OS-specific native command interface. For example, on Unix, there is
+often an access mode associated with issuing device-specific
 @code{ioctl}'s that the OS supports.
 
 To specify a particular kind of access mode, use @code{cdio_open_am}
@@ -2362,9 +2362,9 @@ access mode.
 @node Accessing Driver Parameters
 @section Accessing Driver Parameters --- @code{cdio_get_arg}
 
-Once a driver is opened, you can use call @code{cdio_get_arg} to get
+Once a driver is opened, you can call @code{cdio_get_arg} to get
 information about the driver. Each driver can have specific features
-that can be queried, but there are features that are common to all
+that can be queried, but some features are common to all
 drivers. These are listed below:
 
 @table @code
@@ -2372,8 +2372,8 @@ drivers. These are listed below:
 @item @code{access-mode}
 This returns a string which is the name of the access mode in use.
 @item @code{mmc-supported?}
-This returns a string ``true'' or ``false'' depending whether the
-driver with this access mode support MMC commands.
+This returns a string ``true'' or ``false'' depending on whether the
+driver with this access mode supports MMC commands.
 @item @code{scsi-tuple}
 On drivers that support MMC commands, this returns the SCSI name or a
 faked-up SCSI name that ripping front ends typically use.
@@ -2382,7 +2382,7 @@ faked-up SCSI name that ripping front ends typically use.
 @node GNU/Linux
 @section GNU/Linux
 
-The GNU/Linux uses a hybrid of methods. Somethings are done via ioctl
+GNU/Linux uses a hybrid of methods. Some things are done via ioctl
 and some things via MMC. GNU/Linux has a rather nice and complete
 ioctl mechanism. On the other hand, the MMC mechanism is more
 universal.  There are other ``access modes'' listed which are not
@@ -2401,7 +2401,7 @@ ioctl and ASPI.
 
 The ASPI interface specification was developed by Adaptec for sending
 commands to a SCSI host adapter (such as those controlling CD and DVD
-drives) and used on Window 9x/NT and later. Emulation for ATAPI drives
+drives) and used on Windows 9x/NT and later. Emulation for ATAPI drives
 was added so that the same sets of commands worked, even though
 the drives might not be SCSI nor might there even be a SCSI controller
 attached. The DLL is not part of Microsoft Windows and has to be
@@ -2415,11 +2415,11 @@ interface, and has taken steps to make using ASPI more inaccessible
 @node Solaris
 @section Solaris ATAPI and SCSI
 
-There is currently only one CD drive access methods in Solaris: SCSI
+There is currently only one CD drive access method in Solaris: SCSI
 (called ``USCSI'' or ``user SCSI'' in Solaris). There used to be an
 ATAPI method and it could be resurrected if needed. USCSI was
 preferred since on newer releases of Solaris and Solaris environments
-one need to have root access for ATAPI.
+one needs to have root access for ATAPI.
 
 @node FreeBSD
 @section FreeBSD ioctl and CAM
@@ -2515,7 +2515,7 @@ Various stand-alone utility programs. See below.
 
 @value{libcdio}'s version of @code{cdparanoia}. Except for the fact
 that the back-end CD-reading code has been replaced by
-@value{libcdio}'s routines the code is pretty much identical.
+@value{libcdio}'s routines, the code is pretty much identical.
 
 @item @code{test}
 
@@ -2523,7 +2523,7 @@ Regression tests
 
 @item @code{test/data}
 
-Disk images and image meta-data used in tests
+Disk images and image metadata used in tests
 
 
 @item @code{test/driver}
@@ -2547,9 +2547,9 @@ location @code{lib/driver}
 @node libcdio
 @subsection @samp{libcdio}
 
-@value{libcdio} exports one opaque type @code{CdIo_t}. Internally this
+@value{libcdio} exports one opaque type @code{CdIo_t}. Internally, this is 
 a structure containing an enumeration for the driver, a structure
-containing function pointers and a generic ``environment'' pointer
+containing function pointers, and a generic ``environment'' pointer
 which is passed as a parameter on a function call. See
 @file{lib/driver/cdio_private.h}. The initialization routine for each
 driver sets up the function pointers and allocates memory for the
@@ -2563,10 +2563,10 @@ of sharing of common routines. Some of the common routines are found
 in the file @file{lib/driver/_cdio_generic.c}.
 
 Another set of routines that one is likely to find shared amongst
-drivers are the MMC commands. These are located in
+drivers is the MMC commands. These are located in
 @file{lib/driver/scsi_mmc.c}.
 
-There is not only an attempt to share functions but we've tried to create
+There is not only an attempt to share functions, but we've tried to create
 a generic CD structure @code{generic_img_private_t} of file
 @file{lib/driver/generic.h}. By putting information into a common
 structure, we increase the likelihood of being able to have a common
@@ -2580,7 +2580,7 @@ structure it is not parsed.
 @node libcdio_cdda
 @subsection @samp{libcdio_cdda}
 
-This library is intended to give access CD-DA disks using Monty's
+This library is intended to give access to CD-DA disks using Monty's
 cd-paranoia library underneath.
 
 To be completed....
@@ -2588,7 +2588,7 @@ To be completed....
 @node libcdio_paranoia
 @subsection @samp{libcdio_paranoia}
 
-This library is intended to give access Monty's cd-paranoia
+This library is intended to give access to Monty's cd-paranoia
 library. It is the gap detection and jitter correction part without
 the part dealing with CD-DA reading.
 
@@ -2597,9 +2597,9 @@ To be completed....
 @node libiso9660
 @subsection @samp{libiso9660}
 
-This library is intended to give access and manipulate a ISO-9600 file
-image. One part of it is concerned with the the entire ISO-9660 file
-system image, and the other part access routines for manipulating data
+This library is intended to give access to and manipulate a ISO-9600 file
+image. One part of it is concerned with the entire ISO-9660 file
+system image, and the other part is access routines for manipulating data
 structures and fields that go into such an image.
 
 
@@ -2608,7 +2608,7 @@ To be completed....
 @node libudf
 @subsection @samp{libudf}
 
-This library is intended to give access and manipulate a UDF file
+This library is intended to give access to and manipulate a UDF file
 image.
 
 To be completed....
@@ -2624,8 +2624,8 @@ To be completed....
 @node Coding Conventions
 @subsection Coding Conventions
 
-In @value{libcdio} there are a number of conventions used. If you
-understand some of these conventions it may facilitate understanding
+In @value{libcdio} there are several conventions used. If you
+understand some of these conventions, it may facilitate understanding
 the code a little.
 
 @node Namespace Conventions
@@ -2637,7 +2637,7 @@ libraries. If you understand these conventions, there will be little
 or no chance that the names you use will conflict with @value{libcdio}
 and @code{libiso9660} and vice versa.
 
-All of the external @value{libcdio} C routines start out with
+All of the external @value{libcdio} C routines start with
 @code{cdio_}, e.g. @code{cdio_open}; as a corollary, the
 @value{libcdio} CD-Paranoia routines start @code{cdio_cddap_},
 e.g. @code{cdio_cddap_open}.  @code{libiso9660} routines start
@@ -2656,12 +2656,12 @@ A few suffixes are used in type and structure names:
 
 @item @code{_e}
 
-An enumeration tag. Generally though the same name will appear with the
+An enumeration tag. Generally, though, the same name will appear with the
 @code{_t} suffix and probably that should be used instead.
 
 @item @code{_s}
 
-A structure tag. Generally though the same name will appear with the
+A structure tag. Generally, though, the same name will appear with the
 @code{_t} suffix and probably that should be used instead.
 
 @item @code{_t}
@@ -2672,14 +2672,14 @@ A type suffix.
 
 @subsubsection prefixes (variable names)
 
-A number of prefixes are used in variable names here's what they mean
+Several prefixes are used in variable names; here's what they mean
 
 @itemize
 @item @code{i_}
 
 An integer type of some sort. A variable of this ilk one might find
 being iterated over in @code{for} loops or used as the index of an
-array for example.
+array, for example.
 
 @item @code{b_}
 
@@ -2712,7 +2712,7 @@ CD-ROM device names
 
 @end itemize
 
-There are a some other naming conventions. Generally if a routine
+There are some other naming conventions. Generally, if a routine
 name starts @code{cdio_}, e.g. @code{cdio_open}, then it is an
 externally visible routine in @code{libcdio}. If a name starts
 @code{iso9660_}, e.g. @code{iso9660_is_dchar} then it is an externally

@@ -95,5 +95,14 @@ main(int argc, const char *argv[])
 
   cdio_destroy(p_cdio);
 
+  snprintf(psz_nrgfile, sizeof(psz_nrgfile)-1, "%s/%s",
+	   DATA_DIR, "too-many-tracks.nrg");
+  p_cdio = cdio_open_nrg(psz_nrgfile);
+  if (p_cdio) {
+    printf("Accepted NRG image with too many tracks: %s.\n", psz_nrgfile);
+    cdio_destroy(p_cdio);
+    return(4);
+  }
+
   return 0;
 }

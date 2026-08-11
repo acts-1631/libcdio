@@ -27,7 +27,7 @@
 #include <cdio/cdio.h>
 #include <cdio++/cdio.hpp>
 
-/*!
+/**
   Close media tray in CD drive if there is a routine to do so.
 
   @param psz_drive the name of CD-ROM to be closed.
@@ -41,7 +41,7 @@ void closeTray (const char *psz_drive, /*in/out*/ driver_id_t &driver_id)
   possible_throw_device_exception(drc);
 }
 
-/*!
+/**
   Close media tray in CD drive if there is a routine to do so.
 
   @param psz_drive the name of CD-ROM to be closed. If omitted or
@@ -53,7 +53,7 @@ void closeTray (const char *psz_drive)
   closeTray(psz_drive, driver_id);
 }
 
-/*!
+/**
   Get a string describing driver_id.
 
   @param driver_id the driver you want the description for
@@ -65,7 +65,7 @@ driverDescribe (driver_id_t driver_id)
   return cdio_driver_describe(driver_id);
 }
 
-/*!
+/**
   Eject media in CD drive if there is a routine to do so.
 
   If the CD is ejected, object is destroyed.
@@ -77,7 +77,7 @@ ejectMedia (const char *psz_drive)
   possible_throw_device_exception(drc);
 }
 
-/*!
+/**
   Free device list returned by GetDevices
 
   @param device_list list returned by GetDevices
@@ -91,7 +91,7 @@ freeDeviceList (char * device_list[])
   cdio_free_device_list(device_list);
 }
 
-/*!
+/**
   Return a string containing the default CD device if none is specified.
   if p_driver_id is DRIVER_UNKNOWN or DRIVER_DEVICE
   then find a suitable one set the default device for that.
@@ -104,7 +104,7 @@ getDefaultDevice(/*in/out*/ driver_id_t &driver_id)
   return cdio_get_default_device_driver(&driver_id);
 }
 
-/*! Return an array of device names. If you want a specific
+/** Return an array of device names. If you want a specific
   devices for a driver, give that device. If you want hardware
   devices, give DRIVER_DEVICE and if you want all possible devices,
   image drivers and hardware drivers give DRIVER_UNKNOWN.
@@ -121,7 +121,7 @@ getDevices(driver_id_t driver_id)
   return cdio_get_devices(driver_id);
 }
 
-/*! Like GetDevices above, but we may change the p_driver_id if we
+/** Like GetDevices above, but we may change the p_driver_id if we
   were given DRIVER_DEVICE or DRIVER_UNKNOWN. This is because
   often one wants to get a drive name and then *open* it
   afterwards. Giving the driver back facilitates this, and speeds
@@ -134,7 +134,7 @@ getDevices (driver_id_t &driver_id)
   return cdio_get_devices_ret(&driver_id);
 }
 
-/*!
+/**
   Get an array of device names in search_devices that have at least
   the capabilities listed by the capabities parameter.  If
   search_devices is NULL, then we'll search all possible CD drives.
@@ -158,7 +158,7 @@ getDevices(/*in*/ char *ppsz_search_devices[],
   return cdio_get_devices_with_cap(ppsz_search_devices, capabilities, b_any);
 }
 
-/*!
+/**
   Like GetDevices above but we return the driver we found
   as well. This is because often one wants to search for kind of drive
   and then *open* it afterwards. Giving the driver back facilitates this,
@@ -173,14 +173,14 @@ getDevices(/*in*/ char* ppsz_search_devices[],
 				       b_any, &driver_id);
 }
 
-/*! Return true if we Have driver for driver_id */
+/** Return true if we Have driver for driver_id */
 bool
 haveDriver (driver_id_t driver_id)
 {
   return cdio_have_driver(driver_id);
 }
 
-/*!
+/**
 
 Determine if bin_name is the bin file part of  a CDRWIN CD disk image.
 
@@ -193,7 +193,7 @@ char *isBinFile(const char *psz_bin_name)
   return cdio_is_binfile(psz_bin_name);
 }
 
-/*!
+/**
     Determine if cue_name is the cue sheet for a CDRWIN CD disk image.
 
     @return corresponding BIN file if cue_name is a CDRWIN cue file or
@@ -205,7 +205,7 @@ isCueFile(const char *psz_cue_name)
   return cdio_is_cuefile(psz_cue_name);
 }
 
-/*!
+/**
     Determine if psz_source refers to a real hardware CD-ROM.
 
     @param psz_source location name of object
@@ -220,7 +220,7 @@ isDevice(const char *psz_source, driver_id_t driver_id)
   return cdio_is_device(psz_source, driver_id);
 }
 
-/*!
+/**
     Determine if psz_nrg is a Nero CD disk image.
 
     @param psz_nrg location of presumed NRG image file.
@@ -233,7 +233,7 @@ isNero(const char *psz_nrg)
   return cdio_is_nrg(psz_nrg);
 }
 
-/*!
+/**
   Determine if psz_toc is a TOC file for a cdrdao CD disk image.
 
   @param psz_toc location of presumed TOC image file.

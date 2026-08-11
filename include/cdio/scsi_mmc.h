@@ -15,10 +15,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*!
- *  \file scsi_mmc.h 
- * 
- *  \brief Obsolete please use <cdio/mmc.h> instead. 
+/**
+ *  \file scsi_mmc.h
+ *
+ *  \brief Obsolete please use <cdio/mmc.h> instead.
 */
 /* ust a moment while, I transfer your call... */
 #include <cdio/mmc.h>

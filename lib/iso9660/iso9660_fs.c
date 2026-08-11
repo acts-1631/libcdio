@@ -165,7 +165,7 @@ adjust_fuzzy_pvd( iso9660_t *p_iso )
 
 }
 
-/*!
+/**
   Open an ISO 9660 image for reading in either fuzzy mode or not.
 */
 static iso9660_t *
@@ -208,7 +208,7 @@ iso9660_open_ext_private (const char *psz_path,
   return NULL;
 }
 
-/*!
+/**
   Open an ISO 9660 image for reading. Maybe in the future we will have
   a mode. NULL is returned on error.
 
@@ -223,7 +223,7 @@ iso9660_open (const char *psz_path /*, mode*/)
   return iso9660_open_ext(psz_path, ISO_EXTENSION_NONE);
 }
 
-/*!
+/**
   Open an ISO 9660 image for reading allowing various ISO 9660
   extensions.  Maybe in the future we will have a mode. NULL is
   returned on error.
@@ -238,7 +238,7 @@ iso9660_open_ext (const char *psz_path,
 }
 
 
-/*! Open an ISO 9660 image for "fuzzy" reading. This means that we
+/** Open an ISO 9660 image for "fuzzy" reading. This means that we
   will try to guess various internal offset based on internal
   checks. This may be useful when trying to read an ISO 9660 image
   contained in a file format that libiso9660 doesn't know natively
@@ -258,7 +258,7 @@ iso9660_open_fuzzy (const char *psz_path, uint16_t i_fuzz /*, mode*/)
   return iso9660_open_fuzzy_ext(psz_path, ISO_EXTENSION_NONE, i_fuzz);
 }
 
-/*!
+/**
   Open an ISO 9660 image for reading with some tolerance for positioning
   of the ISO9660 image. We scan for ISO_STANDARD_ID and use that to set
   the eventual offset to adjust by (as long as that is <= i_fuzz).
@@ -276,7 +276,7 @@ iso9660_open_fuzzy_ext (const char *psz_path,
 				  true);
 }
 
-/*! Close previously opened ISO 9660 image and free resources
+/** Close previously opened ISO 9660 image and free resources
     associated with the image. Call this when done using using an ISO
     9660 image.
 
@@ -312,7 +312,7 @@ check_pvd (const iso9660_pvd_t *p_pvd, cdio_log_level_t log_level)
 }
 
 
-/*!
+/**
   Core procedure for the iso9660_ifs_get_###_id() calls.
   pvd_member/svd_member is a pointer to an achar_t or dchar_t
   ID string which we can superset as char.
@@ -377,7 +377,7 @@ get_member_id(iso9660_t *p_iso, cdio_utf8_t **p_psz_member_id,
 }
 
 
-/*!
+/**
   Return the application ID.  NULL is returned in psz_app_id if there
   is some problem in getting this.
 */
@@ -391,7 +391,7 @@ iso9660_ifs_get_application_id(iso9660_t *p_iso,
                        ISO_MAX_APPLICATION_ID);
 }
 
-/*!
+/**
   Return the Joliet level recognized for p_iso.
 */
 uint8_t iso9660_ifs_get_joliet_level(iso9660_t *p_iso)
@@ -400,7 +400,7 @@ uint8_t iso9660_ifs_get_joliet_level(iso9660_t *p_iso)
   return p_iso->u_joliet_level;
 }
 
-/*!
+/**
    Return a string containing the preparer id with trailing
    blanks removed.
 */
@@ -414,7 +414,7 @@ iso9660_ifs_get_preparer_id(iso9660_t *p_iso,
                        ISO_MAX_PREPARER_ID);
 }
 
-/*!
+/**
    Return a string containing the PVD's publisher id with trailing
    blanks removed.
 */
@@ -427,7 +427,7 @@ bool iso9660_ifs_get_publisher_id(iso9660_t *p_iso,
                        ISO_MAX_PUBLISHER_ID);
 }
 
-/*!
+/**
    Return a string containing the PVD's system id with trailing
    blanks removed.
 */
@@ -440,7 +440,7 @@ bool iso9660_ifs_get_system_id(iso9660_t *p_iso,
                        ISO_MAX_SYSTEM_ID);
 }
 
-/*!
+/**
    Return a string containing the PVD's volume id with trailing
    blanks removed.
 */
@@ -453,7 +453,7 @@ bool iso9660_ifs_get_volume_id(iso9660_t *p_iso,
                        ISO_MAX_VOLUME_ID);
 }
 
-/*!
+/**
    Return a string containing the PVD's volumeset id with trailing
    blanks removed.
 */
@@ -467,7 +467,7 @@ bool iso9660_ifs_get_volumeset_id(iso9660_t *p_iso,
 }
 
 
-/*!
+/**
   Read the Primary Volume Descriptor for an ISO 9660 image.
   True is returned if read, and false if there was an error.
 */
@@ -483,7 +483,7 @@ iso9660_ifs_read_pvd_loglevel (const iso9660_t *p_iso,
   return check_pvd(p_pvd, log_level);
 }
 
-/*!
+/**
   Read the Primary Volume Descriptor for an ISO 9660 image.
   True is returned if read, and false if there was an error.
 */
@@ -494,7 +494,7 @@ iso9660_ifs_read_pvd (const iso9660_t *p_iso, /*out*/ iso9660_pvd_t *p_pvd)
 }
 
 
-/*!
+/**
   Read the Super block of an ISO 9660 image. This is the
   Primary Volume Descriptor (PVD) and perhaps a Supplemental Volume
   Descriptor if (Joliet) extensions are acceptable.
@@ -547,7 +547,7 @@ iso9660_ifs_read_superblock (iso9660_t *p_iso,
   return true;
 }
 
-/*!
+/**
   Read the Super block of an ISO 9660 image but determine framesize
   and datastart and a possible additional offset. Generally here we are
   not reading an ISO 9660 image but a CD-Image which contains an ISO 9660
@@ -615,7 +615,7 @@ iso9660_ifs_fuzzy_read_superblock (iso9660_t *p_iso,
 }
 
 
-/*!
+/**
   Read the Primary Volume Descriptor for of CD.
 */
 bool
@@ -643,7 +643,7 @@ iso9660_fs_read_pvd(const CdIo_t *p_cdio, /*out*/ iso9660_pvd_t *p_pvd)
 }
 
 
-/*!
+/**
   Read the Super block of an ISO 9660 image. This is the
   Primary Volume Descriptor (PVD) and perhaps a Supplemental Volume
   Descriptor if (Joliet) extensions are acceptable.
@@ -709,7 +709,7 @@ iso9660_fs_read_superblock (CdIo_t *p_cdio,
   return true;
 }
 
-/*!
+/**
   Seek to a position and then read n blocks. Size read is returned.
 */
 static long int
@@ -729,7 +729,7 @@ iso9660_seek_read_framesize (const iso9660_t *p_iso, void *ptr,
   return cdio_stream_read (p_iso->stream, ptr, i_framesize, size);
 }
 
-/*!
+/**
   Seek to a position and then read n blocks. Size read is returned.
 */
 long int
@@ -741,7 +741,7 @@ iso9660_iso_seek_read (const iso9660_t *p_iso, void *ptr, lsn_t start,
 
 
 
-/*!
+/**
   Check for the end of a directory record list in a single directory
   block.  If at the end, set the offset to start of the next block and
   return "true". The caller often skips actions only when at the end
@@ -794,7 +794,7 @@ _iso9660_is_rock_ridge_enabled(void* p_image)
   return true;
 }
 
-/*!
+/**
   Convert a directory record name to a 0-terminated string.
   One of parameters alloc_result and cpy_result should be non-NULL to take
   the result.
@@ -853,9 +853,16 @@ _iso9660_dir_to_statbuf (iso9660_dir_t *p_iso9660_dir,
   lsn_t extent_lsn;
   bool first_extent;
 
-  if (!dir_len) return NULL;
+  if (dir_len < sizeof(iso9660_dir_t)) return NULL;
 
   i_fname = from_711(p_iso9660_dir->filename.len);
+  {
+    unsigned int su_offset = sizeof(iso9660_dir_t) + i_fname;
+    if (su_offset & 1)
+      su_offset++;
+    if (su_offset > dir_len)
+      return NULL;
+  }
 
   /* .. string in statbuf is one longer than in p_iso9660_dir's listing '\1' */
   stat_len = sizeof(iso9660_stat_t) + i_fname + 2;
@@ -975,12 +982,6 @@ _iso9660_dir_to_statbuf (iso9660_dir_t *p_iso9660_dir,
 
   iso9660_get_dtime(&(p_iso9660_dir->recording_time), true, &(p_stat->tm));
 
-  if (dir_len < sizeof(iso9660_dir_t)) {
-    iso9660_stat_free(p_stat);
-    return NULL;
-  }
-
-
   {
     int su_length = iso9660_get_dir_len(p_iso9660_dir)
       - sizeof (iso9660_dir_t);
@@ -1026,7 +1027,7 @@ fail:
   return NULL;
 }
 
-/*!
+/**
   Return the directory name stored in the iso9660_dir_t
 
   A string is allocated: the caller must deallocate. This routine
@@ -1338,7 +1339,7 @@ _fs_iso_stat_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
   return NULL;
 }
 
-/*!
+/**
   Return file status for psz_path. NULL is returned on error.
 
   @param p_cdio the CD object to read from
@@ -1382,7 +1383,7 @@ typedef iso9660_stat_t * (stat_root_t) (void *p_image);
 typedef iso9660_stat_t * (stat_traverse_t)
   (const void *p_image, const iso9660_stat_t *_root, char **splitpath);
 
-/*!
+/**
   Get file status for psz_path into stat. NULL is returned on error.
   pathname version numbers in the ISO 9660
   name are dropped, i.e. ;1 is removed and if level 1 ISO-9660 names
@@ -1411,7 +1412,7 @@ fs_stat_translate (void *p_image, stat_root_t stat_root,
   return p_stat;
 }
 
-/*!
+/**
   Return file status for path name psz_path. NULL is returned on error.
   pathname version numbers in the ISO 9660 name are dropped, i.e. ;1
   is removed and if level 1 ISO-9660 names are downcased.
@@ -1432,7 +1433,7 @@ iso9660_fs_stat_translate (CdIo_t *p_cdio, const char psz_path[])
 			   psz_path);
 }
 
-/*!
+/**
   @param p_iso the ISO-9660 file image to get data from
 
   @param psz_path filename path translate
@@ -1451,7 +1452,7 @@ iso9660_ifs_stat_translate (iso9660_t *p_iso, const char psz_path[])
 }
 
 
-/*!
+/**
 
   @param p_cdio the CD object to read from
 
@@ -1481,7 +1482,7 @@ iso9660_ifs_stat (iso9660_t *p_iso, const char psz_path[])
   return stat;
 }
 
-/*!
+/**
   Read psz_path (a directory) and return a list of iso9660_stat_t
   pointers for the files inside that directory.
 
@@ -1591,7 +1592,7 @@ iso9660_fs_readdir (CdIo_t *p_cdio, const char psz_path[])
   return retval;
 }
 
-/*!
+/**
   Read psz_path (a directory) and return a list of iso9660_stat_t
   of the files inside that. The caller must free the returned result.
 */
@@ -1795,7 +1796,7 @@ find_lsn_recurse (void *p_image, iso9660_readdir_t iso9660_readdir,
   return NULL;
 }
 
-/*!
+/**
    Given a directory pointer, find the filesystem entry that contains
    lsn and return information about it.
 
@@ -1819,7 +1820,7 @@ iso9660_find_fs_lsn(CdIo_t *p_cdio, lsn_t i_lsn) __attribute__ ((alias ("iso9660
 iso9660_find_fs_lsn(CdIo_t *p_cdio, lsn_t i_lsn);
 #endif
 
-/*!
+/**
    Given a directory pointer, find the filesystem entry that contains
    LSN and return information about it.
 
@@ -1841,7 +1842,7 @@ iso9660_fs_find_lsn_with_path(CdIo_t *p_cdio, lsn_t i_lsn,
 			   "/", i_lsn, ppsz_full_filename);
 }
 
-/*!
+/**
    Given a directory pointer, find the filesystem entry that contains
    lsn and return information about it.
 
@@ -1913,7 +1914,7 @@ _iso9660_dd_find_lsn(void* p_image, lsn_t i_lsn)
 }
 #endif /* HAVE ROCK */
 
-/*!
+/**
    Given a directory pointer, find the filesystem entry that contains
    lsn and return information about it.
 
@@ -1937,7 +1938,7 @@ iso9660_ifs_find_lsn_with_path(iso9660_t *p_iso, lsn_t i_lsn,
 			   "/", i_lsn, ppsz_full_filename);
 }
 
-/*!
+/**
   Free the passed iso9660_stat_t structure.
 
   @param p_stat iso9660 stat buffer to free.
@@ -1954,7 +1955,7 @@ iso9660_stat_free(iso9660_stat_t *p_stat)
   }
 }
 
-/*!
+/**
   Free the passed CdioISOC9660FileList_t structure.
 */
 void
@@ -1962,7 +1963,7 @@ iso9660_filelist_free(CdioISO9660FileList_t *p_filelist) {
   _cdio_list_free(p_filelist, true, (CdioDataFree_t) iso9660_stat_free);
 }
 
-/*!
+/**
   Free the passed CdioISOC9660DirList_t structure.
 */
 void
@@ -1971,7 +1972,7 @@ iso9660_dirlist_free(CdioISO9660DirList_t *p_filelist) {
 }
 
 
-/*!
+/**
   Return true if ISO 9660 image has extended attributes (XA).
 */
 bool
@@ -2052,7 +2053,7 @@ iso_have_rr_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
   return nope;
 }
 
-/*!
+/**
   Return "yup" if any file has Rock-Ridge extensions. Warning: this can
   be time consuming. On an ISO 9600 image with lots of files but no Rock-Ridge
   extensions, the entire directory structure will be scanned up to u_file_limit.

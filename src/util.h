@@ -112,36 +112,36 @@ extern char *source_name;
 extern char *program_name;
 extern cdio_log_handler_t gl_default_cdio_log_handler;
 
-/*! Common error exit routine which frees p_cdio. rc is the
+/** Common error exit routine which frees p_cdio. rc is the
     return code to pass to exit.
 */
 void myexit(CdIo_t *p_cdio, int rc);
 
-/*! Print our version string */
+/** Print our version string */
 void print_version (char *psz_program, const char *psz_version,
 		    int no_header, bool version_only);
 
-/*! Device input routine. If successful we return an open CdIo_t
+/** Device input routine. If successful we return an open CdIo_t
     pointer. On error the program exits.
  */
 CdIo_t *
 open_input(const char *psz_source, source_image_t source_image,
 	   const char *psz_access_mode);
 
-/*! On Unixish OS's we fill out the device name, from a short name.
+/** On Unixish OS's we fill out the device name, from a short name.
     For example cdrom might become /dev/cdrom.
 */
 char *fillout_device_name(const char *device_name);
 
-/*! Prints out SCSI-MMC drive features  */
+/** Prints out SCSI-MMC drive features  */
 void  print_mmc_drive_features(CdIo *p_cdio);
 
-/*! Prints out drive capabilities */
+/** Prints out drive capabilities */
 void print_drive_capabilities(cdio_drive_read_cap_t  p_read_cap,
 			      cdio_drive_write_cap_t p_write_cap,
 			      cdio_drive_misc_cap_t  p_misc_cap);
 
-/*! Common place for output routine. In some environments, like XBOX,
+/** Common place for output routine. In some environments, like XBOX,
   it may not be desirable to send output to stdout and stderr. */
 void report (FILE *stream, const char *psz_format, ...);
 

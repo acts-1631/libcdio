@@ -84,6 +84,7 @@ main(int argc, const char *argv[])
     "bad-mode1.toc",
     "bad-tracknum-exceeded.toc",
     "bad-tracknum-overflow.toc"
+    "bad-pretrack-isrc.toc"
   };
   int ret=0;
   unsigned int i;

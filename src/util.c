@@ -85,7 +85,7 @@ PARTICULAR PURPOSE.\n\
 
 }
 
-/*! Device input routine. If successful we return an open CdIo_t
+/** Device input routine. If successful we return an open CdIo_t
     pointer. On error the program exits.
  */
 CdIo_t *
@@ -185,7 +185,7 @@ fillout_device_name(const char *device_name)
 #endif
 }
 
-/*! Prints out SCSI-MMC drive features  */
+/** Prints out SCSI-MMC drive features  */
 void
 print_mmc_drive_features(CdIo_t *p_cdio)
 {
@@ -458,7 +458,7 @@ print_drive_capabilities(cdio_drive_read_cap_t  i_read_cap,
   }
 }
 
-/*! Common place for output routine. In some environments, like XBOX,
+/** Common place for output routine. In some environments, like XBOX,
   it may not be desirable to send output to stdout and stderr. */
 void
 report (FILE *stream, const char *psz_format,  ...)

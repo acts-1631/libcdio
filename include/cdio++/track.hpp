@@ -22,7 +22,7 @@
  *  should not be #included directly.
  */
 
-/*!  
+/**
   Return an opaque CdIo_t pointer for the given track object.
 */
 CdIo_t *getCdIo()
@@ -30,7 +30,7 @@ CdIo_t *getCdIo()
   return p_cdio;
 }
 
-/*! Return number of channels in track: 2 or 4; -2 if not
+/** Return number of channels in track: 2 or 4; -2 if not
   implemented or -1 for error.
   Not meaningful if track is not an audio track.
 */
@@ -39,54 +39,54 @@ int getChannels()
   return cdio_get_track_channels(p_cdio, i_track);
 }
 
-/*! Return copy protection status on a track. Is this meaningful
+/** Return copy protection status on a track. Is this meaningful
   if not an audio track?
 */
-track_flag_t getCopyPermit() 
+track_flag_t getCopyPermit()
 {
   return cdio_get_track_copy_permit(p_cdio, i_track);
 }
 
-/*!  
-  Get the format (audio, mode2, mode1) of track. 
+/**
+  Get the format (audio, mode2, mode1) of track.
 */
 track_format_t getFormat()
 {
   return cdio_get_track_format(p_cdio, i_track);
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
   12     4      -  8
-  
+
   FIXME: there's gotta be a better design for this and get_track_format?
 */
-bool getGreen() 
+bool getGreen()
 {
   return cdio_get_track_green(p_cdio, i_track);
 }
 
-/*!  
+/**
   Return the ending LSN. CDIO_INVALID_LSN is returned on error.
 */
-lsn_t getLastLsn() 
+lsn_t getLastLsn()
 {
   return cdio_get_track_last_lsn(p_cdio, i_track);
 }
 
-/*!  
-  Get the starting LBA. 
+/**
+  Get the starting LBA.
 
   @return the starting LBA or CDIO_INVALID_LBA on error.
 */
-lba_t getLba() 
+lba_t getLba()
 {
   return cdio_get_track_lba(p_cdio, i_track);
 }
 
-/*!  
+/**
   @return the starting LSN or CDIO_INVALID_LSN on error.
 */
 lsn_t getLsn()
@@ -95,9 +95,9 @@ lsn_t getLsn()
 }
 
 
-/*!  
+/**
   Return the starting MSF (minutes/secs/frames) for track number
-  i_track in p_cdio. 
+  i_track in p_cdio.
 
   @return true if things worked or false if there is no track entry.
 */
@@ -106,7 +106,7 @@ bool getMsf(/*out*/ msf_t &msf)
   return cdio_get_track_msf(p_cdio, i_track,/*out*/ &msf);
 }
 
-/*!  
+/**
   Return the track number of the track object.
 */
 track_t getTrackNum()
@@ -114,7 +114,7 @@ track_t getTrackNum()
   return i_track;
 }
 
-/*! Get linear preemphasis status on an audio track 
+/** Get linear preemphasis status on an audio track
   This is not meaningful if not an audio track?
 */
 track_flag_t getPreemphasis()
@@ -122,15 +122,13 @@ track_flag_t getPreemphasis()
   return cdio_get_track_preemphasis(p_cdio, i_track);
 }
 
-/*!  
+/**
   Get the number of sectors between this track an the next.  This
   includes any pregap sectors before the start of the next track.
-  
+
   @return the number of sectors or 0 if there is an error.
 */
-unsigned int getSecCount() 
+unsigned int getSecCount()
 {
   return cdio_get_track_sec_count(p_cdio, i_track);
 }
-
-

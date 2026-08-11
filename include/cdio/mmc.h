@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012
-                  2016, 2019, 2025 Rocky Bernstein <rocky@gnu.org>
+                  2016, 2019, 2025, 2026 Rocky Bernstein <rocky@gnu.org>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,12 +25,13 @@
    The documents we make use of are described in several
    specifications made by the SCSI committee T10
    http://www.t10.org. In particular, SCSI Primary Commands (SPC),
-   SCSI Block Commands (SBC), and Multi-Media Commands (MMC). These
-   documents generally have a numeric level number appended. For
-   example SPC-3 refers to ``SCSI Primary Commands - 3'.
+   SCSI Block Commands (SBC), and Multi-Media Commands (MMC).
 
-   In year 2010 the current versions were SPC-3, SBC-2, MMC-5.
+   We will use the MMC-6 draft 2g circa 2009 described in
+   https://www.13thmonkey.org/documentation/SCSI/mmc6r02g.pdf
 
+   For SPC-3, we use the draft found at:
+   https://www.13thmonkey.org/documentation/SCSI/spc3r23.pdf
 */
 
 #ifndef CDIO_MMC_H_
@@ -64,7 +65,7 @@ extern "C" {
 
       This has been adapted from GNU/Linux request_sense of <linux/cdrom.h>
       include this for direct MMC access.
-      See SCSI Primary Commands-2 (SPC-3) table 26 page 38.
+      See SCSI Primary Commands-2 (SPC-3) table 26, page 38.
     */
     typedef struct cdio_mmc_request_sense {
 #if defined(__MMC_BIG_ENDIAN_BITFIELD)
@@ -78,7 +79,7 @@ extern "C" {
 #if defined(__MMC_BIG_ENDIAN_BITFIELD)
         uint8_t filemark        : 1; /**< manditory in sequential
                                       * access devices */
-        uint8_t eom             : 1; /**< end of medium. manditory in
+        uint8_t eom             : 1; /**< end of medium. mandatory in
                                       * sequential access and
                                       * printer devices */
         uint8_t ili             : 1; /**< incorrect length indicator */
@@ -88,7 +89,7 @@ extern "C" {
         uint8_t sense_key       : 4;
         uint8_t reserved1       : 1;
         uint8_t ili             : 1; /**< incorrect length indicator */
-        uint8_t eom             : 1; /**< end of medium. manditory in
+        uint8_t eom             : 1; /**< end of medium. mandatory in
                                       * sequential access and
                                       * printer devices */
         uint8_t filemark        : 1; /**< manditory in sequential
@@ -129,7 +130,7 @@ extern "C" {
 
        In general, those opcodes that end in 6 take a 6-byte command
        descriptor, those that end in 10 take a 10-byte
-       descriptor and those that in in 12 take a 12-byte descriptor.
+       descriptor, and those that end in 12 take a 12-byte descriptor.
 
        (Not that you need to know that, but it seems to be a
        big deal in the MMC specification.)
@@ -157,13 +158,13 @@ extern "C" {
   /**
       Group 2 Commands (CDB's here are 10-bytes)
   */
-  CDIO_MMC_GPCMD_READ_FORMAT_CAPACITIES = 0x23, /**< MMC-5 Section 6.24 */
-  CDIO_MMC_GPCMD_READ_CAPACITIY         = 0x25, /**< MMC-5 Section 6.19 */
+  CDIO_MMC_GPCMD_READ_FORMAT_CAPACITIES = 0x23, /**< MMC-6 Section 6.23 READ FORMAT CAPABILITIES Command */
+  CDIO_MMC_GPCMD_READ_CAPACITIY         = 0x25, /**< MMC-6 2g Section 6.18 READ CAPACITY Command */
   CDIO_MMC_GPCMD_READ_10                = 0x28, /**< Read data from drive
                                                    (10 bytes). */
   CDIO_MMC_GPCMD_WRITE_10               = 0x2a,
   CDIO_MMC_GPCMD_SEEK_10                = 0x2b,
-  CDIO_MMC_GPCMD_ERASE_10               = 0x2c, /**< MMC5 Section 6.4 */
+  CDIO_MMC_GPCMD_ERASE_10               = 0x2c, /**< MMC5 Section 6.4; Removed from MMC6 */
   CDIO_MMC_GPCMD_WRITE_AND_VERIFY_10    = 0x2e,
   CDIO_MMC_GPCMD_VERIFY_10              = 0x2f,
   CDIO_MMC_GPCMD_SYNCHRONIZE_CACHE      = 0x35,
@@ -237,7 +238,7 @@ extern "C" {
                                                    handled by Plextor drives.
                                                 */
   CDIO_MMC_GPCMD_WRITE_12               = 0xaa,
-  CDIO_MMC_GPCMD_READ_MEDIA_SERIAL_12   = 0xab, /**< MMC-5 Section 6.25 */
+  CDIO_MMC_GPCMD_READ_MEDIA_SERIAL_12   = 0xab, /**< MMC-6 2g Section 6.24 READ MEDIA SERIAL NUMBER Command */
   CDIO_MMC_GPCMD_GET_PERFORMANCE        = 0xac,
   CDIO_MMC_GPCMD_READ_DVD_STRUCTURE     = 0xad, /**< Get DVD structure info
                                                    from media (12 bytes). */
@@ -477,7 +478,7 @@ typedef struct mmc_cdb_s {
 
   /**
       An enumeration indicating whether an MMC command is sending
-      data, or getting data, or does none of both.
+      data, or getting data, both, or neither.
   */
   typedef enum mmc_direction_s {
     SCSI_MMC_DATA_READ,
@@ -555,7 +556,7 @@ typedef struct mmc_cdb_s {
 
 /**
    Get the output port volumes and port selections used on AUDIO PLAY
-   commands via a MMC \p MODE \p SENSE command using the CD Audio Control
+   commands via an MMC \p MODE \p SENSE command using the CD Audio Control
    Page.
    @param p_cdio the CD object to be acted upon.
    @param p_volume volume parameters retrieved
@@ -673,8 +674,8 @@ driver_return_code_t mmc_audio_get_volume (CdIo_t *p_cdio,  /*out*/
     Get the media catalog number (\p MCN) from the CD via MMC.
 
     @param p_cdio the CD object to be acted upon.
-    @return the media catalog number r NULL if there is none or we
-    don't have the ability to get it.
+    @return the media catalog number or NULL if there is none, or we
+    can't get it.
 
     Note: The caller must free the returned string with cdio_free()
     when done with it.
@@ -688,7 +689,7 @@ driver_return_code_t mmc_audio_get_volume (CdIo_t *p_cdio,  /*out*/
     @param p_cdio the CD object to be acted upon.
     @param i_track the track to get the ISRC info for
     @return international standard recording code or NULL if there is
-    none or we don't have the ability to get it.
+    none or we can't get it.
 
     Note: The caller must free the returned string with cdio_free()
     when done with it.
@@ -702,9 +703,9 @@ driver_return_code_t mmc_audio_get_volume (CdIo_t *p_cdio,  /*out*/
     This is the raw SCSI/MMC reply as retrieved by mmc_read_toc_cdtext().
     It consists of 4 header bytes and a variable number of text packs.
 
-    The first two bytes of the header, a Big-Endian number, specifies
+    The first two bytes of the header, a Big-Endian number, specify
     the number of following bytes. The count also includes the next two
-    header bytes which should be 0.
+    header bytes, which should be 0.
 
     See also information in mmc_read_toc_cdtext().
 
@@ -731,7 +732,7 @@ driver_return_code_t mmc_audio_get_volume (CdIo_t *p_cdio,  /*out*/
 
   /**
     Report if CD-ROM has a particular kind of interface (ATAPI, SCSCI, ...)
-    Is it possible for an interface to have several? If not this
+    Is it possible for an interface to have several? If not, this
     routine could probably return the single \p mmc_feature_interface_t.
     @param p_cdio the CD object to be acted upon.
     @param e_interface
@@ -820,7 +821,7 @@ driver_return_code_t mmc_audio_get_volume (CdIo_t *p_cdio,  /*out*/
 
   /**
       Obtain the SCSI sense reply of the most-recently-performed MMC command.
-      These bytes give an indication of possible problems which occurred in
+      These bytes indicate possible problems which occurred in
       the drive while the command was performed. With some commands they tell
       about the current state of the drive (e.g. 00h \p TEST \p UNIT \p READY).
       @param p_cdio CD structure set by cdio_open().

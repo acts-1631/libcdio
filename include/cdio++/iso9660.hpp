@@ -54,7 +54,7 @@ public:
       std::memcpy(&pvd, p_new_pvd, sizeof(pvd));
     };
 
-    /*!
+    /**
       Return the PVD's application ID.
       NULL is returned if there is some problem in getting this.
     */
@@ -62,13 +62,13 @@ public:
 
     int get_pvd_block_size();
 
-    /*!
+    /**
       Return the PVD's preparer ID.
       NULL is returned if there is some problem in getting this.
     */
     char * get_preparer_id();
 
-    /*!
+    /**
       Return the PVD's publisher ID.
       NULL is returned if there is some problem in getting this.
     */
@@ -80,29 +80,29 @@ public:
 
     uint8_t get_pvd_type();
 
-    /*! Return the primary volume id version number (of pvd).
+    /** Return the primary volume id version number (of pvd).
       If there is an error 0 is returned.
     */
     int get_pvd_version();
 
-    /*! Return the LSN of the root directory for pvd.
+    /** Return the LSN of the root directory for pvd.
       If there is an error CDIO_INVALID_LSN is returned.
     */
     lsn_t get_root_lsn();
 
-    /*!
+    /**
       Return the PVD's system ID.
       NULL is returned if there is some problem in getting this.
     */
     char * get_system_id();
 
-    /*!
+    /**
       Return the PVD's volume ID.
       NULL is returned if there is some problem in getting this.
     */
     char * get_volume_id();
 
-    /*!
+    /**
       Return the PVD's volumeset ID.
       NULL is returned if there is some problem in getting this.
     */
@@ -155,7 +155,7 @@ public:
 
     typedef std::vector< ISO9660::Stat *> stat_vector_t;
 
-    /*!
+    /**
       Given a directory pointer, find the filesystem entry that contains
       lsn and return information about it.
 
@@ -164,25 +164,25 @@ public:
     */
     Stat *find_lsn(lsn_t i_lsn);
 
-    /*! Read the Primary Volume Descriptor for a CD.  A
+    /** Read the Primary Volume Descriptor for a CD.  A
       PVD object is returned if read, and NULL if there was an error.
     */
     PVD *read_pvd ();
 
-    /*!
+    /**
       Read the Super block of an ISO 9660 image. This is the
       Primary Volume Descriptor (PVD) and perhaps a Supplemental Volume
       Descriptor if (Joliet) extensions are acceptable.
     */
     bool read_superblock (iso_extension_mask_t iso_extension_mask);
 
-    /*! Read psz_path (a directory) and return a vector of iso9660_stat_t
+    /** Read psz_path (a directory) and return a vector of iso9660_stat_t
       pointers for the files inside that directory. The caller must free the
       returned result.
     */
     bool readdir (const char psz_path[], stat_vector_t& stat_vector);
 
-    /*!
+    /**
       Return file status for path name psz_path. NULL is returned on
       error.
 
@@ -220,7 +220,7 @@ public:
       p_iso9660 = (iso9660_t *) NULL;
     };
 
-    /*! Close previously opened ISO 9660 image and free resources
+    /** Close previously opened ISO 9660 image and free resources
       associated with the image. Call this when done using using an ISO
       9660 image.
 
@@ -229,7 +229,7 @@ public:
     */
     bool close();
 
-    /*!
+    /**
       Given a directory pointer, find the filesystem entry that contains
       lsn and return information about it.
 
@@ -238,7 +238,7 @@ public:
     */
     Stat *find_lsn(lsn_t i_lsn);
 
-    /*!
+    /**
       Get the application ID.  psz_app_id is set to NULL if there
       is some problem in getting this and false is returned.
     */
@@ -247,12 +247,12 @@ public:
       return iso9660_ifs_get_application_id(p_iso9660, &psz_app_id);
     }
 
-    /*!
+    /**
       Return the Joliet level recognized.
     */
     uint8_t get_joliet_level();
 
-    /*!
+    /**
       Get the preparer ID.  psz_preparer_id is set to NULL if there
       is some problem in getting this and false is returned.
     */
@@ -261,7 +261,7 @@ public:
       return iso9660_ifs_get_preparer_id(p_iso9660, &psz_preparer_id);
     }
 
-    /*!
+    /**
       Get the publisher ID.  psz_publisher_id is set to NULL if there
       is some problem in getting this and false is returned.
     */
@@ -270,7 +270,7 @@ public:
       return iso9660_ifs_get_publisher_id(p_iso9660, &psz_publisher_id);
     }
 
-    /*!
+    /**
       Get the system ID.  psz_system_id is set to NULL if there
       is some problem in getting this and false is returned.
     */
@@ -279,7 +279,7 @@ public:
       return iso9660_ifs_get_system_id(p_iso9660, &psz_system_id);
     }
 
-    /*! Return the volume ID in the PVD. psz_volume_id is set to
+    /** Return the volume ID in the PVD. psz_volume_id is set to
       NULL if there is some problem in getting this and false is
       returned.
     */
@@ -288,7 +288,7 @@ public:
       return iso9660_ifs_get_volume_id(p_iso9660, &psz_volume_id);
     }
 
-    /*! Return the volumeset ID in the PVD. psz_volumeset_id is set to
+    /** Return the volumeset ID in the PVD. psz_volumeset_id is set to
       NULL if there is some problem in getting this and false is
       returned.
     */
@@ -297,12 +297,12 @@ public:
       return iso9660_ifs_get_volumeset_id(p_iso9660, &psz_volumeset_id);
     }
 
-    /*!
+    /**
       Return true if ISO 9660 image has extended attrributes (XA).
     */
     bool is_xa ();
 
-    /*! Open an ISO 9660 image for reading. Maybe in the future we will
+    /** Open an ISO 9660 image for reading. Maybe in the future we will
       have a mode. NULL is returned on error. An open routine should be
       called before using any read routine. If device object was
       previously opened it is closed first.
@@ -323,7 +323,7 @@ public:
       return NULL != (iso9660_t *) p_iso9660 ;
     }
 
-    /*! Open an ISO 9660 image for "fuzzy" reading. This means that we
+    /** Open an ISO 9660 image for "fuzzy" reading. This means that we
       will try to guess various internal offset based on internal
       checks. This may be useful when trying to read an ISO 9660 image
       contained in a file format that libiso9660 doesn't know natively
@@ -339,12 +339,12 @@ public:
                      =ISO_EXTENSION_NONE,
                      uint16_t i_fuzz=20);
 
-    /*! Read the Primary Volume Descriptor for an ISO 9660 image.  A
+    /** Read the Primary Volume Descriptor for an ISO 9660 image.  A
       PVD object is returned if read, and NULL if there was an error.
     */
     PVD *read_pvd ();
 
-    /*!
+    /**
       Read the Super block of an ISO 9660 image but determine framesize
       and datastart and a possible additional offset. Generally here we are
       not reading an ISO 9660 image but a CD-Image which contains an ISO 9660
@@ -356,7 +356,7 @@ public:
                           =ISO_EXTENSION_NONE,
                           uint16_t i_fuzz=20);
 
-    /*!
+    /**
       Read the Super block of an ISO 9660 image but determine framesize
       and datastart and a possible additional offset. Generally here we are
       not reading an ISO 9660 image but a CD-Image which contains an ISO 9660
@@ -369,7 +369,7 @@ public:
                            =ISO_EXTENSION_NONE,
                            uint16_t i_fuzz=20);
 
-    /*! Read psz_path (a directory) and return a list of iso9660_stat_t
+    /** Read psz_path (a directory) and return a list of iso9660_stat_t
       pointers for the files inside that directory. The caller must free
       the returned result.
     */
@@ -394,7 +394,7 @@ public:
       }
     }
 
-    /*!
+    /**
       Seek to a position and then read n bytes. Size read is returned.
     */
     long int
@@ -403,7 +403,7 @@ public:
       return iso9660_iso_seek_read (p_iso9660, ptr, start, i_size);
     }
 
-    /*!
+    /**
       Return file status for pathname. NULL is returned on error.
       Caller must release returned object using delete when done.
     */

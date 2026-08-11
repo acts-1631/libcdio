@@ -124,7 +124,7 @@ extern "C" {
 #define CDIO_FS_MATCH_ALL            (cdio_fs_anal_t) (~CDIO_FS_MASK)
 
 
-/*!
+/**
   \brief The type used to return analysis information from
   cdio_guess_cd_type.
 

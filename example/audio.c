@@ -104,7 +104,7 @@ oops(const char *psz_msg, int rc)
 
 /* ---------------------------------------------------------------------- */
 
-/*! Stop playing audio CD */
+/** Stop playing audio CD */
 static bool
 cd_stop(CdIo_t *p_cdio)
 {
@@ -118,7 +118,7 @@ cd_stop(CdIo_t *p_cdio)
   return b_ok;
 }
 
-/*! Eject CD */
+/** Eject CD */
 static bool
 cd_eject(void)
 {
@@ -134,7 +134,7 @@ cd_eject(void)
   return b_ok;
 }
 
-/*! Close CD tray */
+/** Close CD tray */
 static bool
 cd_close(const char *psz_device)
 {
@@ -147,7 +147,7 @@ cd_close(const char *psz_device)
   return b_ok;
 }
 
-/*! Pause playing audio CD */
+/** Pause playing audio CD */
 static bool
 cd_pause(CdIo_t *p_cdio)
 {
@@ -160,7 +160,7 @@ cd_pause(CdIo_t *p_cdio)
   return b_ok;
 }
 
-/*! Get status/track/position info of an audio CD */
+/** Get status/track/position info of an audio CD */
 static bool
 read_subchannel(CdIo_t *p_cdio)
 {
@@ -177,7 +177,7 @@ read_subchannel(CdIo_t *p_cdio)
   return b_ok;
 }
 
-/*! Read CD TOC  and set CD information. */
+/** Read CD TOC  and set CD information. */
 static void
 read_toc(CdIo_t *p_cdio)
 {
@@ -224,7 +224,7 @@ read_toc(CdIo_t *p_cdio)
   }
 }
 
-/*! Play an audio track. */
+/** Play an audio track. */
 static bool
 play_track(track_t i_start_track, track_t i_end_track)
 {

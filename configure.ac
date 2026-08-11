@@ -1,5 +1,5 @@
 dnl Copyright (C) 2003-2008, 2010, 2011-2014, 2018, 2019,
-dnl 2023-2025
+dnl 2023-2026
 dnl Rocky Bernstein <rocky@gnu.org>
 dnl
 dnl This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-define(RELEASE_NUM, 2.3.0)
+define(RELEASE_NUM, 2.4.0dev0)
 define(CDIO_VERSION_STR, $1)
 
 AC_PREREQ([2.71])
@@ -37,10 +37,9 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])],
 
 # FIXME: write a m4 macro to convert x.y.zjunk to x*10000 + y*100 + z
 # LIBCDIO_VERSION_NUM=`echo RELEASE_NUM | cut -d . -f 1 | tr -d a-z`
-LIBCDIO_VERSION_NUM=20300
+LIBCDIO_VERSION_NUM=20400
 AC_SUBST(LIBCDIO_VERSION_NUM)
 
-AM_MISSING_PROG(HELP2MAN, help2man, $missing_dir)
 AM_MAINTAINER_MODE
 
 AM_SANITY_CHECK
@@ -94,6 +93,22 @@ if test "x$enable_cxx" != "xno" ; then
 else
   am__fastdepCXX_TRUE='#'
   am__fastdepCXX_FALSE=
+fi
+
+# AM_MAINTAINER_MODE sets the shell variable $USE_MAINTAINER_MODE "no" when
+# --enable-maintainer-mode is not given
+if test "x$USE_MAINTAINER_MODE" != "xno"; then
+    AC_PATH_PROG([HELP2MAN], [help2man])
+    if test -z "$HELP2MAN"; then
+        AC_MSG_ERROR([help2man is required when maintainer mode is enabled.])
+    fi
+else
+    # Check for help2man even when not in maintainer mode.
+    # If it's there, we can create libcdio tool manuals.
+    AC_PATH_PROG([HELP2MAN], [help2man])
+    if test -z "$HELP2MAN"; then
+        AC_MSG_WARN([help2man is not available; libcdio tool manuals will not be created.])
+    fi
 fi
 
 dnl For iso_read test
@@ -426,11 +441,11 @@ case $host_os in
         AC_CHECK_HEADERS(linux/version.h linux/major.h)
         AC_CHECK_HEADERS(linux/cdrom.h, [have_linux_cdrom_h="yes"])
 	if test "x$have_linux_cdrom_h" = "xyes"; then
-	   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
-#include <linux/cdrom.h>
-struct cdrom_generic_command test;
-int has_timeout=sizeof(test.timeout);]])],[AC_DEFINE([HAVE_LINUX_CDROM_TIMEOUT], [1],
-                   [Define 1 if timeout is in cdrom_generic_command struct])],[])
+	   AC_CHECK_MEMBER([struct cdrom_generic_command.timeout],
+	     [AC_DEFINE([HAVE_LINUX_CDROM_GENERIC_COMMAND_TIMEOUT], [1],
+	        [Define 1 if struct cdrom_generic_command has a timeout field])],
+	     [],
+	     [[#include <linux/cdrom.h>]])
 	   AC_DEFINE([HAVE_LINUX_CDROM], [1],
                      [Define 1 if you have Linux-type CD-ROM support])
 	   cd_drivers="${cd_drivers}, GNU/Linux"
@@ -540,12 +555,12 @@ int main(int argc, char **argv) {
    [AC_MSG_RESULT(no)])
 dnl
 
-AC_SUBST(LINUX_CDROM_TIMEOUT)
 AC_SUBST(DARWIN_PKG_LIB_HACK)
 AC_SUBST(HAVE_BSDI_CDROM)
 AC_SUBST(HAVE_DARWIN_CDROM)
 AC_SUBST(HAVE_FREEBSD_CDROM)
 AC_SUBST(HAVE_LINUX_CDROM)
+AC_SUBST(HAVE_LINUX_CDROM_GENERIC_COMMAND_TIMEOUT)
 AC_SUBST(HAVE_SOLARIS_CDROM)
 AC_SUBST(HAVE_WIN32_CDROM)
 AC_SUBST(HAVE_OS2_CDROM)

@@ -33,7 +33,7 @@
 #include "cdio_assert.h"
 #include "cdio_private.h"
 
-/*!
+/**
   For ioctl access /dev/acd0c is preferred over /dev/cd0c.
   For cam access /dev/cd0c is preferred. DEFAULT_CDIO_DEVICE and
   DEFAULT_FREEBSD_AM should be consistent.
@@ -168,13 +168,13 @@ char *get_mcn_freebsd_ioctl (const _img_private_t *p_env);
 
 void free_freebsd_cam (void *obj);
 
-/*!
+/**
    Using the ioctl method, r nblocks of audio sectors from cd device
    into data starting from lsn.  Returns 0 if no error.
  */
 int  read_audio_sectors_freebsd_ioctl (_img_private_t *env, void *data,
 				       lsn_t lsn, unsigned int nblocks);
-/*!
+/**
    Using the CAM method, reads nblocks of mode2 sectors from
    cd device using into data starting from lsn.  Returns 0 if no
    error.
@@ -182,7 +182,7 @@ int  read_audio_sectors_freebsd_ioctl (_img_private_t *env, void *data,
 int  read_mode2_sector_freebsd_cam (_img_private_t *env, void *data,
 				    lsn_t lsn, bool b_form2);
 
-/*!
+/**
    Using the ioctl method, reads nblocks of mode2 sectors from
    cd device using into data starting from lsn.  Returns 0 if no
    error.
@@ -190,7 +190,7 @@ int  read_mode2_sector_freebsd_cam (_img_private_t *env, void *data,
 int  read_mode2_sector_freebsd_ioctl (_img_private_t *env, void *data,
 				      lsn_t lsn, bool b_form2);
 
-/*!
+/**
    Using the CAM method, reads nblocks of mode2 form2 sectors from
    cd device using into data starting from lsn.  Returns 0 if no
    error.
@@ -203,7 +203,7 @@ int  read_mode2_sectors_freebsd_cam (_img_private_t *env, void *buf,
 
 bool read_toc_freebsd_ioctl (_img_private_t *env);
 
-/*!
+/**
   Run a SCSI MMC command.
 
   p_user_data   internal CD structure.
@@ -226,7 +226,7 @@ int run_mmc_cmd_freebsd_cam( void *p_user_data,
 			     unsigned int i_buf,
 			     /*in/out*/ void *p_buf );
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
  */
 lsn_t get_disc_last_lsn_freebsd_ioctl (_img_private_t *_obj);

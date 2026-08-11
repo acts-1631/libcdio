@@ -48,7 +48,7 @@ to decode and encode it.
 @menu
 * Encoding and Decoding CD Text::
 * Higher-Level Encoding::
-* Acknowlegement::
+* Acknowledgement::
 * List of Tables::
 * References::
 @end menu
@@ -120,7 +120,7 @@ to repeat identical information is provided.
 @node Pack Contents
 @section Pack Contents
 
-Packs are stored in CD in the sub-channel of the Lead-in of the
+Packs are stored on the CD in the sub-channel of the Lead-in of the
 disc. The file @file{doc/cookbook.txt} of the
 @url{http://libburnia-project.org/,libburnia} distribution describes
 how to write the CD Text pack array to CD, and how to read CD Text
@@ -161,12 +161,11 @@ text started before the previous pack.
 @item bits 4-6
 Block Number (groups text packs in language blocks)
 @item bit 7
-Is 0 if single byte characters, 1 if double-byte characters.
+Is 0 if single-byte characters, 1 if double-byte characters.
 @end table
 
-The 12 payload bytes contain pieces of zero terminated data. When
-double-byte text is used the zero is a double byte, otherwise it is a
-single ASCII NUL.
+The 12 payload bytes contain pieces of zero-terminated data. When
+double-byte text is used, the zero is a double byte; otherwise it is a single ASCII NUL.
 
 A text may span over several packs. Unused characters in
 a pack are used for the next text of the same pack type. If no text of
@@ -174,7 +173,7 @@ the same type follows, then the remaining text bytes are set to 0.
 
 The CRC algorithm uses divisor @kbd{0x11021}. The resulting 16-bit
 residue of the polynomial division is inverted (xor-ed with
-@kbd{0xffff}) and written as Big-endian number in bytes 16 and 17 of
+@kbd{0xffff}) and written as a big-endian number in bytes 16 and 17 of
 the pack.
 
 The text packs are grouped in up to 8 blocks of at most 256 packs. Each
@@ -182,13 +181,13 @@ block pertains to one language. Sequence numbers of each block are
 counted separately. All packs of block 0 come before the packs of block
 1.
 
-The limitation of block number and sequence numbers imply that there are
+The limitation of block number and sequence numbers implies that there are
 at most 2048 text packs possible.
 
 If a text of a track (pack types @kbd{0x80} to @kbd{0x85} and
 @kbd{0x8e}) repeats identically for the next track, then it may be
-represented by a TAB character (ASCII 9) for single byte texts, and
-two TAB characters for double byte texts.  This is desirable because
+represented by a TAB character (ASCII 9) for single-byte texts, and
+two TAB characters for double-byte texts.  This is desirable because
 there is a somewhat limited amount of space for CD Text --- 256 * 12
 bytes which may have to accommodate up to 99 tracks.
 
@@ -201,11 +200,11 @@ of the follow-up packs of type @kbd{0x87}.
 
 Pack types @kbd{0x80} to @kbd{0x85} and @kbd{0x8e} (Title, Performers,
 Songwriters, Arrangers, Message Area and UPC/EAN code respectively)
-contain a NUL-termintated string. If double-byte characters are used,
+contain a NUL-terminated string. If double-byte characters are used,
 then two zero bytes terminate the text.  Of these, all except the last,
 @kbd{0x8e} or UPC/EAN code, are encoded according to their block's
-Character Code.  This could be either as ISO-8859-1 single byte
-characters, as 7-bit ASCII single byte characters, or as MS-JIS double
+Character Code.  This could be either as ISO-8859-1 single-byte
+characters, as 7-bit ASCII single-byte characters, or as MS-JIS double
 byte characters.
 
 Pack type @kbd{0x8e} is documented by Sony as:
@@ -224,7 +223,7 @@ consists of 12 characters: 2 country code [0-9A-Z], 3 owner code
 @node Misc Pack Types
 @section Miscellaneous Pack Types (@kbd{0x86}, @kbd{0x87}, @kbd{0x8d})
 
-For pack type @kbd{0x86} (Disc Identification) here is how Sony describes this:
+For pack type @kbd{0x86} (Disc Identification), here is how Sony describes this:
 @quotation
 @emph{Catalog Number: (use ASCII Code) Catalog Number of the album}
 @end quotation
@@ -232,7 +231,7 @@ So it is not really binary but might be non-printable, and should contain only
 bytes with bit 7 set to zero.
 
 Pack type @kbd{0x87} (Genre Identification) contains 2 binary bytes
-followed by NUL-byte terminated text.
+followed by NUL-byte-terminated text.
 
 You can either specify a genre code or the supplementary genre
 information (without the code) or both. Neither is mandatory.
@@ -246,7 +245,7 @@ their Big-endian 16-bit value are listed in @ref{table:genres}.
   0x0001: Not Defined
   0x0002: Adult Contemporary
   0x0003: Alternative Rock
-  0x0004: Childrens' Music
+  0x0004: Children's Music
   0x0005: Classical
   0x0006: Contemporary Christian
   0x0007: Country
@@ -289,7 +288,7 @@ be recorded on disc as memorandum. Information in this field will not
 be read by CD-TEXT players available to the public.}
 @end quotation
 
-One can however read this information with an MMC READ TOC/PMA/ATP
+One can, however, read this information with an MMC READ TOC/PMA/ATP
 command.  (See Section 5.23 of @ref{mmc3r10g.pdf}).
 
 This field is always ISO-8859-1 encoded.
@@ -345,7 +344,7 @@ Encoding the above gives:
 
 Pack type @kbd{0x89} (Second Table of Contents) is not yet clear. It
 might be a representation of Playback Skip Interval, Mode-5 Q
-sub-channel, POINT 01 to 40 See Section 4.2.6.3 of @ref{mmc3r10g.pdf,, MMC-3}.
+sub-channel, POINT 01 to 40. See Section 4.2.6.3 of @ref{mmc3r10g.pdf,, MMC-3}.
 
 
 The time points in the Sony example are in the time range of the
@@ -367,8 +366,8 @@ Encoding the above gives:
 @end smallexample
 
 The track numbers are stored in the track number byte of the packs. The
-two time points are stored in byte 6 to 11 of the payload. Byte 0 of the
-payload seems to be a sequential counter. Byte 1 always 4? Byte 2 to 5
+two time points are stored in bytes 6 to 11 of the payload. Byte 0 of the
+payload seems to be a sequential counter. Is byte 1 always 4? Byte 2 to 5
 always 0?
 
 @node Block Size Information Type (0x8f)
@@ -376,13 +375,13 @@ always 0?
 
 Pack type @kbd{0x8f} summarizes the whole list of text packs of a
 block.  So there is one group of three @kbd{0x8f} packs per block.
-Nevertheless each @kbd{0x8f} group indicates the highest sequence
+Nevertheless, each @kbd{0x8f} group indicates the highest sequence
 number and the language code of all blocks.
 
 The payload bytes of three @kbd{0x8f} packs form a 36-byte record.
 The track number bytes of the three packs have the values 0, 1, 2.
 
-For the format of this pack type see @ref{table:block-pack}.
+For the format of this pack type, see @ref{table:block-pack}.
 
 @float Table,table:block-pack
 @smallexample
@@ -518,7 +517,7 @@ This part gives examples of two ways to input CD Text for burning.
 @section Sony Text File Format (Input Sheet Version 0.7T)
 
 This text file format provides comprehensive means to define the text
-attributes of session and tracks for a single block. More than one
+attributes of sessions and tracks for a single block. More than one
 such file has to be read to form an attribute set with multiple blocks.
 
 The information is given by text lines of the following form:
@@ -684,7 +683,7 @@ see Table 237 (TOC Track Descriptor Format, Q
 Sub-channel), Annex J (CD Text format in the Lead-in Area) and
 Sections 4.2.5.3 (Mode-5 Q).
 
-@item ``Materials describing the procedure of the procedure of authoring and mastering for creating CD TEXT disks on equipment developed by Sony HAV Company'',@anchor{cdtext.zip}@*
+@item ``Materials describing the procedure of authoring and mastering for creating CD TEXT disks on equipment developed by Sony HAV Company'',@anchor{cdtext.zip}@*
 @file{http://www.sonydadc.com/file/cdtext.zip} which was previously found on Sony's web site circa 2007. You may be able to get this from the ``Wayback Archive'', such as @url{http://web.archive.org/web/20070204035327/http://www.sonydadc.com/file/cdtext.zip}@*
 
 @item Cue-Sheet Syntax

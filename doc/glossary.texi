@@ -23,7 +23,7 @@ but with the help of ATAPI, it is possible to connect other devices, in
 particular CD-ROMS to the IDE/EIDE connections.
 
 The ATAPI CD-ROM drives understand a subset of SCSI commands. In
-particular multi-initiator commands are neither needed nor defined for
+particular, multi-initiator commands are neither needed nor defined for
 ATAPI devices.
 
 @item BIN/CUE
@@ -58,9 +58,9 @@ See @url{http://en.wikipedia.org/wiki/Red_Book_(audio_CD_standard)}
 @item CD+G
 @cindex CD+G
 
-Compact Disc + Graphics. An extension of the CD audio format contains
+Compact Disc + Graphics. An extension of the CD audio format that contains
 a limited amount of graphics in subcode channels. This disc works in
-all audio players but the graphics portion is only available in a
+all audio players, but the graphics portion is only available in a
 special CD+G or Karaoke player.
 
 @item CD-i
@@ -103,7 +103,7 @@ information such as artist name, title, songwriter, composer, or
 arranger. Commercially available audio CDs sometimes contain CD Text
 information.
 
-Information on how CD Text is stored can be found in in older MMC
+Information on how CD Text is stored can be found in older MMC
 standards.  Specifically, try ``Annex J'' of ``mmc3r10g.pdf''.
 
 An ``Unofficial CD Text FAQ'' is at
@@ -142,7 +142,7 @@ models and profiles"}.
 A method to compensate small amounts of bad spots on media by replacing
 them out of a pool of reserve blocks and performing address translation.
 The necessary check reading slows down write performance by a factor of 2 or 3.
-Defect management applies by default to DVD-RAM and BD-RE. Optionally it
+Defect management applies by default to DVD-RAM and BD-RE. Optionally, it
 can be formatted onto CD-RW and DVD+RW, where it has the name "Mount Rainier".
 Sequential BD-R can be formatted for defect management too.
 
@@ -204,7 +204,7 @@ overwritable or pseudo-overwritable media. It serves as the base of UDF.
 
 ISO 13490 / ECMA-168 is an attempt to replace ISO 9660 with a format that
 allows finer write granularity and representation of typical disk file
-properties. It resembles ECMA-167 which led to UDF.
+properties. It resembles ECMA-167, which led to UDF.
 
 @item ISO 9660
 @cindex ISO 9660
@@ -213,7 +213,7 @@ ISO 9660 / ECMA-119 is an operating-system-independent filesystem format
 originally intended for CD-ROM media. It was standardized in 1988 and
 replaced the High Sierra standard for the logical format on CD-ROM media
 (ISO 9660 and High Sierra are identical in content, but the exact format is
-different). ISO 9660 and ECMA-119 are technically identical meanwhile.
+different). ISO 9660 and ECMA-119 are technically identical, meanwhile.
 
 There are several specification levels. In Level 1, file names must be
 in the 8.3 format (no more than eight characters in the name, no more
@@ -221,7 +221,7 @@ than three characters in the suffix) and in capital letters. Directory
 names can be no longer than eight characters. There can be no more
 than eight nested directory levels. Level 2 and 3 specifications allow
 file names up to 32 characters long. Level 3 allows data file sizes to be
-4 GB or larger. File data content is stored in extents, i.e. contiguous
+4 GB or larger. File data content is stored in extents, i.e., contiguous
 sequences of blocks. A single extent can hold only up to 2 exp 32 - 1 bytes.
 So files of 4 GB or larger need more than one extent to be stored.
 Older operating systems might have trouble with multi-extent files.
@@ -243,10 +243,10 @@ standard was defined.
 @item LBA
 @cindex LBA
 
-Logical Block Addressing. Mapped integer numbers from CD Red Book
-Addressing MSF.  The starting sector is -150 and the ending sector is
+Logical Block Addressing. Mapped integer numbers from the CD Red Book
+Addressing MSF.  The starting sector is -150, and the ending sector is
 449849, which correlates directly to MSF: 00:00:00 to 99:59:74.
-Because an LBA is a single number it is often easier to work with in
+Because an LBA is a single number, it is often easier to work with in
 programming than an MSF.
 
 @item Lead in
@@ -254,7 +254,7 @@ programming than an MSF.
 
 The area of a CD where the Table Of Contents (TOC) and CD Text are
 stored.  I think it is supposed to be around 4500 (1 min) or more
-sectors in length.  On a CDR(W) the lead-in length is variable,
+sectors in length.  On a CDR(W), the lead-in length is variable,
 because manufacturers have a different starting position
 indicated by the ATIP start of lead-in position that is recorded in
 the ATIP groove on the disk. For example:
@@ -269,11 +269,11 @@ the ATIP groove on the disk. For example:
 @item LSN
 @cindex LSN
 
-Logical Sector Number. Mapped integer numbers from CD Red Book
-Addressing MSF.  The starting sector is 0 and the ending sector is 449699,
+Logical Sector Number. Mapped integer numbers from the CD Red Book
+Addressing MSF.  The starting sector is 0, and the ending sector is 449699,
 which correlates to MSF: 00:00:00 to 99:59:74.  Because an LSN is a
-single number it is often easier to work with in programming than an
-MSF. Because it starts at 0 rather than -150 as is the case of an LBA
+single number, it is often easier to work with in programming than an
+MSF. Because it starts at 0 rather than -150 as is the case of an LBA,
 it can be represented as an unsigned value.
 
 @item MCN
@@ -292,7 +292,7 @@ MMC are raw commands for communicating with CDROM drives,
 CD-Rewriters, DVD-Rewriters, etc. They are a subset of the larger SCSI
 command set. See also @pxref{SCSI,,@acronym{SCSI}}.
 
-Many manufacturers have adopted this standard and it also applies to
+Many manufacturers have adopted this standard, and it also applies to
 ATAPI versions of their drives.
 
 The documents @code{libcdio} makes use of are described in the
@@ -348,7 +348,7 @@ Special burn programs are needed for writing to them.
 @end table
 They can assume three states:
 @table @dfn
-@item "Blank" is not readable but writeable from scratch
+@item "Blank" is not readable but writable from scratch
 @item "Appendable" is readable and after the readable part still writeable
 @item "Closed" is only readable
 @end table
@@ -375,8 +375,8 @@ priced Blu-ray burners as of the year 2010.
 
 A Mixed Mode is a CD that contains tracks of differing CD-ROM Mode
 formats. In particular, the first track may contain both computer data
-(Yellow Book) CD ROM data while the remaining tracks are audio or
-video data. Video CD's can be Mixed Mode CDs.
+(Yellow Book) CD-ROM data while the remaining tracks are audio or
+video data. Video CDs can be Mixed Mode CDs.
 
 @item Multisession
 @cindex Multisession
@@ -384,7 +384,7 @@ video data. Video CD's can be Mixed Mode CDs.
 A way of writing to a CD, DVD, or Blu-ray Disc that allows more data to be
 added to readable discs at a later time. The media must not have been closed
 by the previous writing session. This applies originally to unformatted CD-R,
-CD-RW, DVD-R, DVD-RW, DVD+R, and sequential BD-R which all can record more
+CD-RW, DVD-R, DVD-RW, DVD+R, and sequential BD-R, which all can record more
 than one session. They hold a table of contents with sessions and tracks.
 Formatted CD-RW, DVD-RAM, DVD+RW, DVD-RW, and BD-RE have only one track.
 Multisession on these media needs help from the recorded data formats.
@@ -406,7 +406,7 @@ ISO 9660 image at block 32 so that its descriptors are not overwritten later.
 
 A proprietary CD image file format used by a popular program for
 Microsoft Windows, Ahead Nero. The specification of this format is
-not to our knowledge published.
+not, to our knowledge, published.
 
 @item Rock Ridge Extensions
 @cindex Rock Ridge extensions
@@ -415,7 +415,7 @@ An extension to the ISO-9660 standard which adds POSIX information to files.
 It allows long file names, owner, group, access permissions @code{ugo+-rwx},
 inode numbers, hard-link count, and file types other than directory or regular
 file. Rock Ridge is described by unapproved standard IEEE P1282 / RRIP-1.12
-and based on unapproved IEEE P1281 / SUSP-1.10. It has become a de-facto
+and based on unapproved IEEE P1281 / SUSP-1.10. It has become a de facto
 standard on X/Open systems like GNU/Linux, FreeBSD, Solaris, et.\ al.
 
 @item SCSI
@@ -428,7 +428,7 @@ personal computers to communicate with peripheral hardware such as
 CD-ROM drives, disk drives, printers, etc.
 
 Although the original hardware has been outdated for years, the SCSI command
-set nowadays controls most storage devices including all optical disc drives.
+set nowadays controls most storage devices, including all optical disc drives.
 The contemporary electronic technologies that transport SCSI commands
 to optical drives are P-ATA, SATA, and USB.
 
@@ -468,7 +468,7 @@ data sessions.
 
 Super @acronym{VCD}
 
-An improvement of Video CD 2.0 specification which includes most
+An improvement of the Video CD 2.0 specification which includes most
 notably a switch from @acronym{MPEG}-1 (constant bit rate encoding) to
 @acronym{MPEG}-2 (variable bit rate encoding) for the video stream.
 
@@ -484,7 +484,7 @@ See @uref{https://www.videohelp.com/glossary?S#SVCD}
 
 (Compact Disc) Table of Contents. The TOC contains a list of sessions
 and their tracks. For sessions, it records the starting track
-number and the last track number. For tracks, it records starting time
+number and the last track number. For tracks, it records the starting time
 block address, size, copy protection, linear audio preemphasis, track format
 (CDDA or data) in that order.
 Session and track information is also available on sequential DVDs and
@@ -493,12 +493,12 @@ Blu-ray Discs. Several track properties are fixed to equivalents of CD data.
 @item Track
 @cindex track
 
-A unit of data of a CD. The size of a track can vary; it can occupy
-the entire contents of the CD. Most CD standards however require that
+A unit of data on a CD. The size of a track can vary; it can occupy
+the entire contents of the CD. Most CD standards, however, require that
 tracks have a 150 frame (or ``2 second'') lead-in gap.
 
 An abstraction of tracks for CD, DVD, and Blu-ray Discs is the Logical Track
-as of MMC specs. Overwritable media have a single logical track, sequential
+as of MMC specs. Overwritable media have a single logical track; sequential
 media can have one or more logical tracks which they describe in their TOC.
 
 @item UDF
@@ -506,7 +506,7 @@ media can have one or more logical tracks which they describe in their TOC.
 
 Universal Disc Format was designed as the successor of ISO 9660. It allows recording
 long file names and advanced file properties. Although intended
-as a format for data exchange its main importance is with DVD video players.
+as a format for data exchange, its main importance is with DVD video players.
 Video DVDs have to bear a simple UDF filesystem with a prescribed set
 of files.
 
@@ -522,7 +522,7 @@ multimedia support.
 
 A Video CD is made up of @acronym{CD-ROM XA} sectors,
 i.e. @acronym{CD-ROM} mode 2 form 1 & 2 sectors. Non-@acronym{MPEG} data
-is stored in mode 2 form 1 sectors with a user data area of 2048 byte,
+is stored in mode 2 form 1 sectors with a user data area of 2048 bytes,
 which have a similar L2 error correction and detection
 (@acronym{ECC}/@acronym{EDC}) to @acronym{CD-ROM} mode 1 sectors. While
 real-time @acronym{MPEG} streams is stored in @acronym{CD-ROM} mode 2

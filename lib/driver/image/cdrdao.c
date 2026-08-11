@@ -102,7 +102,7 @@ check_track_is_blocksize_multiple(const char *psz_fname,
 }
 
 
-/*!
+/**
   Initialize image structures.
  */
 static bool
@@ -138,7 +138,7 @@ _init_cdrdao (_img_private_t *env)
   return true;
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   Would be libc's seek() but we have to adjust for the extra track header
@@ -184,7 +184,7 @@ _lseek_cdrdao (void *user_data, off_t offset, int whence)
   }
 }
 
-/*!
+/**
   Reads into buf the next size bytes.
   Returns -1 on error.
   FIXME:
@@ -239,7 +239,7 @@ _read_cdrdao (void *user_data, void *data, size_t size)
   return final_size;
 }
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
 
    FIXME: this assumes there is only one source for data or
@@ -646,6 +646,8 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	/* track flags */
 	/* [NO] COPY | [NO] PRE_EMPHASIS */
       } else if (0 == strcmp ("NO", psz_keyword)) {
+	if (i_track < 0)
+	  goto not_in_global_section;
 	if (NULL != (psz_field = strtok_r(NULL, " \t\n\r", &saveptr))) {
 	  if (0 == strcmp ("COPY", psz_field)) {
 	    if (NULL != cd)
@@ -678,6 +680,8 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 
 	/* ISRC "CCOOOYYSSSSS" */
       } else if (0 == strcmp ("ISRC", psz_keyword)) {
+	if (i_track < 0)
+	  goto not_in_global_section;
 	if (NULL != (psz_field = strtok_r(NULL, "\"\t\n\r", &saveptr))) {
 	  if (NULL != cd)
 	    cd->tocent[i_track].isrc = strdup(psz_field);
@@ -687,6 +691,8 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 
 	/* SILENCE <length> */
       } else if (0 == strcmp ("SILENCE", psz_keyword)) {
+	if (i_track < 0)
+	  goto not_in_global_section;
         if (NULL != (psz_field = strtok_r(NULL, " \t\n\r", &saveptr))) {
 	      if (NULL != cd)
 		  cd->tocent[i_track].silence = cdio_mmssff_to_lba (psz_field);
@@ -1016,7 +1022,7 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
   return false;
 }
 
-/*!
+/**
    Reads a single audio sector from CD device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -1038,7 +1044,7 @@ _read_audio_sectors_cdrdao (void *user_data, void *data, lsn_t lsn,
   return ret == 0;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -1065,7 +1071,7 @@ _read_mode1_sector_cdrdao (void *user_data, void *data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads nblocks of mode1 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -1088,7 +1094,7 @@ _read_mode1_sectors_cdrdao (void *user_data, void *data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads a single mode1 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -1130,7 +1136,7 @@ _read_mode2_sector_cdrdao (void *user_data, void *data, lsn_t lsn,
   return DRIVER_OP_SUCCESS;
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -1152,7 +1158,7 @@ _read_mode2_sectors_cdrdao (void *user_data, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
   Return an array of strings giving possible TOC disk images.
  */
 char **
@@ -1176,7 +1182,7 @@ cdio_get_devices_cdrdao (void)
   return drives;
 }
 
-/*!
+/**
   Return a string containing the default CD device.
  */
 char *
@@ -1203,7 +1209,7 @@ get_hwinfo_cdrdao ( const CdIo_t *p_cdio, /*out*/ cdio_hwinfo_t *hw_info)
   return true;
 }
 
-/*!
+/**
   Return the number of tracks in the current medium.
   CDIO_INVALID_TRACK is returned on error.
 */
@@ -1220,7 +1226,7 @@ _get_track_format_cdrdao(void *p_user_data, track_t i_track)
   return p_env->tocent[i_track-p_env->gen.i_first_track].track_format;
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -1241,7 +1247,7 @@ _get_track_green_cdrdao(void *user_data, track_t i_track)
   return env->tocent[i_track-env->gen.i_first_track].track_green;
 }
 
-/*!
+/**
   Return the starting LSN track number
   i_track in obj.  Track numbers start at 1.
   The "leadout" track is specified either by
@@ -1263,7 +1269,7 @@ _get_lba_track_cdrdao(void *p_user_data, track_t i_track)
     return CDIO_INVALID_LBA;
 }
 
-/*!
+/**
   Check that a TOC file is valid. We parse the entire file.
 
 */
@@ -1285,7 +1291,7 @@ cdio_is_tocfile(const char *psz_cue_name)
   return false;
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
@@ -1299,7 +1305,7 @@ cdio_open_am_cdrdao (const char *psz_source_name, const char *psz_access_mode)
   return cdio_open_cdrdao(psz_source_name);
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.

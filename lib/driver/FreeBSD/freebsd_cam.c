@@ -33,7 +33,7 @@
    complete. */
 #define DEFAULT_TIMEOUT_MSECS 10000
 
-/*!
+/**
   Run a SCSI MMC command.
 
   p_user_data   internal CD structure.
@@ -189,7 +189,7 @@ read_mode2_sector_freebsd_cam (_img_private_t *p_env, void *data, lsn_t lsn,
   }
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -238,7 +238,7 @@ read_mode2_sectors_freebsd_cam (_img_private_t *p_env, void *p_buf,
   }
 }
 
-/*!
+/**
   Eject media in CD-ROM drive. Return DRIVER_OP_SUCCESS if successful,
   DRIVER_OP_ERROR on error.
  */

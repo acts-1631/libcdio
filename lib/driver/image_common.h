@@ -15,7 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*! Common image routines.
+/** Common image routines.
 
   Because _img_private_t may vary over image formats, the routines are
   included into the image drivers after _img_private_t is defined.  In
@@ -60,7 +60,7 @@ typedef struct {
 #endif
 } _img_private_t;
 
-/*!
+/**
   We don't need the image any more. Free all memory associated with
   it.
  */
@@ -68,22 +68,22 @@ void  _free_image (void *p_user_data);
 
 driver_return_code_t _eject_media_image(void *p_user_data);
 
-/*!
+/**
   Return the value associated with the key "arg".
 */
 const char * _get_arg_image (void *user_data, const char key[]);
 
-/*!
+/**
   Return CD-Text object or NULL
  */
 cdtext_t * _get_cdtext_image(void *p_user_data);
 
-/*!
+/**
   Get disc type associated with cd_obj.
 */
 discmode_t _get_discmode_image (void *p_user_data);
 
-/*!
+/**
   Return the the kind of drive capabilities of device.
 
  */
@@ -92,13 +92,13 @@ void _get_drive_cap_image (const void *user_data,
                            cdio_drive_write_cap_t *p_write_cap,
                            cdio_drive_misc_cap_t  *p_misc_cap);
 
-/*!
+/**
   Return the number of of the first track.
   CDIO_INVALID_TRACK is returned on error.
 */
 track_t _get_first_track_num_image(void *p_user_data);
 
-/*!
+/**
   Find out if media has changed since the last call.
   @param p_user_data the CD object to be acted upon.
   @return 1 if media has changed since last call, 0 if not. Error
@@ -107,7 +107,7 @@ track_t _get_first_track_num_image(void *p_user_data);
  */
 int get_media_changed_image(const void *p_user_data);
 
-/*!
+/**
   Return the media catalog number (MCN) from the CD or NULL if there
   is none or we don't have the ability to get it.
 
@@ -116,13 +116,13 @@ int get_media_changed_image(const void *p_user_data);
   */
 char * _get_mcn_image(const void *p_user_data);
 
-/*!
+/**
   Return the number of tracks.
 */
 track_t _get_num_tracks_image(void *p_user_data);
 
 
-/*!
+/**
   Return the starting MSF (minutes/secs/frames) for the track number
   track_num in obj.  Tracks numbers start at 1.
   The "leadout" track is specified either by
@@ -131,18 +131,18 @@ track_t _get_num_tracks_image(void *p_user_data);
 */
 bool _get_track_msf_image(void *p_user_data, track_t i_track, msf_t *msf);
 
-/*! Return number of channels in track: 2 or 4; -2 if not
+/** Return number of channels in track: 2 or 4; -2 if not
   implemented or -1 for error.
   Not meaningful if track is not an audio track.
 */
 int get_track_channels_image(const void *p_user_data, track_t i_track);
 
-/*! Return 1 if copy is permitted on the track, 0 if not, or -1 for error.
+/** Return 1 if copy is permitted on the track, 0 if not, or -1 for error.
   Is this meaningful if not an audio track?
 */
 track_flag_t get_track_copy_permit_image(void *p_user_data, track_t i_track);
 
-/*! Return 1 if track has pre-emphasis, 0 if not, or -1 for error.
+/** Return 1 if track has pre-emphasis, 0 if not, or -1 for error.
   Is this meaningful if not an audio track?
 
   pre-emphasis is a non linear frequency response.
@@ -150,13 +150,13 @@ track_flag_t get_track_copy_permit_image(void *p_user_data, track_t i_track);
 track_flag_t get_track_preemphasis_image(const void *p_user_data,
                                          track_t i_track);
 
-/*! Return the starting LBA for the pregap for track number i_track.
+/** Return the starting LBA for the pregap for track number i_track.
   Track numbers start at 1.
   CDIO_INVALID_LBA is returned on error.
 */
 lba_t get_track_pregap_lba_image(const void *p_user_data, track_t i_track);
 
-/*!
+/**
   Return the International Standard Recording Code (ISRC) for track number
   i_track in p_cdio.  Track numbers start at 1.
 
@@ -165,7 +165,7 @@ lba_t get_track_pregap_lba_image(const void *p_user_data, track_t i_track);
 */
 char *get_track_isrc_image(const void *p_user_data, track_t i_track);
 
-/*!
+/**
   Read a data sector
 
   @param p_cdio object to read from
@@ -190,7 +190,7 @@ read_data_sectors_image ( void *p_user_data, void *p_buf,
                           lsn_t i_lsn,  uint16_t i_blocksize,
                           uint32_t i_blocks );
 
-/*!
+/**
   Set the arg "key" with "value" in the source device.
   Currently "source" to set the source device in I/O operations
   is the only valid key.

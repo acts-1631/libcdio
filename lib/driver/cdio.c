@@ -38,7 +38,7 @@
 #include <cdio/util.h>
 #include "cdio_private.h"
 
-/*!
+/**
   Return the value associatied with key. NULL is returned if obj is NULL
   or "key" does not exist.
  */
@@ -70,7 +70,7 @@ cdio_new (generic_img_private_t *p_env, cdio_funcs_t *p_funcs)
   return p_new_cdio;
 }
 
-/*!
+/**
   Set the arg "key" with "value" in the source device.
 */
 driver_return_code_t

@@ -147,7 +147,7 @@ str_to_access_mode_aix(const char *psz_access_mode)
 }
 
 
-/*!
+/**
   Initialize CD device.
  */
 static bool
@@ -179,7 +179,7 @@ init_aix (_img_private_t *p_env)
   return true;
 }
 
-/*!
+/**
   Run a SCSI MMC command.
 
   p_user_data   internal CD structure.
@@ -228,7 +228,7 @@ run_mmc_cmd_aix( void *p_user_data, unsigned int i_timeout_ms,
   return i_rc;
 }
 
-/*!
+/**
    Reads audio sectors from CD device into data starting from lsn.
    Returns 0 if no error.
 
@@ -282,7 +282,7 @@ _read_audio_sectors_aix (void *p_user_data, void *data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads a single mode1 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -298,7 +298,7 @@ _read_mode1_sector_aix (void *env, void *data, lsn_t lsn,
 #endif
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -321,7 +321,7 @@ _read_mode1_sectors_aix (void *p_user_data, void *p_data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads a single mode2 sector from cd device into data starting from lsn.
    Returns 0 if no error.
  */
@@ -382,7 +382,7 @@ _read_mode2_sector_aix (void *p_user_data, void *p_data, lsn_t lsn,
   return 0;
 }
 
-/*!
+/**
    Reads nblocks of mode2 sectors from cd device into data starting
    from lsn.
    Returns 0 if no error.
@@ -406,7 +406,7 @@ _read_mode2_sectors_aix (void *p_user_data, void *data, lsn_t lsn,
 }
 
 
-/*!
+/**
    Return the size of the CD in logical block address (LBA) units.
  */
 static lsn_t
@@ -432,7 +432,7 @@ get_disc_last_lsn_aix (void *p_user_data)
   return i_size;
 }
 
-/*!
+/**
   Set the arg "key" with "value" in the source device.
   Currently "source" and "access-mode" are valid keys.
   "source" sets the source device in I/O operations
@@ -496,7 +496,7 @@ aixioc_send(_img_private_t *p_env, int cmd, void *arg, bool b_print_err)
   return true;
 }
 
-/*!
+/**
   Read and cache the CD's Track Table of Contents and track info.
   via a SCSI MMC READ_TOC (FULTOC).  Return true if successful or
   false if an error.
@@ -542,7 +542,7 @@ read_toc_ioctl_aix (void *p_user_data)
   return true;
 }
 
-/*!
+/**
   Read and cache the CD's Track Table of Contents and track info.
   via a SCSI MMC READ_TOC (FULTOC).  Return true if successful or
   false if an error.
@@ -637,7 +637,7 @@ read_toc_aix (void *p_user_data)
   return false;
 }
 
-/*!
+/**
   Eject media in CD drive. If successful, as a side effect we
   also free obj.
  */
@@ -684,7 +684,7 @@ is_mmc_supported(void *user_data)
     return (_AM_NONE == env->access_mode) ? false : true;
 }
 
-/*!
+/**
   Return the value associated with the key "arg".
 */
 static const char *
@@ -707,7 +707,7 @@ get_arg_aix (void *p_user_data, const char key[])
   return NULL;
 }
 
-/*!
+/**
   Return a string containing the default CD device if none is specified.
  */
 char *
@@ -716,7 +716,7 @@ cdio_get_default_device_aix(void)
   return strdup(DEFAULT_CDIO_DEVICE);
 }
 
-/*!
+/**
   Get disc type associated with cd object.
 */
 
@@ -750,7 +750,7 @@ get_discmode_aix (void *p_user_data)
   }
 }
 
-/*!
+/**
   Get format of track.
 */
 static track_format_t
@@ -787,7 +787,7 @@ get_track_format_aix(void *p_user_data, track_t i_track)
 
 }
 
-/*!
+/**
   Return true if we have XA data (green, mode2 form1) or
   XA data (green, mode2 form2). That is track begins:
   sync - header - subheader
@@ -821,7 +821,7 @@ _cdio_get_track_green(void *p_user_data, track_t i_track)
 #endif
 }
 
-/*!
+/**
   Return the starting MSF (minutes/secs/frames) for track number
   track_num in obj.  Track numbers usually start at something
   greater than 0, usually 1.
@@ -860,7 +860,7 @@ _cdio_get_track_msf(void *p_user_data, track_t i_track, msf_t *msf)
 }
 
 #else
-/*!
+/**
   Return a string containing the default VCD device if none is specified.
  */
 char *
@@ -871,7 +871,7 @@ cdio_get_default_device_aix(void)
 
 #endif /* HAVE_AIX_CDROM */
 
-/*!
+/**
   Return an array of strings giving possible CD devices.
  */
 char **
@@ -916,7 +916,7 @@ cdio_get_devices_aix (void)
 #endif /*HAVE_AIX_CDROM*/
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
@@ -927,7 +927,7 @@ cdio_open_aix (const char *psz_source_name)
   return cdio_open_am_aix(psz_source_name, NULL);
 }
 
-/*!
+/**
   Initialization routine. This is the only thing that doesn't
   get called via a function pointer. In fact *we* are the
   ones to set that up.
