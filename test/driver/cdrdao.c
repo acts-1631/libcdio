@@ -49,7 +49,7 @@
 #endif
 
 #define NUM_GOOD_TOCS 17
-#define NUM_BAD_TOCS 9
+#define NUM_BAD_TOCS 10
 int
 main(int argc, const char *argv[])
 {
@@ -82,7 +82,8 @@ main(int argc, const char *argv[])
     "bad-cat3.toc",
     "bad-file.toc",
     "bad-mode1.toc",
-    "bad-tracknum-exceeded.toc"
+    "bad-tracknum-exceeded.toc",
+    "bad-pretrack-isrc.toc"
   };
   int ret=0;
   unsigned int i;
