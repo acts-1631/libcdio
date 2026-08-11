@@ -136,6 +136,9 @@ make-executable: check_nrg.sh check_cue.sh
 		test -L isofs-m1.bin && $(RM) isofs-m1.cue ; \
 		$(LN_S) $(abs_top_srcdir)/test/data/isofs-m1.cue @abs_top_builddir@/test/data/isofs-m1.cue ;  \
 	fi
+	@if test ! -f @abs_top_builddir@/test/data/xa.iso -a ! -s isofs-m1.cue -a ! -f @abs_top_builddir@/test/data/xa.iso; then \
+		$(LN_S) $(abs_top_srcdir)/test/data/xa.iso @abs_top_builddir@/test/data/xa.iso ;  \
+	fi
 
 clean-local: clean-local-check
 clean-local-check:

@@ -65,6 +65,7 @@ check_DATA = \
 	too-many-tracks.nrg \
 	udf102.iso     \
 	vcd2.toc       \
-	videocd.nrg
+	videocd.nrg    \
+	xa.iso
 
 EXTRA_DIST = $(check_DATA)
