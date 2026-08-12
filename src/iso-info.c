@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2004-2006, 2008, 2012-2014, 2017, 2025 Rocky Bernstein
+  Copyright (C) 2004-2006, 2008, 2012-2014, 2017, 2025-2026 Rocky Bernstein
   <rocky@gnu.org>
 
   This program is free software: you can redistribute it and/or modify
