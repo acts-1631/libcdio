@@ -109,6 +109,7 @@ else
 endif
 
 MOSTLYCLEANFILES = *.orig *.rej *.dSYM .libs
+DISTCLEANFILES = *.1
 
 mostlyclean-generic:
 	-test -z "$(MOSTLYCLEANFILES)" || rm -fr $(MOSTLYCLEANFILES)

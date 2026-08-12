@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2003-2010, 2012-2014, 2017, 2025 Rocky Bernstein <rocky@gnu.org>
+  Copyright (C) 2003-2010, 2012-2014, 2017, 2025-2026 Rocky Bernstein <rocky@gnu.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ print_version (char *prog_name, const char *version,
   if (no_header == 0) {
     report( stdout,
 	    "%s version %s\n"
-	    "Copyright (c) 2003-2005, 2007-2008, 2011-2015, 2017, 2025 "
+	    "Copyright (c) 2003-2005, 2007-2008, 2011-2015, 2017, 2025-2026 "
 	    "R. Bernstein\n",
 	    prog_name, version);
     report( stdout,

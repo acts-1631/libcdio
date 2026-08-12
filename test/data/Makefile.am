@@ -16,10 +16,10 @@ check_DATA = \
 	bad-msf-2.toc  \
 	bad-msf-3.cue  \
 	bad-msf-3.toc  \
+	bad-pretrack-isrc.toc \
 	bad-tracknum-exceeded.cue \
 	bad-tracknum-exceeded.toc \
 	bad-tracknum-overflow.toc \
-	bad-pretrack-isrc.toc \
 	cdda.bin       \
 	cdda.cue       \
 	cdda_4_5.bin   \
@@ -65,6 +65,7 @@ check_DATA = \
 	too-many-tracks.nrg \
 	udf102.iso     \
 	vcd2.toc       \
-	videocd.nrg
+	videocd.nrg    \
+	xa.iso
 
 EXTRA_DIST = $(check_DATA)
