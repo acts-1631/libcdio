@@ -491,6 +491,12 @@ parse_cuefile (_img_private_t *cd, const char *psz_cue_name)
           track_info_t  *this_track=NULL;
 
           if (cd) {
+            if (cd->gen.i_tracks >= CDIO_CD_MAX_TRACKS) {
+              cdio_log(log_level,
+                       "Too many tracks; maximum track number is %d.",
+                       CDIO_CD_MAX_TRACKS);
+              goto err_exit;
+            }
             this_track = &(cd->tocent[cd->gen.i_tracks]);
             this_track->track_num   = cd->gen.i_tracks;
             this_track->num_indices = 0;
@@ -498,12 +504,6 @@ parse_cuefile (_img_private_t *cd, const char *psz_cue_name)
             cd->gen.i_tracks++;
           }
           i++;
-	  if (i > CDIO_CD_MAX_TRACKS) {
-            cdio_warn(
-                "Track number %d is too large; maximum track number is %d.",
-                i, CDIO_CD_MAX_TRACKS);
-	    return DRIVER_OP_ERROR;
-	  }
 
 
           if (0 == strcmp("AUDIO", psz_field)) {
