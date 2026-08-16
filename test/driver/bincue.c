@@ -50,6 +50,21 @@
 
 #define NUM_GOOD_CUES 3
 #define NUM_BAD_CUES 8
+
+static int
+check_file_before_first_track(void)
+{
+  CdIo_t *p_cdio = cdio_open_bincue(DATA_DIR "/cdda.cue");
+
+  if (!p_cdio) {
+    printf("Can't open cdda.cue with FILE before TRACK\n");
+    return 1;
+  }
+
+  cdio_destroy(p_cdio);
+  return 0;
+}
+
 int
 main(int argc, const char *argv[])
 {
@@ -76,6 +91,10 @@ main(int argc, const char *argv[])
 
   psz_cuefile[sizeof(psz_cuefile)-1] = '\0';
   cdio_loglevel_default = (argc > 1) ? CDIO_LOG_DEBUG : CDIO_LOG_WARN;
+
+  if (check_file_before_first_track())
+    ret = 1;
+
   for (i=0; i<NUM_GOOD_CUES; i++) {
     char *psz_binfile;
     snprintf(psz_cuefile, sizeof(psz_cuefile)-1,
