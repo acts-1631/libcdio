@@ -22,6 +22,7 @@
 #endif
 
 #include <ctype.h>
+#include <stddef.h>
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
@@ -32,6 +33,7 @@
 #include <stdio.h>
 #endif
 
+#include <cdio/cdio.h>
 #include <cdio/iso9660.h>
 #include <cdio/bytesex.h>
 
@@ -39,6 +41,93 @@
 #define ISO_XA_FILE_ENTRY_FOO "FOO.;1"
 #define ISO_XA_FILE_ENTRY_FOO_ATTR "----1xrxrx-"
 #define ISO_XA_FILE_ENTRY_FOO_MODE 0551
+
+static int
+test_oversized_directory_size(void)
+{
+  const char *image_name = "bad-directory-size.bin";
+  const char *cue_name = "bad-directory-size.cue";
+  const uint8_t oversized_size[8] =
+    { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+  FILE *source;
+  FILE *image;
+  FILE *cue;
+  uint8_t buffer[4096];
+  size_t nread;
+  long int root_size_offset;
+  CdIo_t *cdio;
+  CdioISO9660FileList_t *entries;
+  int result = 1;
+
+  source = fopen("./data/isofs-m1.bin", "rb");
+  image = fopen(image_name, "wb");
+  if (!source || !image) {
+    printf("Could not create crafted ISO image\n");
+    goto out;
+  }
+
+  while ((nread = fread(buffer, 1, sizeof(buffer), source)) != 0) {
+    if (fwrite(buffer, 1, nread, image) != nread) {
+      printf("Could not write crafted ISO image\n");
+      goto out;
+    }
+  }
+  if (ferror(source)) {
+    printf("Could not read ISO fixture\n");
+    goto out;
+  }
+  fclose(source);
+  source = NULL;
+
+  root_size_offset = ISO_PVD_SECTOR * CDIO_CD_FRAMESIZE_RAW
+    + CDIO_CD_SYNC_SIZE + CDIO_CD_HEADER_SIZE
+    + offsetof(iso9660_pvd_t, root_directory_record)
+    + offsetof(iso9660_dir_t, size);
+  if (fseek(image, root_size_offset, SEEK_SET) != 0
+      || fwrite(oversized_size, 1, sizeof(oversized_size), image)
+         != sizeof(oversized_size)) {
+    printf("Could not set crafted directory size\n");
+    goto out;
+  }
+  fclose(image);
+  image = NULL;
+
+  cue = fopen(cue_name, "w");
+  if (!cue) {
+    printf("Could not create crafted CUE image\n");
+    goto out;
+  }
+  fputs("TRACK 01 MODE1/2352\n"
+        "FILE \"bad-directory-size.bin\" BINARY\n"
+        "INDEX 01 00:00:00\n", cue);
+  fclose(cue);
+  cue = NULL;
+
+  cdio = cdio_open(cue_name, DRIVER_BINCUE);
+  if (!cdio) {
+    printf("Could not open crafted CUE image\n");
+    goto out;
+  }
+  entries = iso9660_fs_readdir(cdio, "/");
+  cdio_destroy(cdio);
+  if (entries) {
+    printf("Incorrectly listed crafted oversized directory\n");
+    iso9660_dirlist_free(entries);
+    goto out;
+  }
+
+  result = 0;
+out:
+  if (source)
+    fclose(source);
+  if (image)
+    fclose(image);
+  if (cue)
+    fclose(cue);
+  remove(image_name);
+  remove(cue_name);
+  return result;
+}
 
 
 static bool
@@ -454,6 +543,9 @@ main (int argc, const char *argv[])
     iso9660_filelist_free(entries);
     iso9660_close(iso);
   }
+
+  if (test_oversized_directory_size())
+    return 56;
 
   return 0;
 }
