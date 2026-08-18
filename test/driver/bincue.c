@@ -78,7 +78,10 @@ check_too_many_tracks(void)
     cdio_destroy(p_cdio);
     return 1;
   }
+  return 0;
+}
 
+static int
 check_file_before_first_track(void)
 {
   CdIo_t *p_cdio = cdio_open_bincue(DATA_DIR "/cdda.cue");
