@@ -52,6 +52,36 @@
 #define NUM_BAD_CUES 8
 
 static int
+check_too_many_tracks(void)
+{
+  const char *cue_name = "bincue-too-many-tracks.cue";
+  FILE *cue;
+  CdIo_t *p_cdio;
+  unsigned int i;
+
+  cue = fopen(cue_name, "w");
+  if (!cue) {
+    printf("Can't create %s\n", cue_name);
+    return 1;
+  }
+
+  fprintf(cue, "FILE \"%s/cdda.bin\" BINARY\n", DATA_DIR);
+  for (i = 1; i <= CDIO_CD_MAX_TRACKS; i++)
+    fprintf(cue, "TRACK %02u AUDIO\n", i);
+  fprintf(cue, "TRACK %02u AUDIO\n", CDIO_CD_MAX_TRACKS);
+  fclose(cue);
+
+  p_cdio = cdio_open_bincue(cue_name);
+  remove(cue_name);
+  if (p_cdio) {
+    printf("Incorrect: %s with too many tracks opened.\n", cue_name);
+    cdio_destroy(p_cdio);
+    return 1;
+  }
+  return 0;
+}
+
+static int
 check_file_before_first_track(void)
 {
   CdIo_t *p_cdio = cdio_open_bincue(DATA_DIR "/cdda.cue");
@@ -92,6 +122,8 @@ main(int argc, const char *argv[])
   psz_cuefile[sizeof(psz_cuefile)-1] = '\0';
   cdio_loglevel_default = (argc > 1) ? CDIO_LOG_DEBUG : CDIO_LOG_WARN;
 
+  if (check_too_many_tracks())
+    ret = 1;
   if (check_file_before_first_track())
     ret = 1;
 
