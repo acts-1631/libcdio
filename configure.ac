@@ -15,10 +15,10 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-define(RELEASE_NUM, 2.4.0)
-define(CDIO_VERSION_STR, $1)
+define(RELEASE_NUM, 2.4.1)
+define(CDIO_VERSION_STR, $1dev0)
 
-AC_PREREQ([2.71])
+AC_PREREQ([2.73])
 
 AC_INIT([libcdio],[CDIO_VERSION_STR(RELEASE_NUM)],[https://savannah.gnu.org/bugs/?group=libcdio])
 AC_CONFIG_SRCDIR(src/cd-info.c)
@@ -37,7 +37,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])],
 
 # FIXME: write a m4 macro to convert x.y.zjunk to x*10000 + y*100 + z
 # LIBCDIO_VERSION_NUM=`echo RELEASE_NUM | cut -d . -f 1 | tr -d a-z`
-LIBCDIO_VERSION_NUM=20400
+LIBCDIO_VERSION_NUM=20401
 AC_SUBST(LIBCDIO_VERSION_NUM)
 
 AM_MAINTAINER_MODE
