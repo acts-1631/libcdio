@@ -779,6 +779,23 @@ iso9660_check_dir_block_end(iso9660_dir_t *p_iso9660_dir, unsigned *offset)
   return false;
 }
 
+/*
+ * The directory reader stores the block count in uint32_t and calculates
+ * buffer sizes from it. Reject sizes which would need 2^32 bytes after
+ * rounding up to ISO blocks.
+ */
+static bool
+iso9660_directory_block_count(uint64_t size, uint32_t *blocks)
+{
+  if (size > UINT32_MAX - (ISO_BLOCKSIZE - 1)) {
+    cdio_warn("Directory size is too large");
+    return false;
+  }
+
+  *blocks = CDIO_EXTENT_BLOCKS(size);
+  return true;
+}
+
 static inline bool
 _iso9660_is_rock_ridge_enabled(void* p_image)
 {
@@ -1153,7 +1170,8 @@ _fs_stat_traverse (const CdIo_t *p_cdio, const iso9660_stat_t *_root,
     return NULL;
 
   cdio_assert (_root->type == _STAT_DIR);
-  blocks = CDIO_EXTENT_BLOCKS(_root->total_size);
+  if (!iso9660_directory_block_count(_root->total_size, &blocks))
+    return NULL;
 
   _dirbuf = calloc(1, blocks * ISO_BLOCKSIZE);
   if (!_dirbuf)
@@ -1264,7 +1282,8 @@ _fs_iso_stat_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
 
   cdio_assert (_root->type == _STAT_DIR);
 
-  blocks = CDIO_EXTENT_BLOCKS(_root->total_size);
+  if (!iso9660_directory_block_count(_root->total_size, &blocks))
+    return NULL;
   _dirbuf = calloc(1, blocks * ISO_BLOCKSIZE);
   if (!_dirbuf)
     {
@@ -1520,25 +1539,12 @@ iso9660_fs_readdir (CdIo_t *p_cdio, const char psz_path[])
     return NULL;
   }
 
-  /* Check for overflow on 32-bit systems.
-     uint32_t has a limited maximum value, and if p_stat->total_size (the total
-     size of the directory) is very large, the calculation might exceed this limit.
-  */
-  if (p_stat->total_size > SIZE_MAX / ISO_BLOCKSIZE) {
-    cdio_warn("Total size is too large");
+  if (!iso9660_directory_block_count(p_stat->total_size, &blocks)) {
     iso9660_stat_free(p_stat);
     return NULL;
   }
 
-  blocks = CDIO_EXTENT_BLOCKS(p_stat->total_size);
   retval = _cdio_list_new ();
-
-  /* Check for potential integer overflow when calculating total blocks */
-  if (blocks > (SIZE_MAX / ISO_BLOCKSIZE)) {
-    cdio_warn("Total size is too large");
-    iso9660_stat_free(p_stat);
-    return NULL;
-  }
 
   _dirbuf = calloc(1, blocks * ISO_BLOCKSIZE);
   if (!_dirbuf)
@@ -1622,18 +1628,10 @@ iso9660_ifs_readdir (iso9660_t *p_iso, const char psz_path[])
     return NULL;
   }
 
-  /* Check for overflow on 32-bit systems.
-     uint32_t has a limited maximum value, and if p_stat->total_size (the total
-     size of the directory) is very large, the calculation might exceed this limit.
-  */
-
-  if (p_stat->total_size > SIZE_MAX / ISO_BLOCKSIZE) {
-    cdio_warn("Total size is too large");
+  if (!iso9660_directory_block_count(p_stat->total_size, &blocks)) {
     iso9660_stat_free(p_stat);
     return NULL;
   }
-
-  blocks = CDIO_EXTENT_BLOCKS(p_stat->total_size);
   dirbuf_len = blocks * ISO_BLOCKSIZE;
   retval = _cdio_list_new ();
 
@@ -1999,7 +1997,8 @@ iso_have_rr_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
 
   cdio_assert (_root->type == _STAT_DIR);
 
-   blocks = CDIO_EXTENT_BLOCKS(_root->total_size);
+  if (!iso9660_directory_block_count(_root->total_size, &blocks))
+    return dunno;
   _dirbuf = calloc(1, blocks * ISO_BLOCKSIZE);
   if (!_dirbuf)
     {

@@ -450,9 +450,10 @@ parse_cuefile (_img_private_t *cd, const char *psz_cue_name)
           char *dirname = cdio_dirname(psz_cue_name);
           char *filename = cdio_abspath(dirname, psz_field);
           if (cd) {
-	      cd->gen.source_name = strdup(filename);
-	      cd->tocent[i].filename = strdup(filename);
-	  }
+            cd->gen.source_name = strdup(filename);
+            if (i >= 0)
+              cd->tocent[i].filename = strdup(filename);
+          }
           free(filename);
           free(dirname);
         } else {

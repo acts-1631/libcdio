@@ -79,6 +79,16 @@ check_too_many_tracks(void)
     return 1;
   }
 
+check_file_before_first_track(void)
+{
+  CdIo_t *p_cdio = cdio_open_bincue(DATA_DIR "/cdda.cue");
+
+  if (!p_cdio) {
+    printf("Can't open cdda.cue with FILE before TRACK\n");
+    return 1;
+  }
+
+  cdio_destroy(p_cdio);
   return 0;
 }
 
@@ -110,6 +120,8 @@ main(int argc, const char *argv[])
   cdio_loglevel_default = (argc > 1) ? CDIO_LOG_DEBUG : CDIO_LOG_WARN;
 
   if (check_too_many_tracks())
+    ret = 1;
+  if (check_file_before_first_track())
     ret = 1;
 
   for (i=0; i<NUM_GOOD_CUES; i++) {
