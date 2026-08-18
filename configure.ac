@@ -18,7 +18,7 @@ dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 define(RELEASE_NUM, 2.4.1)
 define(CDIO_VERSION_STR, $1dev0)
 
-AC_PREREQ([2.73])
+AC_PREREQ([2.71])
 
 AC_INIT([libcdio],[CDIO_VERSION_STR(RELEASE_NUM)],[https://savannah.gnu.org/bugs/?group=libcdio])
 AC_CONFIG_SRCDIR(src/cd-info.c)
