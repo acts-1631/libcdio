@@ -96,38 +96,24 @@ check_file_before_first_track(void)
 }
 
 static int
-check_mode2_seek(const char *mode)
+check_mode2_seek(const char *cue_name, const char *mode)
 {
-  const char *cue_name = "bincue-mode2-seek.cue";
-  FILE *cue;
   CdIo_t *p_cdio;
+  char cue_path[500];
   int result = 1;
 
-  cue = fopen(cue_name, "w");
-  if (!cue) {
-    printf("Can't create %s\n", cue_name);
-    return 1;
-  }
-
-  fprintf(cue, "FILE \"%s/cdda.bin\" BINARY\n"
-          "TRACK 01 %s\n"
-          "INDEX 01 00:00:00\n", DATA_DIR, mode);
-  fclose(cue);
-
-  p_cdio = cdio_open_bincue(cue_name);
+  snprintf(cue_path, sizeof(cue_path), "%s/%s", DATA_DIR, cue_name);
+  p_cdio = cdio_open_bincue(cue_path);
   if (!p_cdio) {
     printf("Can't open %s track image\n", mode);
-    goto out;
+    return 1;
   }
   if (cdio_lseek(p_cdio, 0, SEEK_SET) < 0) {
     printf("Can't seek %s track image\n", mode);
-    cdio_destroy(p_cdio);
-    goto out;
+  } else {
+    result = 0;
   }
   cdio_destroy(p_cdio);
-  result = 0;
-out:
-  remove(cue_name);
   return result;
 }
 
@@ -162,8 +148,8 @@ main(int argc, const char *argv[])
     ret = 1;
   if (check_file_before_first_track())
     ret = 1;
-  if (check_mode2_seek("MODE2/2048")
-      || check_mode2_seek("MODE2/2324"))
+  if (check_mode2_seek("mode2-2048.cue", "MODE2/2048")
+      || check_mode2_seek("mode2-2324.cue", "MODE2/2324"))
     ret = 1;
 
   for (i=0; i<NUM_GOOD_CUES; i++) {
