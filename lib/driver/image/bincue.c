@@ -621,6 +621,9 @@ parse_cuefile (_img_private_t *cd, const char *psz_cue_name)
               this_track->track_format= TRACK_FORMAT_XA;
               this_track->track_green = true;
               this_track->mode        = MODE2_FORM1;
+              this_track->datastart   = 0;
+              this_track->datasize    = CDIO_CD_FRAMESIZE;
+              this_track->endsize     = 0;
               switch(cd->disc_mode) {
               case CDIO_DISC_MODE_NO_INFO:
                 cd->disc_mode = CDIO_DISC_MODE_CD_XA;
@@ -644,6 +647,9 @@ parse_cuefile (_img_private_t *cd, const char *psz_cue_name)
               this_track->track_format= TRACK_FORMAT_XA;
               this_track->track_green = true;
               this_track->mode        = MODE2_FORM2;
+              this_track->datastart   = 0;
+              this_track->datasize    = M2F2_SECTOR_SIZE;
+              this_track->endsize     = 0;
               switch(cd->disc_mode) {
               case CDIO_DISC_MODE_NO_INFO:
                 cd->disc_mode = CDIO_DISC_MODE_CD_XA;
