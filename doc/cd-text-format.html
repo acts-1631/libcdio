@@ -6,11 +6,11 @@ There is NO WARRANTY, to the extent permitted by law.
 
 Copyright C 2011-2012 Thomas Schmitt scdbackup@gmx.net.
 
-Copyright C 2012 Rocky Bernstein
+Copyright C 2012, 2025 Rocky Bernstein
 
  -->
-<!-- Created on January 4, 2025 by texi2html 1.82
-texi2html was written by: 
+<!-- Created on August 22, 2026 by texi2html 1.82
+texi2html was written by:
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
             Olaf Bachmann <obachman@mathematik.uni-kl.de>
@@ -65,7 +65,7 @@ references to the original information sources are maintained.
 There is NO WARRANTY, to the extent permitted by law.
 </p>
 <p>Copyright &copy; 2011-2012 Thomas Schmitt <a href="mailto:scdbackup@gmx.net">scdbackup@gmx.net</a>.<br>
-Copyright &copy; 2012 Rocky Bernstein
+Copyright &copy; 2012, 2025-2026 Rocky Bernstein
 </p></blockquote>
 
 <p>CD Text provides a way to give disk and track information in an audio
@@ -80,7 +80,7 @@ to decode and encode it.
 </td></tr>
 <tr><td align="left" valign="top"><a href="#Higher_002dLevel-Encoding">2. Higher-Level Encoding</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
-<tr><td align="left" valign="top"><a href="#Acknowlegement">Acknowlegement</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+<tr><td align="left" valign="top"><a href="#Acknowledgement">Acknowledgement</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
 <tr><td align="left" valign="top"><a href="#List-of-Tables">List of Tables</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
@@ -157,9 +157,9 @@ See <a href="#table_003acategories">table:categories</a>.
 <div class="float"><a name="table_003acategories"></a>
 <table><tr><td>&nbsp;</td><td><pre class="smallexample">  0x80: Title
   0x81: Performers
-  0x82: Songwriters 
+  0x82: Songwriters
   0x83: Composers
-  0x84: Arrangers 
+  0x84: Arrangers
   0x85: Message Area
   0x86: Disc Identification (in text and binary)
   0x87: Genre Identification (in text and binary)
@@ -183,14 +183,14 @@ disc, and cannot be attached to individual tracks.
 </li><li> Pack Types <kbd>0x80</kbd>, <kbd>0x81</kbd>, <kbd>0x82</kbd>, <kbd>0x83</kbd>, <kbd>0x84</kbd>, <kbd>0x85</kbd>, and <kbd>0x8e</kbd> (Performers, Songwriters, Composers,
 Arrangers, and Message Area respectively) have to be attributed to
 each track if they are present for the whole disc.
-</li><li> Pack Type <kbd>0x8f</kbd> (Block Size Information) describes the overall content of a block and in part of all other blocks. 
+</li><li> Pack Type <kbd>0x8f</kbd> (Block Size Information) describes the overall content of a block and in part of all other blocks.
 </li></ul>
 
 <p>The total size of a block&rsquo;s attribute set is restricted by the fact
 that it has to be stored in at most 253 records with 12 bytes of
 payload. These records are called <em>Text Packs</em> described in the
 next section.  Since information such as the Disc and Genre
-Identification is often the same across mutiple tracks, a compact way
+Identification is often the same across multiple tracks, a compact way
 to repeat identical information is provided.
 </p>
 <hr size="6">
@@ -214,7 +214,7 @@ to repeat identical information is provided.
 <a name="Pack-Contents-1"></a>
 <h2 class="section">1.2 Pack Contents</h2>
 
-<p>Packs are stored in CD in the sub-channel of the Lead-in of the
+<p>Packs are stored on the CD in the sub-channel of the Lead-in of the
 disc. The file &lsquo;<tt>doc/cookbook.txt</tt>&rsquo; of the
 <a href="http://libburnia-project.org/">libburnia</a> distribution describes
 how to write the CD Text pack array to CD, and how to read CD Text
@@ -261,8 +261,7 @@ text started before the previous pack.
 </dl>
 
 <p>The 12 payload bytes contain pieces of zero-terminated data. When
-double-byte text is used, the zero is a double byte; otherwise it is a
-single ASCII NUL.
+double-byte text is used, the zero is a double byte; otherwise it is a single ASCII NUL.
 </p>
 <p>A text may span over several packs. Unused characters in
 a pack are used for the next text of the same pack type. If no text of
@@ -320,7 +319,7 @@ then two zero bytes terminate the text.  Of these, all except the last,
 <kbd>0x8e</kbd> or UPC/EAN code, are encoded according to their block&rsquo;s
 Character Code.  This could be either as ISO-8859-1 single-byte
 characters, as 7-bit ASCII single-byte characters, or as MS-JIS double
-byte characters.  
+byte characters.
 </p>
 <p>Pack type <kbd>0x8e</kbd> is documented by Sony as:
 </p><blockquote><p><em>UPC/EAN Code (POS Code) of the
@@ -362,7 +361,7 @@ consists of 12 characters: 2 country code [0-9A-Z], 3 owner code
 bytes with bit 7 set to zero.
 </p>
 <p>Pack type <kbd>0x87</kbd> (Genre Identification) contains 2 binary bytes
-followed by NUL-byte-terminated text.  
+followed by NUL-byte-terminated text.
 </p>
 <p>You can either specify a genre code or the supplementary genre
 information (without the code) or both. Neither is mandatory.
@@ -417,7 +416,7 @@ be recorded on disc as memorandum. Information in this field will not
 be read by CD-TEXT players available to the public.</em>
 </p></blockquote>
 
-<p>One can however, read this information with an MMC READ TOC/PMA/ATP
+<p>One can, however, read this information with an MMC READ TOC/PMA/ATP
 command.  (See Section 5.23 of <a href="#mmc3r10g_002epdf">mmc3r10g.pdf</a>).
 </p>
 <p>This field is always ISO-8859-1 encoded.
@@ -492,7 +491,7 @@ sub-channel, POINT 01 to 40. See Section 4.2.6.3 of <a href="#mmc3r10g_002epdf">
 </p>
 
 <p>The time points in the Sony example are in the time range of the
-track numbers that are given before the time points:
+tracks numbers that are given before the time points:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="smallexample">  01 02:41:48 01 02:52:58
   06 23:14:25 06 23:29:60
@@ -508,8 +507,8 @@ track numbers that are given before the time points:
 </pre></td></tr></table>
 
 <p>The track numbers are stored in the track number byte of the packs. The
-two time points are stored in byte 6 to 11 of the payload. Byte 0 of the
-payload seems to be a sequential counter. Byte 1 always 4? Byte 2 to 5
+two time points are stored in bytes 6 to 11 of the payload. Byte 0 of the
+payload seems to be a sequential counter. Is byte 1 always 4? Byte 2 to 5
 always 0?
 </p>
 <hr size="6">
@@ -535,13 +534,13 @@ always 0?
 
 <p>Pack type <kbd>0x8f</kbd> summarizes the whole list of text packs of a
 block.  So there is one group of three <kbd>0x8f</kbd> packs per block.
-Nevertheless each <kbd>0x8f</kbd> group indicates the highest sequence
+Nevertheless, each <kbd>0x8f</kbd> group indicates the highest sequence
 number and the language code of all blocks.
 </p>
-<p>The payload bytes of three <kbd>0x8f</kbd> packs form a 36-byte record. 
+<p>The payload bytes of three <kbd>0x8f</kbd> packs form a 36-byte record.
 The track number bytes of the three packs have the values 0, 1, 2.
 </p>
-<p>For the format of this pack type see <a href="#table_003ablock_002dpack">table:block-pack</a>.
+<p>For the format of this pack type, see <a href="#table_003ablock_002dpack">table:block-pack</a>.
 </p>
 <div class="float"><a name="table_003ablock_002dpack"></a>
 <table><tr><td>&nbsp;</td><td><pre class="smallexample">    Byte :
@@ -570,7 +569,7 @@ referred to in bytes 28-38 of <a href="#table_003ablock_002dpack">table:block-pa
 <table><tr><td>&nbsp;</td><td><pre class="smallexample">0x00: Unknown                  0x50: Sranan Tongo
 0x01: Albanian                 0x51: Somali
 0x02: Breton                   0x52: Sinhalese
-0x03: Catalan                  0x53: Shona 
+0x03: Catalan                  0x53: Shona
 0x04: Croatian                 0x54: Serbo-croat
 0x05: Welsh                    0x55: Ruthenian
 0x06: Czech                    0x56: Russian
@@ -586,7 +585,7 @@ referred to in bytes 28-38 of <a href="#table_003ablock_002dpack">table:block-pa
 0x10: Frisian                  0x60: Moldavian
 0x11: Irish                    0x61: Malaysian
 0x12: Gaelic                   0x62: Malagasay
-0x13: Galician                 0x63: Macedonian     
+0x13: Galician                 0x63: Macedonian
 0x14: Iceland                  0x64: Laotian
 0x15: Italian                  0x65: Korean
 0x16: Lappish                  0x66: Khmer
@@ -601,27 +600,27 @@ referred to in bytes 28-38 of <a href="#table_003ablock_002dpack">table:block-pa
 0x1f: Occitan                  0x6f: Gujurati
 0x20: Polish                   0x70: Greek
 0x21: Portuguese               0x71: Georgian
-0x22: Romanian                 0x72: Fulani 
-0x23: Romanish                 0x73: Dari    
-0x24: Serbian                  0x74: Churash   
-0x25: Slovak                   0x75: Chinese        
-0x26: Slovenian                0x76: Burmese          
-0x27: Finnish                  0x77: Bulgarian      
-0x28: Swedish                  0x78: Bengali            
-0x29: Turkish                  0x79: Bielorussian             
-0x2a: Flemish                  0x7a: Bambora                 
-0x2b: Wallon                   0x7b: Azerbaijani                 
-0x45: Zulu                     0x7c: Assamese                    
-0x46: Vietnamese               0x7d: Armenian                    
-0x47: Uzbek                    0x7e: Arabic                    
-0x48: Urdu                     0x7f: Amharic              
-0x49: Ukrainian                                 
-0x4a: Thai                                   
-0x4b: Telugu                                        
-0x4c: Tatar                                    
-0x4d: Tamil                                         
-0x4e: Tadzhik                                          
-0x4f: Swahili                          
+0x22: Romanian                 0x72: Fulani
+0x23: Romanish                 0x73: Dari
+0x24: Serbian                  0x74: Churash
+0x25: Slovak                   0x75: Chinese
+0x26: Slovenian                0x76: Burmese
+0x27: Finnish                  0x77: Bulgarian
+0x28: Swedish                  0x78: Bengali
+0x29: Turkish                  0x79: Bielorussian
+0x2a: Flemish                  0x7a: Bambora
+0x2b: Wallon                   0x7b: Azerbaijani
+0x45: Zulu                     0x7c: Assamese
+0x46: Vietnamese               0x7d: Armenian
+0x47: Uzbek                    0x7e: Arabic
+0x48: Urdu                     0x7f: Amharic
+0x49: Ukrainian
+0x4a: Thai
+0x4b: Telugu
+0x4c: Tatar
+0x4d: Tamil
+0x4e: Tadzhik
+0x4f: Swahili
 </pre></td></tr></table>
 
 </div><p><strong>Table 1.4: Language Codes
@@ -669,7 +668,7 @@ ever been seen with CD Text.
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="#Encoding-and-Decoding-CD-Text" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
-<td valign="middle" align="left">[<a href="#Acknowlegement" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Acknowledgement" title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -699,7 +698,7 @@ ever been seen with CD Text.
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="#Higher_002dLevel-Encoding" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#Higher_002dLevel-Encoding" title="Up section"> Up </a>]</td>
-<td valign="middle" align="left">[<a href="#Acknowlegement" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Acknowledgement" title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -713,7 +712,7 @@ ever been seen with CD Text.
 <h2 class="section">2.1 Sony Text File Format (Input Sheet Version 0.7T)</h2>
 
 <p>This text file format provides comprehensive means to define the text
-attributes of session and tracks for a single block. More than one
+attributes of sessions and tracks for a single block. More than one
 such file has to be read to form an attribute set with multiple blocks.
 </p>
 <p>The information is given by text lines of the following form:
@@ -806,7 +805,7 @@ Track 03 Artist     =  Mia Kitten
 Track 03 Songwriter =  Mia Kitten
 Track 03 Composer   =  Mia Kitten
 Track 03 Arranger   =  Mia Kitten
-Track 03 Message    =  
+Track 03 Message    =
 ISRC 03             =  XYBLG1100006
 </pre></td></tr></table>
 
@@ -814,11 +813,11 @@ ISRC 03             =  XYBLG1100006
 <a name="CDRWIN-Cue-Sheet-with-CD-Text"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="#Sony-Text-File-Format-_0028Input-Sheet-Version-0_002e7T_0029" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="#Acknowlegement" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Acknowledgement" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="#Higher_002dLevel-Encoding" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#Higher_002dLevel-Encoding" title="Up section"> Up </a>]</td>
-<td valign="middle" align="left">[<a href="#Acknowlegement" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Acknowledgement" title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -869,7 +868,7 @@ TITLE &quot;Joyful Nights&quot;
 </pre></td></tr></table>
 
 <hr size="6">
-<a name="Acknowlegement"></a>
+<a name="Acknowledgement"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="#CDRWIN-Cue-Sheet-with-CD-Text" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#List-of-Tables" title="Next section in reading order"> &gt; </a>]</td>
@@ -886,17 +885,17 @@ TITLE &quot;Joyful Nights&quot;
 <td valign="middle" align="left">[Index]</td>
 <td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<a name="Acknowlegement-1"></a>
-<h1 class="unnumbered">Acknowlegement</h1>
-<p>Thanks to Leon Merten Lohse. 
+<a name="Acknowledgement-1"></a>
+<h1 class="unnumbered">Acknowledgement</h1>
+<p>Thanks to Leon Merten Lohse.
 </p>
 <hr size="6">
 <a name="List-of-Tables"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="#Acknowlegement" title="Previous section in reading order"> &lt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="#Acknowledgement" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#References" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
-<td valign="middle" align="left">[<a href="#Acknowlegement" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Acknowledgement" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="#References" title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -943,18 +942,18 @@ TITLE &quot;Joyful Nights&quot;
 <h1 class="unnumbered">References</h1>
 
 <ol>
-<li> Correspondence with Leon Merten Lohse 
+<li> Correspondence with Leon Merten Lohse
 in <a href="mailto:libcdio-devel@gnu.org">libcdio-devel@gnu.org</a>, December 2011. <br> Mail archives at
 <a href="http://lists.gnu.org/archive/html/libcdio-devel/2011-12/index.html">http://lists.gnu.org/archive/html/libcdio-devel/2011-12/index.html</a>
 
-</li><li> <em>SCSI Multimedia Commands &mdash; 3 (MMC-3)</em>,<a name="mmc3r10g_002epdf"></a> Revision 10g, November 12. 2011.<br> 
-Google for &lsquo;<tt>mmc3r10g.pdf</tt>&rsquo; 
+</li><li> <em>SCSI Multimedia Commands &mdash; 3 (MMC-3)</em>,<a name="mmc3r10g_002epdf"></a> Revision 10g, November 12. 2011.<br>
+Google for &lsquo;<tt>mmc3r10g.pdf</tt>&rsquo;
 See especially Section 5.23 (READ TOC/PMA/ATIP Command),
 see Table 237 (TOC Track Descriptor Format, Q
 Sub-channel), Annex J (CD Text format in the Lead-in Area) and
 Sections 4.2.5.3 (Mode-5 Q).
 
-</li><li> &ldquo;Materials describing the procedure of the procedure of authoring and mastering for creating CD TEXT disks on equipments develooped by Sony HAV Company&rdquo;,<a name="cdtext_002ezip"></a><br>
+</li><li> &ldquo;Materials describing the procedure of authoring and mastering for creating CD TEXT disks on equipment developed by Sony HAV Company&rdquo;,<a name="cdtext_002ezip"></a><br>
 &lsquo;<tt>http://www.sonydadc.com/file/cdtext.zip</tt>&rsquo; which was previously found on Sony&rsquo;s web site circa 2007. You may be able to get this from the &ldquo;Wayback Archive&rdquo;, such as <a href="http://web.archive.org/web/20070204035327/http://www.sonydadc.com/file/cdtext.zip">http://web.archive.org/web/20070204035327/http://www.sonydadc.com/file/cdtext.zip</a><br>
 
 </li><li> Cue-Sheet Syntax
@@ -966,7 +965,7 @@ See &lsquo;<tt>doc</tt>&rsquo; directory in that project.
 </li><li> <em>libcdio</em> source code <a href="http://www.gnu.org/s/libcdio">http://www.gnu.org/s/libcdio</a>
 
 </li><li> <em>cdrecord</em> source code <a href="ftp://ftp.berlios.de/pub/cdrecord/alpha">ftp://ftp.berlios.de/pub/cdrecord/alpha</a>
-</li><li> <em>cdrecord</em> manual page. 
+</li><li> <em>cdrecord</em> manual page.
 <a href="http://cdrecord.berlios.de/private/man/cdrecord/cdrecord.1.html">http://cdrecord.berlios.de/private/man/cdrecord/cdrecord.1.html</a>
 
 </li><li> <em>Specification of the EBU Subtitling data exchange format</em>,<br>
@@ -975,7 +974,7 @@ Appendix 3. February 1991
 Contains CD Text Language codes shown in <a href="#table_003alanguages">table:languages</a>.
 
 </li><li> Genre codes
-<a href="http://helpdesk.audiofile-engineering.com/index.php?pg=kb.page&amp;id=123">http://helpdesk.audiofile-engineering.com/index.php?pg=kb.page&amp;id=123</a> 
+<a href="http://helpdesk.audiofile-engineering.com/index.php?pg=kb.page&amp;id=123">http://helpdesk.audiofile-engineering.com/index.php?pg=kb.page&amp;id=123</a>
 </li></ol>
 
 <hr size="6">
@@ -1004,7 +1003,7 @@ Contains CD Text Language codes shown in <a href="#table_003alanguages">table:la
     <li><a name="toc-Sony-Text-File-Format-_0028Input-Sheet-Version-0_002e7T_0029-1" href="#Sony-Text-File-Format-_0028Input-Sheet-Version-0_002e7T_0029">2.1 Sony Text File Format (Input Sheet Version 0.7T)</a></li>
     <li><a name="toc-CDRWIN-Cue-Sheet-with-CD-Text-1" href="#CDRWIN-Cue-Sheet-with-CD-Text">2.2 CDRWIN Cue Sheet with CD Text</a></li>
   </ul></li>
-  <li><a name="toc-Acknowlegement-1" href="#Acknowlegement">Acknowlegement</a></li>
+  <li><a name="toc-Acknowledgement-1" href="#Acknowledgement">Acknowledgement</a></li>
   <li><a name="toc-List-of-Tables-1" href="#List-of-Tables">List of Tables</a></li>
   <li><a name="toc-References-1" href="#References">References</a></li>
 </ul>
@@ -1019,7 +1018,7 @@ Contains CD Text Language codes shown in <a href="#table_003alanguages">table:la
 </tr></table>
 <h1>About This Document</h1>
 <p>
-  This document was generated on <i>January 4, 2025</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 1.82</i></a>.
+  This document was generated on <i>August 22, 2026</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 1.82</i></a>.
 </p>
 <p>
   The buttons in the navigation panels have the following meaning:
@@ -1121,7 +1120,7 @@ Contains CD Text Language codes shown in <a href="#table_003alanguages">table:la
 <hr size="1">
 <p>
  <font size="-1">
-  This document was generated on <i>January 4, 2025</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 1.82</i></a>.
+  This document was generated on <i>August 22, 2026</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 1.82</i></a>.
  </font>
  <br>
 
