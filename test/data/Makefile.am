@@ -46,6 +46,8 @@ check_DATA = \
 	joliet.iso     \
 	malformed.iso  \
 	malformed2.iso \
+	mode2-2048.cue \
+	mode2-2324.cue \
 	multi_extent_8k.iso \
 	multi_extent_file \
 	p1.bin         \

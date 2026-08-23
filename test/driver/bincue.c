@@ -95,6 +95,28 @@ check_file_before_first_track(void)
   return 0;
 }
 
+static int
+check_mode2_seek(const char *cue_name, const char *mode)
+{
+  CdIo_t *p_cdio;
+  char cue_path[500];
+  int result = 1;
+
+  snprintf(cue_path, sizeof(cue_path), "%s/%s", DATA_DIR, cue_name);
+  p_cdio = cdio_open_bincue(cue_path);
+  if (!p_cdio) {
+    printf("Can't open %s track image\n", mode);
+    return 1;
+  }
+  if (cdio_lseek(p_cdio, 0, SEEK_SET) < 0) {
+    printf("Can't seek %s track image\n", mode);
+  } else {
+    result = 0;
+  }
+  cdio_destroy(p_cdio);
+  return result;
+}
+
 int
 main(int argc, const char *argv[])
 {
@@ -125,6 +147,9 @@ main(int argc, const char *argv[])
   if (check_too_many_tracks())
     ret = 1;
   if (check_file_before_first_track())
+    ret = 1;
+  if (check_mode2_seek("mode2-2048.cue", "MODE2/2048")
+      || check_mode2_seek("mode2-2324.cue", "MODE2/2324"))
     ret = 1;
 
   for (i=0; i<NUM_GOOD_CUES; i++) {
