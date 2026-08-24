@@ -40,6 +40,8 @@
 #ifdef HAVE_STDBOOL_H
 # include <stdbool.h>
 #endif
+#include <stddef.h>
+#include <stdint.h>
 
 #include <cdio/bytesex.h>
 #include <cdio/ds.h>
@@ -438,10 +440,37 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	  _daox_t *_xentries = NULL;
 	  _daoi_t *_ientries = NULL;
 	  _dao_array_common_t *_dao_array_common = NULL;
+	  size_t dao_entry_size;
+	  size_t dao_track_count = p_env->gen.i_tracks;
+	  size_t dao_required;
 	  _dao_common_t *_dao_common = (void *) chunk->data;
-	  int disc_mode = _dao_common->unknown[1];
+	  int disc_mode;
 	  track_format_t track_format;
 	  int i;
+
+	  if (dao_track_count == 0)
+	    dao_track_count = 1;
+	  if (DAOX_ID == opcode) {
+	    dao_entry_size = sizeof(_daox_array_t);
+	    dao_required = offsetof(_daox_t, track_info);
+	  } else {
+	    dao_entry_size = sizeof(_daoi_array_t);
+	    dao_required = offsetof(_daoi_t, track_info);
+	  }
+	  if (dao_track_count > (SIZE_MAX - dao_required) / dao_entry_size)
+	    dao_required = SIZE_MAX;
+	  else
+	    dao_required += dao_track_count * dao_entry_size;
+	  if (UINT32_FROM_BE(chunk->len) < dao_required) {
+	    cdio_log(log_level, "truncated DAO%c chunk: need %lu bytes, got %u",
+		      DAOX_ID == opcode ? 'X' : 'I',
+		      (unsigned long) dao_required,
+		      (unsigned int) UINT32_FROM_BE(chunk->len));
+	    free(footer_buf);
+	    return false;
+	  }
+
+	  disc_mode = _dao_common->unknown[1];
 
 	  /* We include an extra 0 byte so these can be used as C strings.*/
 	  p_env->psz_mcn = calloc(1, CDIO_MCN_SIZE+1);
