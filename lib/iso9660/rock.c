@@ -252,12 +252,29 @@ repeat:
 	if (truncate)
 	  break;
 	if (rr->u.NM.flags & ISO_ROCK_NM_PARENT) {
-	  i_namelen = sizeof("..");
-	  strncat(psz_name, "..", i_namelen);
+	  if ((strlen(psz_name) + sizeof("..") - 1) >= 254) {
+	    truncate = 1;
+	    break;
+	  }
+	  {
+	    size_t i_name_len = strlen(psz_name);
+	    psz_name[i_name_len] = '.';
+	    psz_name[i_name_len + 1] = '.';
+	    psz_name[i_name_len + 2] = '\0';
+	  }
+	  i_namelen += sizeof("..") - 1;
 	  break;
 	} else if (rr->u.NM.flags & ISO_ROCK_NM_CURRENT) {
-	  i_namelen = sizeof(".");
-	  strncat(psz_name, ".", i_namelen);
+	  if ((strlen(psz_name) + sizeof(".") - 1) >= 254) {
+	    truncate = 1;
+	    break;
+	  }
+	  {
+	    size_t i_name_len = strlen(psz_name);
+	    psz_name[i_name_len] = '.';
+	    psz_name[i_name_len + 1] = '\0';
+	  }
+	  i_namelen += sizeof(".") - 1;
 	  break;
 	}
 
