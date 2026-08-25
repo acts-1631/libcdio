@@ -1716,10 +1716,37 @@ iso9660_dirlist_new(void) {
   return (CdioISO9660FileList_t *) _cdio_list_new ();
 }
 
+static int
+find_lsn_visited_cmp (void *p_data, void *p_user_data)
+{
+  return *(lsn_t *)p_data == *(lsn_t *)p_user_data;
+}
+
+/* Return 1 when the LSN was added, 0 when it was already present, and -1
+   when the entry could not be allocated. */
+static int
+find_lsn_mark_visited (CdioList_t *visited, lsn_t lsn)
+{
+  CdioListNode_t *node;
+  lsn_t *p_lsn;
+
+  node = _cdio_list_find (visited, find_lsn_visited_cmp, &lsn);
+  if (node != NULL)
+    return 0;
+
+  p_lsn = malloc (sizeof (*p_lsn));
+  if (p_lsn == NULL)
+    return -1;
+  *p_lsn = lsn;
+  _cdio_list_append (visited, p_lsn);
+  return 1;
+}
+
 static iso9660_stat_t *
 find_lsn_recurse (void *p_image, iso9660_readdir_t iso9660_readdir,
 		  const char psz_path[], lsn_t lsn,
-		  /*out*/ char **ppsz_full_filename)
+		  /*out*/ char **ppsz_full_filename,
+		  CdioList_t *visited)
 {
   CdioISO9660FileList_t *entlist = iso9660_readdir (p_image, psz_path);
   CdioISO9660DirList_t *dirlist = iso9660_filelist_new();
@@ -1739,13 +1766,6 @@ find_lsn_recurse (void *p_image, iso9660_readdir_t iso9660_readdir,
       *ppsz_full_filename = calloc(1, len);
       snprintf (*ppsz_full_filename, len, "%s%s/", psz_path, psz_filename);
 
-      if (statbuf->type == _STAT_DIR
-          && strcmp ((char *) statbuf->filename, ".")
-          && strcmp ((char *) statbuf->filename, "..")) {
-	snprintf (*ppsz_full_filename, len, "%s%s/", psz_path, psz_filename);
-        _cdio_list_append (dirlist, strdup(*ppsz_full_filename));
-      }
-
       if (statbuf->lsn == lsn) {
 	const unsigned int len2 = sizeof(iso9660_stat_t) +
 				  strlen(statbuf->filename) + 1;
@@ -1764,6 +1784,23 @@ find_lsn_recurse (void *p_image, iso9660_readdir_t iso9660_readdir,
 	return ret_stat;
       }
 
+      if (statbuf->type == _STAT_DIR) {
+	int was_visited = find_lsn_mark_visited (visited, statbuf->lsn);
+	if (was_visited < 0) {
+	  iso9660_filelist_free (entlist);
+	  iso9660_dirlist_free (dirlist);
+	  free (*ppsz_full_filename);
+	  *ppsz_full_filename = NULL;
+	  return NULL;
+	}
+	if (!was_visited
+	    || !strcmp ((char *) statbuf->filename, ".")
+	    || !strcmp ((char *) statbuf->filename, ".."))
+	  continue;
+
+	_cdio_list_append (dirlist, strdup(*ppsz_full_filename));
+      }
+
     }
 
   iso9660_filelist_free (entlist);
@@ -1778,7 +1815,7 @@ find_lsn_recurse (void *p_image, iso9660_readdir_t iso9660_readdir,
       *ppsz_full_filename = NULL;
       ret_stat = find_lsn_recurse (p_image, iso9660_readdir,
 				   psz_path_prefix, lsn,
-				   ppsz_full_filename);
+				   ppsz_full_filename, visited);
 
       if (NULL != ret_stat) {
         iso9660_dirlist_free(dirlist);
@@ -1794,6 +1831,22 @@ find_lsn_recurse (void *p_image, iso9660_readdir_t iso9660_readdir,
   return NULL;
 }
 
+static iso9660_stat_t *
+find_lsn_recurse_top (void *p_image, iso9660_readdir_t iso9660_readdir,
+		      const char psz_path[], lsn_t lsn,
+		      /*out*/ char **ppsz_full_filename)
+{
+  CdioList_t *visited = _cdio_list_new ();
+  iso9660_stat_t *ret;
+
+  if (visited == NULL)
+    return NULL;
+  ret = find_lsn_recurse (p_image, iso9660_readdir, psz_path, lsn,
+			  ppsz_full_filename, visited);
+  _cdio_list_free (visited, true, free);
+  return ret;
+}
+
 /**
    Given a directory pointer, find the filesystem entry that contains
    lsn and return information about it.
@@ -1805,8 +1858,9 @@ iso9660_fs_find_lsn(CdIo_t *p_cdio, lsn_t i_lsn)
 {
   char *psz_full_filename = NULL;
   iso9660_stat_t * p_statbuf;
-  p_statbuf = find_lsn_recurse (p_cdio, (iso9660_readdir_t *) iso9660_fs_readdir,
-				"/", i_lsn, &psz_full_filename);
+  p_statbuf = find_lsn_recurse_top (p_cdio,
+					(iso9660_readdir_t *) iso9660_fs_readdir,
+					"/", i_lsn, &psz_full_filename);
   if (psz_full_filename != NULL)
     free(psz_full_filename);
   return p_statbuf;
@@ -1836,8 +1890,9 @@ iso9660_stat_t *
 iso9660_fs_find_lsn_with_path(CdIo_t *p_cdio, lsn_t i_lsn,
 			      /*out*/ char **ppsz_full_filename)
 {
-  return find_lsn_recurse (p_cdio, (iso9660_readdir_t *) iso9660_fs_readdir,
-			   "/", i_lsn, ppsz_full_filename);
+  return find_lsn_recurse_top (p_cdio,
+				       (iso9660_readdir_t *) iso9660_fs_readdir,
+				       "/", i_lsn, ppsz_full_filename);
 }
 
 /**
@@ -1856,8 +1911,9 @@ iso9660_ifs_find_lsn(iso9660_t *p_iso, lsn_t i_lsn)
 {
   char *psz_full_filename = NULL;
   iso9660_stat_t *ret  =
-    find_lsn_recurse (p_iso, (iso9660_readdir_t *) iso9660_ifs_readdir,
-		      "/", i_lsn, &psz_full_filename);
+    find_lsn_recurse_top (p_iso,
+				  (iso9660_readdir_t *) iso9660_ifs_readdir,
+				  "/", i_lsn, &psz_full_filename);
   if (psz_full_filename != NULL)
     free(psz_full_filename);
   return ret;
@@ -1904,7 +1960,8 @@ _iso9660_dd_find_lsn(void* p_image, lsn_t i_lsn)
   /* Disable the deep directory flag so we can process all entries */
   p_header = (cdio_header_t*)p_image_dd;
   p_header->u_flags |= CDIO_HEADER_FLAGS_DISABLE_RR_DD;
-  ret = find_lsn_recurse(p_image_dd, f_readdir, "/", i_lsn, &psz_full_filename);
+  ret = find_lsn_recurse_top(p_image_dd, f_readdir, "/", i_lsn,
+				     &psz_full_filename);
   if (psz_full_filename != NULL)
     free(psz_full_filename);
   free(p_image_dd);
@@ -1932,8 +1989,9 @@ iso9660_stat_t *
 iso9660_ifs_find_lsn_with_path(iso9660_t *p_iso, lsn_t i_lsn,
 			       /*out*/ char **ppsz_full_filename)
 {
-  return find_lsn_recurse (p_iso, (iso9660_readdir_t *) iso9660_ifs_readdir,
-			   "/", i_lsn, ppsz_full_filename);
+  return find_lsn_recurse_top (p_iso,
+				       (iso9660_readdir_t *) iso9660_ifs_readdir,
+				       "/", i_lsn, ppsz_full_filename);
 }
 
 /**
