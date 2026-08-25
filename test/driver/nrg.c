@@ -35,6 +35,12 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #include <cdio/cdio.h>
 #include <cdio/logging.h>
@@ -46,6 +52,68 @@
 #endif
 
 #define NUM_FIELDS 2
+
+static void
+put_be32(uint8_t *p, uint32_t value)
+{
+  p[0] = value >> 24;
+  p[1] = value >> 16;
+  p[2] = value >> 8;
+  p[3] = value;
+}
+
+static void
+put_be64(uint8_t *p, uint64_t value)
+{
+  put_be32(p, value >> 32);
+  put_be32(p + 4, value);
+}
+
+static int
+check_truncated_dao(void)
+{
+  uint8_t nrg[20] = {0};
+#ifdef HAVE_MKSTEMP
+  char psz_tmp[] = "libcdio-nrg-XXXXXX";
+  int fd;
+#else
+  char *psz_tmp;
+#endif
+  FILE *fp;
+  int ret = 1;
+
+#ifdef HAVE_MKSTEMP
+  fd = mkstemp(psz_tmp);
+  if (fd < 0)
+    return ret;
+  fp = fdopen(fd, "wb");
+  if (!fp) {
+    close(fd);
+    remove(psz_tmp);
+    return ret;
+  }
+#else
+  psz_tmp = tmpnam(NULL);
+  if (!psz_tmp)
+    return ret;
+  fp = fopen(psz_tmp, "wb");
+  if (!fp)
+    return ret;
+#endif
+
+  put_be32(&nrg[0], 0x44414f49); /* DAOI chunk */
+  put_be32(&nrg[4], 0);          /* empty chunk payload */
+  put_be32(&nrg[8], 0x4e455235); /* NER5 footer */
+  put_be64(&nrg[12], 0);         /* footer starts at file offset 0 */
+  if (fwrite(nrg, 1, sizeof(nrg), fp) == sizeof(nrg)) {
+    fclose(fp);
+    ret = cdio_is_nrg(psz_tmp) ? 1 : 0;
+  } else {
+    fclose(fp);
+  }
+  remove(psz_tmp);
+  return ret;
+}
 
 int
 main(int argc, const char *argv[])
@@ -102,6 +170,11 @@ main(int argc, const char *argv[])
     printf("Accepted NRG image with too many tracks: %s.\n", psz_nrgfile);
     cdio_destroy(p_cdio);
     return(4);
+  }
+
+  if (check_truncated_dao() != 0) {
+    printf("Accepted or failed to reject truncated DAO metadata.\n");
+    return(5);
   }
 
   return 0;
