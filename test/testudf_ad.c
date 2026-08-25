@@ -17,6 +17,62 @@
 #define DATA_DIR "./data"
 #endif
 
+static void
+set_tag(udf_tag_t *tag, uint16_t id)
+{
+  uint8_t *bytes = (uint8_t *)tag;
+  uint8_t checksum = 0;
+  unsigned int i;
+
+  memset(tag, 0, sizeof(*tag));
+  tag->id = id;
+  for (i = 0; i < 15; i++)
+    if (i != 4)
+      checksum = (uint8_t)(checksum + bytes[i]);
+  tag->cksum = checksum;
+}
+
+static int
+check_zero_length_file_id(udf_t *udf)
+{
+  udf_dirent_t *dirent = calloc(1, sizeof(*dirent));
+  udf_fileid_desc_t *first;
+  udf_fileid_desc_t *target;
+
+  if (!dirent)
+    return 1;
+  dirent->p_udf = udf;
+  dirent->i_loc = 0;
+  dirent->i_loc_end = 0;
+  dirent->dir_left = 80;
+  dirent->sector = calloc(1, UDF_BLOCKSIZE);
+  if (!dirent->sector) {
+    free(dirent);
+    return 1;
+  }
+
+  first = (udf_fileid_desc_t *)(dirent->sector + 1968);
+  set_tag(&first->tag, TAGID_FID);
+  first->i_file_id = 1;
+  first->u.file_id.data[0] = 8;
+
+  target = (udf_fileid_desc_t *)(dirent->sector + 2008);
+  set_tag(&target->tag, TAGID_FID);
+  target->i_file_id = 0;
+  target->icb.loc.lba = 1;
+  target->u.padding.data[0] = 8;
+  dirent->fid = first;
+
+  dirent = udf_readdir(dirent);
+  if (!dirent || !dirent->psz_name || dirent->psz_name[0] != '\0') {
+    if (dirent)
+      udf_dirent_free(dirent);
+    return 1;
+  }
+  udf_dirent_free(dirent);
+  return 0;
+}
+
 int
 main(void)
 {
@@ -40,6 +96,10 @@ main(void)
   udf.stream = cdio_stdio_new(DATA_DIR "/cdda.bin");
   if (!udf.stream)
     goto out;
+
+  if (check_zero_length_file_id(&udf) != 0)
+    goto close;
+  udf.i_position = 0;
 
   test->dirent.p_udf = &udf;
   test->dirent.fe.icb_tag.strat_type = ICBTAG_STRATEGY_TYPE_4;
