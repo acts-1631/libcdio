@@ -147,7 +147,9 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
 	  do {
 	    i_offset -= icblen;
 	    ad_offset = sizeof(udf_short_ad_t) * ad_num;
-	    if (ad_offset > uint32_from_le(p_udf_fe->u_alloc_descs)) {
+	    if (ad_offset > uint32_from_le(p_udf_fe->u_alloc_descs)
+		|| sizeof(udf_short_ad_t) >
+		   uint32_from_le(p_udf_fe->u_alloc_descs) - ad_offset) {
 	      cdio_warn("File offset out of bounds");
 	      return CDIO_INVALID_LBA;
 	    }
@@ -174,7 +176,9 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
 	  do {
 	    i_offset -= icblen;
 	    ad_offset = sizeof(udf_long_ad_t) * ad_num;
-	    if (ad_offset > uint32_from_le(p_udf_fe->u_alloc_descs)) {
+	    if (ad_offset > uint32_from_le(p_udf_fe->u_alloc_descs)
+		|| sizeof(udf_long_ad_t) >
+		   uint32_from_le(p_udf_fe->u_alloc_descs) - ad_offset) {
 	      cdio_warn("File offset out of bounds");
 	      return CDIO_INVALID_LBA;
 	    }
