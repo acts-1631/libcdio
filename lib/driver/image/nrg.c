@@ -280,16 +280,20 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 		       */
       case CUEX_ID: /* "CUEX" */
 	{
-	  unsigned entries = UINT32_FROM_BE (chunk->len);
+	  const uint32_t cue_chunk_len = UINT32_FROM_BE (chunk->len);
+	  unsigned entries;
 	  _cuex_array_t *_entries = (void *) chunk->data;
 
-	  cdio_assert (p_env->mapping == NULL);
+	  if (p_env->mapping != NULL
+	      || cue_chunk_len % sizeof (_cuex_array_t) != 0) {
+	    cdio_log (log_level, "invalid NRG CUE chunk length");
+	    free(footer_buf);
+	    return false;
+	  }
 
 	  cdio_assert ( sizeof (_cuex_array_t) == 8 );
-	  cdio_assert ( UINT32_FROM_BE (chunk->len) % sizeof(_cuex_array_t)
-			== 0 );
 
-	  entries /= sizeof (_cuex_array_t);
+	  entries = cue_chunk_len / sizeof (_cuex_array_t);
 
 	  if (CUES_ID == opcode) {
 	    unsigned int idx;
@@ -300,6 +304,11 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	    */
 
 	    cdio_debug ("CUES type image detected" );
+	    if (entries < 2) {
+	      cdio_log (log_level, "NRG CUES chunk has too few entries");
+	      free(footer_buf);
+	      return false;
+	    }
 
 	    p_env->is_cues           = true; /* HACK alert. */
 	    p_env->gen.i_tracks      = 0;
@@ -333,7 +342,11 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 		if (p_env) p_env->tocent[i].flags &= ~FOUR_CHANNEL_AUDIO;
 	      }
 
-	      cdio_assert (_entries[idx].track == _entries[idx + 1].track);
+	      if (_entries[idx].track != _entries[idx + 1].track) {
+		cdio_log (log_level, "invalid NRG CUES track pair");
+		free(footer_buf);
+		return false;
+	      }
 
 	      /* lsn and sec_count*2 aren't correct, but it comes closer on the
 		 single example I have: svcdgs.nrg
@@ -373,14 +386,25 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	      }
 	    }
 	  } else {
-	    lsn_t lsn = UINT32_FROM_BE (_entries[0].lsn);
+	    lsn_t lsn;
 	    unsigned int idx;
 	    unsigned int i = 0;
+
+	    if (entries == 0) {
+	      cdio_log (log_level, "NRG CUEX chunk has no entries");
+	      free(footer_buf);
+	      return false;
+	    }
+	    lsn = UINT32_FROM_BE (_entries[0].lsn);
 
 	    cdio_debug ("CUEX type image detected");
 
 	    /* LSN must start at -150 (LBA 0)? */
-	    cdio_assert (lsn == -150);
+	    if (lsn != -150) {
+	      cdio_log (log_level, "invalid NRG CUEX starting LSN");
+	      free(footer_buf);
+	      return false;
+	    }
 
 	    for (idx = 2; idx < entries; idx += 2, i++) {
 	      lsn_t sec_count;
@@ -416,9 +440,17 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 
 		 FIXME: Should decode as appropriate for cdte_format.
 	       */
-	      cdio_assert ( cdte_format == 0 || cdte_format == 1 );
+	      if (cdte_format != 0 && cdte_format != 1) {
+		cdio_log (log_level, "invalid NRG CUEX address format");
+		free(footer_buf);
+		return false;
+	      }
 
-	      cdio_assert (_entries[idx].track != _entries[idx + 1].track);
+	      if (_entries[idx].track == _entries[idx + 1].track) {
+		cdio_log (log_level, "invalid NRG CUEX track pair");
+		free(footer_buf);
+		return false;
+	      }
 
 	      lsn       = UINT32_FROM_BE (_entries[idx].lsn);
 	      sec_count = UINT32_FROM_BE (_entries[idx + 1].lsn);
@@ -622,11 +654,14 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	unsigned entries = UINT32_FROM_BE (chunk->len);
 	_etnf_array_t *_entries = (void *) chunk->data;
 
-	cdio_assert (p_env->mapping == NULL);
+	if (p_env->mapping != NULL
+	    || entries % sizeof (_etnf_array_t) != 0) {
+	  cdio_log (log_level, "invalid NRG ETNF chunk length");
+	  free(footer_buf);
+	  return false;
+	}
 
 	cdio_assert ( sizeof (_etnf_array_t) == 20 );
-	cdio_assert ( UINT32_FROM_BE(chunk->len) % sizeof(_etnf_array_t)
-		      == 0 );
 
 	entries /= sizeof (_etnf_array_t);
 
@@ -698,11 +733,19 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	      return false;
 	    }
 
-	    cdio_assert (_len % blocksize == 0);
+	    if (_len % blocksize != 0) {
+	      cdio_log (log_level, "invalid NRG ETNF block length");
+	      free(footer_buf);
+	      return false;
+	    }
 
 	    _len /= blocksize;
 
-	    cdio_assert (_start * blocksize == _start2);
+	    if ((uint64_t)_start * blocksize != _start2) {
+	      cdio_log (log_level, "invalid NRG ETNF start offset");
+	      free(footer_buf);
+	      return false;
+	    }
 
 	    _start += idx * CDIO_PREGAP_SECTORS;
 	    if (!_register_mapping (p_env, _start, _len, _start2, blocksize,
@@ -720,10 +763,14 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	unsigned entries = uint32_from_be (chunk->len);
 	_etn2_array_t *_entries = (void *) chunk->data;
 
-	cdio_assert (p_env->mapping == NULL);
+	if (p_env->mapping != NULL
+	    || entries % sizeof (_etn2_array_t) != 0) {
+	  cdio_log (log_level, "invalid NRG ETN2 chunk length");
+	  free(footer_buf);
+	  return false;
+	}
 
 	cdio_assert (sizeof (_etn2_array_t) == 32);
-	cdio_assert (uint32_from_be (chunk->len) % sizeof (_etn2_array_t) == 0);
 
 	entries /= sizeof (_etn2_array_t);
 
@@ -828,7 +875,11 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 
 	uint32_t _sessions;
 
-	cdio_assert (UINT32_FROM_BE (chunk->len) == 4);
+	if (UINT32_FROM_BE (chunk->len) != sizeof (_sessions)) {
+	  cdio_log (log_level, "invalid NRG SINF chunk length");
+	  free(footer_buf);
+	  return false;
+	}
 
 	memcpy(&_sessions, chunk->data, 4);
 
@@ -841,7 +892,11 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 	uint32_t mtyp_be;
 	uint32_t mtyp;
 
-	cdio_assert (UINT32_FROM_BE (chunk->len) == 4);
+	if (UINT32_FROM_BE (chunk->len) != sizeof (mtyp_be)) {
+	  cdio_log (log_level, "invalid NRG MTYP chunk length");
+	  free(footer_buf);
+	  return false;
+	}
 
 	memcpy(&mtyp_be, chunk->data, 4);
 	mtyp = UINT32_FROM_BE (mtyp_be);
@@ -859,8 +914,12 @@ parse_nrg (_img_private_t *p_env, const char *psz_nrg_name,
 
       case CDTX_ID: { /* "CD TEXT" */
         uint8_t *wdata = (uint8_t *) chunk->data;
-        int len = UINT32_FROM_BE (chunk->len);
-        cdio_assert (len % CDTEXT_LEN_PACK == 0);
+        uint32_t len = UINT32_FROM_BE (chunk->len);
+        if (len % CDTEXT_LEN_PACK != 0) {
+          cdio_log (log_level, "invalid NRG CD TEXT chunk length");
+          free(footer_buf);
+          return false;
+        }
         p_env->gen.cdtext = cdtext_init ();
         if(0 !=cdtext_data_init (p_env->gen.cdtext, wdata, len))
         {

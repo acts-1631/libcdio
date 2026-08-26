@@ -70,7 +70,7 @@ put_be64(uint8_t *p, uint64_t value)
 }
 
 static int
-check_truncated_dao(void)
+check_rejected_chunk(uint32_t id, uint32_t length)
 {
   uint8_t nrg[20] = {0};
 #ifdef HAVE_MKSTEMP
@@ -101,8 +101,8 @@ check_truncated_dao(void)
     return ret;
 #endif
 
-  put_be32(&nrg[0], 0x44414f49); /* DAOI chunk */
-  put_be32(&nrg[4], 0);          /* empty chunk payload */
+  put_be32(&nrg[0], id);
+  put_be32(&nrg[4], length);
   put_be32(&nrg[8], 0x4e455235); /* NER5 footer */
   put_be64(&nrg[12], 0);         /* footer starts at file offset 0 */
   if (fwrite(nrg, 1, sizeof(nrg), fp) == sizeof(nrg)) {
@@ -113,6 +113,24 @@ check_truncated_dao(void)
   }
   remove(psz_tmp);
   return ret;
+}
+
+static int
+check_truncated_dao(void)
+{
+  return check_rejected_chunk(0x44414f49, 0); /* DAOI */
+}
+
+static int
+check_short_sinf(void)
+{
+  return check_rejected_chunk(0x53494e46, 0); /* SINF */
+}
+
+static int
+check_empty_cues(void)
+{
+  return check_rejected_chunk(0x43554553, 0); /* CUES */
 }
 
 int
@@ -175,6 +193,16 @@ main(int argc, const char *argv[])
   if (check_truncated_dao() != 0) {
     printf("Accepted or failed to reject truncated DAO metadata.\n");
     return(5);
+  }
+
+  if (check_short_sinf() != 0) {
+    printf("Accepted or failed to reject short SINF metadata.\n");
+    return(6);
+  }
+
+  if (check_empty_cues() != 0) {
+    printf("Accepted or failed to reject empty CUES metadata.\n");
+    return(7);
   }
 
   return 0;
