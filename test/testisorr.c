@@ -42,6 +42,9 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -51,6 +54,123 @@
 
 #include <cdio/cdio.h>
 #include <cdio/iso9660.h>
+
+static void
+put_733(uint8_t *p, uint32_t value)
+{
+  p[0] = value;
+  p[1] = value >> 8;
+  p[2] = value >> 16;
+  p[3] = value >> 24;
+  p[4] = value >> 24;
+  p[5] = value >> 16;
+  p[6] = value >> 8;
+  p[7] = value;
+}
+
+static unsigned
+add_cycle_record(uint8_t *dir, unsigned offset, char name, uint32_t extent,
+                 int child_link)
+{
+  const unsigned length = child_link ? 46 : 34;
+  uint8_t *record = dir + offset;
+
+  memset(record, 0, length);
+  record[0] = length;
+  put_733(record + 2, extent);
+  put_733(record + 10, ISO_BLOCKSIZE);
+  record[25] = child_link ? 0 : ISO_DIRECTORY;
+  record[32] = 1;
+  record[33] = name;
+  if (child_link) {
+    record[34] = 'C';
+    record[35] = 'L';
+    record[36] = 12;
+    record[37] = 1;
+    put_733(record + 38, 888);
+  }
+  return offset + length;
+}
+
+static int
+check_rock_ridge_cycle(void)
+{
+  uint8_t pvd[ISO_BLOCKSIZE] = {0};
+  uint8_t dir[ISO_BLOCKSIZE] = {0};
+  unsigned offset = 0;
+  iso9660_t *p_iso = NULL;
+  CdioISO9660FileList_t *entries = NULL;
+  FILE *fp = NULL;
+  int ret = 1;
+#ifdef HAVE_MKSTEMP
+  char psz_tmp[] = "libcdio-rock-cycle-XXXXXX";
+  int fd = mkstemp(psz_tmp);
+  if (fd < 0)
+    return 1;
+  fp = fdopen(fd, "wb");
+#else
+  char *psz_tmp = tmpnam(NULL);
+  if (psz_tmp)
+    fp = fopen(psz_tmp, "wb");
+#endif
+
+  if (!fp)
+    goto out;
+  if (fseek(fp, 21 * ISO_BLOCKSIZE - 1, SEEK_SET) != 0
+      || fputc(0, fp) == EOF)
+    goto out;
+
+  pvd[0] = 1;
+  memcpy(&pvd[1], "CD001", 5);
+  pvd[6] = 1;
+  put_733(&pvd[80], 21);
+  pvd[128] = 0;
+  pvd[129] = 8;
+  pvd[156] = 34;
+  put_733(&pvd[158], 20);
+  put_733(&pvd[166], ISO_BLOCKSIZE);
+  pvd[181] = 2;
+  pvd[188] = 1;
+
+  offset = add_cycle_record(dir, offset, '\0', 20, 0);
+  offset = add_cycle_record(dir, offset, '\1', 20, 0);
+  offset = add_cycle_record(dir, offset, 'A', 20, 0);
+  add_cycle_record(dir, offset, 'X', 999, 1);
+
+  if (fseek(fp, 16 * ISO_BLOCKSIZE, SEEK_SET) != 0
+      || fwrite(pvd, 1, sizeof(pvd), fp) != sizeof(pvd))
+    goto out;
+  memset(pvd, 0, sizeof(pvd));
+  pvd[0] = 255;
+  memcpy(&pvd[1], "CD001", 5);
+  pvd[6] = 1;
+  if (fwrite(pvd, 1, sizeof(pvd), fp) != sizeof(pvd)
+      || fseek(fp, 20 * ISO_BLOCKSIZE, SEEK_SET) != 0
+      || fwrite(dir, 1, sizeof(dir), fp) != sizeof(dir)
+      || fclose(fp) != 0)
+    goto out;
+  fp = NULL;
+
+  p_iso = iso9660_open_ext(psz_tmp, ISO_EXTENSION_ALL);
+  if (!p_iso)
+    goto out;
+  entries = iso9660_ifs_readdir(p_iso, "/");
+  if (!entries)
+    goto out;
+  iso9660_filelist_free(entries);
+  entries = NULL;
+  ret = 0;
+
+out:
+  if (entries)
+    iso9660_filelist_free(entries);
+  if (p_iso)
+    iso9660_close(p_iso);
+  if (fp)
+    fclose(fp);
+  remove(psz_tmp);
+  return ret;
+}
 
 int
 main(int argc, const char *argv[])
@@ -100,6 +220,11 @@ main(int argc, const char *argv[])
   }
 
   iso9660_close(p_iso);
+
+  if (check_rock_ridge_cycle() != 0) {
+    fprintf(stderr, "Rock Ridge deep-directory cycle was not rejected\n");
+    return 4;
+  }
 
   return 0;
 }
