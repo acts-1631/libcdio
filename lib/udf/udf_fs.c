@@ -301,8 +301,11 @@ udf_fopen(udf_dirent_t *p_udf_root, const char *psz_name)
 static char*
 unicode16_decode(const uint8_t *data, unsigned int u_len)
 {
-  int i;
+  unsigned int i;
   char* r = NULL;
+
+  if (u_len == 0)
+    return (char *)calloc(1, 1);
 
   switch (data[0])
   {
@@ -310,8 +313,8 @@ unicode16_decode(const uint8_t *data, unsigned int u_len)
     r = (char*)calloc(u_len, 1);
     if (r == NULL)
       return r;
-    for (i=0; i<u_len-1; i++)
-      r[i] = data[i+1];
+    for (i = 1; i < u_len; i++)
+      r[i - 1] = data[i];
     return r;
   case 16:
     cdio_charset_to_utf8((char*)&data[1], u_len-1, &r, "UCS-2BE");
