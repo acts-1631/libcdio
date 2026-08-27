@@ -71,6 +71,32 @@ for fname in malformed malformed2; do
     fi
 done
 
+extract_base=/tmp/iso-path-$$
+extract_dir=$extract_base/out
+bad_iso=$extract_base.iso
+escaped_file=$extract_base/escaped.txt
+payload=$extract_dir.payload
+mkdir "$extract_base"
+cp "${srcdir}/data/copying.iso" "$bad_iso"
+printf '../escaped.txt' > "$payload"
+printf '\060' > "$extract_dir.record-length"
+printf '\016' > "$extract_dir.name-length"
+dd if="$extract_dir.record-length" of="$bad_iso" bs=1 seek=$((23 * 2048 + 68)) conv=notrunc 2>/dev/null
+dd if="$extract_dir.name-length" of="$bad_iso" bs=1 seek=$((23 * 2048 + 68 + 32)) conv=notrunc 2>/dev/null
+dd if="$payload" of="$bad_iso" bs=1 seek=$((23 * 2048 + 68 + 33)) conv=notrunc 2>/dev/null
+cmd="../example/extract $bad_iso $extract_dir"
+$cmd >/dev/null 2>&1
+RC=$?
+if test -e "$escaped_file" ; then
+    echo "$0: extractor wrote outside the ISO destination"
+    RC=1
+fi
+rm -f "$bad_iso" "$payload" "$extract_dir.record-length" "$extract_dir.name-length" "$escaped_file"
+if test -d "$extract_base" ; then
+    rm -fr "$extract_base"
+fi
+check_result $RC 'ISO extraction path test' "$cmd"
+
 
 exit $RC
 
