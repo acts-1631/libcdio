@@ -629,7 +629,12 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	    cdio_log(log_level, "'%s' not a valid mode.", psz_field);
 	    goto err_exit;
 	  }
-	}
+	  } else {
+	    cdio_log(log_level, "%s line %d after word TRACK:",
+	             psz_cue_name, i_line);
+	    cdio_log(log_level, "Expecting a track mode, got nothing.");
+	    goto err_exit;
+	  }
 	if (NULL != (psz_field = strtok_r(NULL, " \t\n\r", &saveptr))) {
 	  /* \todo: set sub-channel-mode */
 #ifdef TODO
