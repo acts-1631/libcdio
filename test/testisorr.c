@@ -172,6 +172,116 @@ out:
   return ret;
 }
 
+static unsigned
+add_directory_record(uint8_t *dir, unsigned offset, uint32_t extent,
+                     uint8_t flags, uint8_t name)
+{
+  uint8_t *record = dir + offset;
+
+  memset(record, 0, 34);
+  record[0] = 34;
+  put_733(record + 2, extent);
+  put_733(record + 10, ISO_BLOCKSIZE);
+  record[25] = flags;
+  record[28] = 1;
+  record[32] = 1;
+  record[33] = name;
+  return offset + 34;
+}
+
+static int
+check_excessive_path_depth(void)
+{
+  const unsigned depth = 300;
+  uint8_t pvd[ISO_BLOCKSIZE] = {0};
+  uint8_t dir[ISO_BLOCKSIZE] = {0};
+  char path[depth * 2];
+  unsigned i;
+  unsigned offset;
+  iso9660_t *p_iso = NULL;
+  iso9660_stat_t *p_stat = NULL;
+  FILE *fp = NULL;
+  int ret = 1;
+#ifdef HAVE_MKSTEMP
+  char psz_tmp[] = "libcdio-iso-depth-XXXXXX";
+  int fd = mkstemp(psz_tmp);
+  if (fd < 0)
+    return 1;
+  fp = fdopen(fd, "wb");
+#else
+  char *psz_tmp = tmpnam(NULL);
+  if (psz_tmp)
+    fp = fopen(psz_tmp, "wb");
+#endif
+
+  if (!fp)
+    goto out;
+  if (fseek(fp, (22 + depth) * ISO_BLOCKSIZE - 1, SEEK_SET) != 0
+      || fputc(0, fp) == EOF)
+    goto out;
+
+  pvd[0] = 1;
+  memcpy(&pvd[1], "CD001", 5);
+  pvd[6] = 1;
+  put_733(&pvd[80], 22 + depth);
+  pvd[128] = 0;
+  pvd[129] = 8;
+  pvd[156] = 34;
+  put_733(&pvd[158], 20);
+  put_733(&pvd[166], ISO_BLOCKSIZE);
+  pvd[181] = ISO_DIRECTORY;
+  pvd[188] = 1;
+  pvd[189] = 0;
+
+  if (fseek(fp, 16 * ISO_BLOCKSIZE, SEEK_SET) != 0
+      || fwrite(pvd, 1, sizeof(pvd), fp) != sizeof(pvd))
+    goto out;
+  memset(pvd, 0, sizeof(pvd));
+  pvd[0] = 255;
+  memcpy(&pvd[1], "CD001", 5);
+  pvd[6] = 1;
+  if (fwrite(pvd, 1, sizeof(pvd), fp) != sizeof(pvd))
+    goto out;
+
+  for (i = 0; i <= depth; i++) {
+    offset = 0;
+    memset(dir, 0, sizeof(dir));
+    offset = add_directory_record(dir, offset, 20 + i, ISO_DIRECTORY, 0);
+    offset = add_directory_record(dir, offset, i ? 19 + i : 20,
+                                  ISO_DIRECTORY, 1);
+    add_directory_record(dir, offset, 21 + i, ISO_DIRECTORY, 'D');
+    if (fseek(fp, (20 + i) * ISO_BLOCKSIZE, SEEK_SET) != 0
+        || fwrite(dir, 1, sizeof(dir), fp) != sizeof(dir))
+      goto out;
+  }
+  if (fclose(fp) != 0)
+    goto out;
+  fp = NULL;
+
+  for (i = 0; i < depth; i++) {
+    path[2 * i] = 'D';
+    path[2 * i + 1] = '/';
+  }
+  path[2 * depth - 1] = '\0';
+
+  p_iso = iso9660_open_ext(psz_tmp, ISO_EXTENSION_NONE);
+  if (!p_iso)
+    goto out;
+  p_stat = iso9660_ifs_stat(p_iso, path);
+  if (p_stat)
+    iso9660_stat_free(p_stat);
+  else
+    ret = 0;
+
+out:
+  if (p_iso)
+    iso9660_close(p_iso);
+  if (fp)
+    fclose(fp);
+  remove(psz_tmp);
+  return ret;
+}
+
 int
 main(int argc, const char *argv[])
 {
@@ -224,6 +334,11 @@ main(int argc, const char *argv[])
   if (check_rock_ridge_cycle() != 0) {
     fprintf(stderr, "Rock Ridge deep-directory cycle was not rejected\n");
     return 4;
+  }
+
+  if (check_excessive_path_depth() != 0) {
+    fprintf(stderr, "Excessive ISO path depth was not rejected\n");
+    return 5;
   }
 
   return 0;
