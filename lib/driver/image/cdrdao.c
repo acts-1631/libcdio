@@ -996,6 +996,11 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
     }
   }
 
+  if (i_track < 0) {
+    cdio_log(log_level, "%s contains no tracks", psz_cue_name);
+    goto err_exit;
+  }
+
   if (NULL != cd) {
     cd->gen.i_tracks = i_track+1;
     cd->gen.toc_init = true;
