@@ -96,6 +96,30 @@ check_file_before_first_track(void)
 }
 
 static int
+check_no_tracks(void)
+{
+  const char *cue_name = "bincue-no-tracks.cue";
+  FILE *cue = fopen(cue_name, "w");
+  CdIo_t *p_cdio;
+
+  if (!cue) {
+    printf("Can't create %s\n", cue_name);
+    return 1;
+  }
+  fprintf(cue, "FILE \"%s/cdda.bin\" BINARY\n", DATA_DIR);
+  fclose(cue);
+
+  p_cdio = cdio_open_bincue(cue_name);
+  remove(cue_name);
+  if (p_cdio) {
+    printf("Incorrect: %s with no tracks opened.\n", cue_name);
+    cdio_destroy(p_cdio);
+    return 1;
+  }
+  return 0;
+}
+
+static int
 check_mode2_seek(const char *cue_name, const char *mode)
 {
   CdIo_t *p_cdio;
@@ -145,6 +169,8 @@ main(int argc, const char *argv[])
   cdio_loglevel_default = (argc > 1) ? CDIO_LOG_DEBUG : CDIO_LOG_WARN;
 
   if (check_too_many_tracks())
+    ret = 1;
+  if (check_no_tracks())
     ret = 1;
   if (check_file_before_first_track())
     ret = 1;
