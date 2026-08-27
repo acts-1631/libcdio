@@ -365,9 +365,16 @@ print_udf_file_info(const udf_dirent_t *p_udf_dirent,
 }
 
 static void
-list_udf_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent, const char *psz_path)
+list_udf_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent,
+               const char *psz_path, unsigned int depth)
 {
   if (!p_udf_dirent) return;
+
+  if (depth >= 256) {
+    fprintf(stderr, "Maximum UDF directory depth exceeded\n");
+    udf_dirent_free(p_udf_dirent);
+    return;
+  }
 
   if (opts.print_iso9660) {
     printf ("\n/%s:\n", psz_path);
@@ -385,7 +392,7 @@ list_udf_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent, const char *psz_path)
         char *psz_newpath = calloc(1, sizeof(char)*i_newlen);
 
         snprintf(psz_newpath, i_newlen, "%s%s/", psz_path, psz_dirname);
-        list_udf_files(p_udf, p_udf_dirent2, psz_newpath);
+        list_udf_files(p_udf, p_udf_dirent2, psz_newpath, depth + 1);
         free(psz_newpath);
       }
     } else {
@@ -413,7 +420,7 @@ print_udf_fs (void)
       return 1;
     }
 
-    list_udf_files(p_udf, p_udf_root, "");
+    list_udf_files(p_udf, p_udf_root, "", 0);
   }
   udf_close(p_udf);
   return 0;
