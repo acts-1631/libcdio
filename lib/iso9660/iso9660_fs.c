@@ -60,6 +60,8 @@
 #include "_cdio_stdio.h"
 #include "cdio_private.h"
 
+#define MAX_ISO9660_PATH_DEPTH 256
+
 /** Implementation of iso9660_t type */
 struct _iso9660_s {
   cdio_header_t header;     /**< Internal header - MUST come first. */
@@ -1143,7 +1145,7 @@ _ifs_stat_root (iso9660_t *p_iso)
 
 static iso9660_stat_t *
 _fs_stat_traverse (const CdIo_t *p_cdio, const iso9660_stat_t *_root,
-		   char **splitpath)
+		   char **splitpath, unsigned int depth)
 {
   unsigned offset = 0;
   uint8_t *_dirbuf = NULL;
@@ -1165,6 +1167,9 @@ _fs_stat_traverse (const CdIo_t *p_cdio, const iso9660_stat_t *_root,
 	     p_stat->rr.i_symlink_max);
       return p_stat;
     }
+
+  if (depth >= MAX_ISO9660_PATH_DEPTH)
+    return NULL;
 
   if (_root->type == _STAT_FILE)
     return NULL;
@@ -1232,7 +1237,8 @@ _fs_stat_traverse (const CdIo_t *p_cdio, const iso9660_stat_t *_root,
 
       if (!cmp) {
 	iso9660_stat_t *ret_stat
-	  = _fs_stat_traverse (p_cdio, p_iso9660_stat, &splitpath[1]);
+	  = _fs_stat_traverse (p_cdio, p_iso9660_stat, &splitpath[1],
+				depth + 1);
 	iso9660_stat_free(p_iso9660_stat);
 	free (_dirbuf);
 	return ret_stat;
@@ -1255,7 +1261,7 @@ skip_to_next_record:;
 
 static iso9660_stat_t *
 _fs_iso_stat_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
-		       char **splitpath)
+		       char **splitpath, unsigned int depth)
 {
   unsigned offset = 0;
   uint8_t *_dirbuf = NULL;
@@ -1276,6 +1282,9 @@ _fs_iso_stat_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
 	     p_stat->rr.i_symlink_max);
       return p_stat;
     }
+
+  if (depth >= MAX_ISO9660_PATH_DEPTH)
+    return NULL;
 
   if (_root->type == _STAT_FILE)
     return NULL;
@@ -1342,7 +1351,7 @@ _fs_iso_stat_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
 
       if (!cmp) {
 	iso9660_stat_t *ret_stat
-	  = _fs_iso_stat_traverse (p_iso, p_stat, &splitpath[1]);
+	  = _fs_iso_stat_traverse (p_iso, p_stat, &splitpath[1], depth + 1);
 	iso9660_stat_free(p_stat);
 	free (_dirbuf);
 	return ret_stat;
@@ -1391,7 +1400,7 @@ iso9660_fs_stat (CdIo_t *p_cdio, const char psz_path[])
   if (!p_root)   return NULL;
 
   p_psz_splitpath = _cdio_strsplit (psz_path, '/');
-  p_stat = _fs_stat_traverse (p_cdio, p_root, p_psz_splitpath);
+  p_stat = _fs_stat_traverse (p_cdio, p_root, p_psz_splitpath, 0);
   iso9660_stat_free(p_root);
   _cdio_strfreev (p_psz_splitpath);
 
@@ -1400,7 +1409,8 @@ iso9660_fs_stat (CdIo_t *p_cdio, const char psz_path[])
 
 typedef iso9660_stat_t * (stat_root_t) (void *p_image);
 typedef iso9660_stat_t * (stat_traverse_t)
-  (const void *p_image, const iso9660_stat_t *_root, char **splitpath);
+	(const void *p_image, const iso9660_stat_t *_root, char **splitpath,
+	 unsigned int depth);
 
 /**
   Get file status for psz_path into stat. NULL is returned on error.
@@ -1424,7 +1434,7 @@ fs_stat_translate (void *p_image, stat_root_t stat_root,
   if (!p_root) return NULL;
 
   p_psz_splitpath = _cdio_strsplit (psz_path, '/');
-  p_stat = stat_traverse (p_image, p_root, p_psz_splitpath);
+  p_stat = stat_traverse (p_image, p_root, p_psz_splitpath, 0);
   iso9660_stat_free(p_root);
   _cdio_strfreev (p_psz_splitpath);
 
@@ -1494,7 +1504,7 @@ iso9660_ifs_stat (iso9660_t *p_iso, const char psz_path[])
   if (!p_root) return NULL;
 
   splitpath = _cdio_strsplit (psz_path, '/');
-  stat = _fs_iso_stat_traverse (p_iso, p_root, splitpath);
+  stat = _fs_iso_stat_traverse (p_iso, p_root, splitpath, 0);
   iso9660_stat_free(p_root);
   _cdio_strfreev (splitpath);
 
