@@ -46,6 +46,30 @@ if test $RC -eq 0 ; then
     rm -fr $extract_dir
 fi
 
+extract_base=/tmp/udf-path-$$
+extract_dir=$extract_base/out
+bad_udf=$extract_base.iso
+escaped_file=$extract_base/escaped.txt
+payload=$extract_dir.payload
+mkdir "$extract_base"
+cp "$abs_top_srcdir/test/data/udf102.iso" "$bad_udf"
+printf '\010../escaped.txt' > "$payload"
+printf '\017' > "$extract_dir.length"
+dd if="$extract_dir.length" of="$bad_udf" bs=1 seek=$((596 * 2048 + 40 + 19)) conv=notrunc 2>/dev/null
+dd if="$payload" of="$bad_udf" bs=1 seek=$((596 * 2048 + 40 + 38)) conv=notrunc 2>/dev/null
+cmd="$extract_program $bad_udf $extract_dir"
+$cmd >/dev/null 2>&1
+RC=$?
+if test -e "$escaped_file" ; then
+    echo "$0: extractor wrote outside the UDF destination"
+    RC=1
+fi
+rm -f "$bad_udf" "$payload" "$extract_dir.length" "$escaped_file"
+if test -d "$extract_base" ; then
+    rm -fr "$extract_base"
+fi
+check_result $RC 'UDF extraction path test' "$cmd"
+
 extract_dir=/tmp/udf-bad-fid-$$
 udf_iso=$abs_top_srcdir/test/data/bad-fid.udf
 cmd="$extract_program $udf_iso $extract_dir"

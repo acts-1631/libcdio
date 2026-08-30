@@ -86,6 +86,22 @@ static void log_handler (cdio_log_level_t level, const char *message)
   }
 }
 
+static bool
+path_component_is_safe(const char *psz_name)
+{
+  if (!psz_name || !psz_name[0]
+      || 0 == strcmp(psz_name, ".")
+      || 0 == strcmp(psz_name, "..")
+      || strchr(psz_name, '/')
+      || strchr(psz_name, '\\'))
+    return false;
+#ifdef _WIN32
+  if (strchr(psz_name, ':'))
+    return false;
+#endif
+  return true;
+}
+
 static int udf_extract_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent, const char *psz_path)
 {
   FILE *fd = NULL;
@@ -101,6 +117,10 @@ static int udf_extract_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent, const cha
 
   while (udf_readdir(p_udf_dirent)) {
     psz_basename = udf_get_filename(p_udf_dirent);
+    if (!path_component_is_safe(psz_basename)) {
+      fprintf(stderr, "  Refusing unsafe image filename\n");
+      continue;
+    }
     i_length = 3 + strlen(psz_path) + strlen(psz_basename) + strlen(psz_extract_dir);
     psz_fullpath = (char*)calloc(sizeof(char), i_length);
     if (psz_fullpath == NULL) {
@@ -199,6 +219,10 @@ static int iso_extract_files(iso9660_t* p_iso, const char *psz_path)
       || (strcmp(p_statbuf->filename, "..") == 0) )
       continue;
     iso9660_name_translate_ext(p_statbuf->filename, psz_basename, i_joliet_level);
+    if (!path_component_is_safe(psz_basename)) {
+      fprintf(stderr, "  Refusing unsafe image filename\n");
+      continue;
+    }
     if (p_statbuf->type == _STAT_DIR) {
       _mkdir(psz_fullpath);
       if (iso_extract_files(p_iso, psz_iso_name))
