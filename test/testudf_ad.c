@@ -150,6 +150,18 @@ main(void)
   if (nread != DRIVER_OP_ERROR)
     goto close;
 
+  memset(&test->dirent.fe, 0, sizeof(test->dirent.fe));
+  udf.i_position = 0;
+  test->dirent.fe.icb_tag.strat_type = ICBTAG_STRATEGY_TYPE_4;
+  test->dirent.fe.icb_tag.flags = ICBTAG_FLAG_AD_SHORT;
+  test->dirent.fe.info_len = UDF_BLOCKSIZE;
+  test->dirent.fe.u_extended_attr = UDF_BLOCKSIZE;
+  test->dirent.fe.u_alloc_descs = sizeof(udf_short_ad_t);
+
+  nread = udf_read_block(&test->dirent, buffer, 1);
+  if (nread != DRIVER_OP_ERROR)
+    goto close;
+
   ret = 0;
 close:
   cdio_stdio_destroy(udf.stream);

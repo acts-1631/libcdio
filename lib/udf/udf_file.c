@@ -117,6 +117,15 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
     &p_udf_dirent->fe;
   const udf_icbtag_t *p_icb_tag = &p_udf_fe->icb_tag;
   const uint16_t strat_type= uint16_from_le(p_icb_tag->strat_type);
+  const uint32_t i_extended_attr =
+    uint32_from_le(p_udf_fe->u_extended_attr);
+  const uint32_t i_alloc_descs = uint32_from_le(p_udf_fe->u_alloc_descs);
+
+  if (i_extended_attr > UDF_BLOCKSIZE - UDF_FENTRY_SIZE
+      || i_alloc_descs > UDF_BLOCKSIZE - UDF_FENTRY_SIZE - i_extended_attr) {
+    cdio_warn("File entry allocation descriptors out of bounds");
+    return CDIO_INVALID_LBA;
+  }
 
   if (i_offset < 0) {
     cdio_warn("Negative offset value");
