@@ -74,6 +74,30 @@ check_no_tracks(void)
   return 0;
 }
 
+static int
+check_track_without_mode(void)
+{
+  const char *toc_name = "cdrdao-track-without-mode.toc";
+  FILE *toc = fopen(toc_name, "w");
+  CdIo_t *p_cdio;
+
+  if (!toc) {
+    fprintf(stderr, "Unable to create %s\n", toc_name);
+    return 1;
+  }
+  fprintf(toc, "TRACK\nFILE \"%s/cdda.bin\" 00:00:00\n", DATA_DIR);
+  fclose(toc);
+
+  p_cdio = cdio_open_cdrdao(toc_name);
+  remove(toc_name);
+  if (p_cdio) {
+    fprintf(stderr, "Incorrect: %s without a mode opened.\n", toc_name);
+    cdio_destroy(p_cdio);
+    return 1;
+  }
+  return 0;
+}
+
 int
 main(int argc, const char *argv[])
 {
@@ -115,7 +139,7 @@ main(int argc, const char *argv[])
   char psz_tocfile[500];
   unsigned int verbose = (argc > 1);
 
-  if (check_no_tracks())
+  if (check_no_tracks() || check_track_without_mode())
     ret = 1;
 
 #ifdef HAVE_CHDIR
