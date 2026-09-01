@@ -75,7 +75,7 @@
 static const char *psz_extract_dir;
 static uint8_t i_joliet_level = 0;
 
-#define MAX_UDF_DIRECTORY_DEPTH 256
+#define MAX_UDF_DIRECTORY_DEPTH 64
 
 static void log_handler (cdio_log_level_t level, const char *message)
 {

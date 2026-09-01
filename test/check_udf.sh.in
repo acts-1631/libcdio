@@ -80,7 +80,11 @@ printf '\002' > "$cycle_base.characteristics"
 printf '\004' > "$cycle_base.type"
 printf '\144\000\000\000' > "$cycle_base.length"
 printf '\003\000\000\000' > "$cycle_base.position"
+printf '\002' > "$cycle_base.fid-length"
+printf '\010x' > "$cycle_base.fid-name"
 dd if="$cycle_base.characteristics" of="$cycle_udf" bs=1 seek=$((596 * 2048 + 40 + 18)) conv=notrunc 2>/dev/null
+dd if="$cycle_base.fid-length" of="$cycle_udf" bs=1 seek=$((596 * 2048 + 40 + 19)) conv=notrunc 2>/dev/null
+dd if="$cycle_base.fid-name" of="$cycle_udf" bs=1 seek=$((596 * 2048 + 40 + 38)) conv=notrunc 2>/dev/null
 dd if="$cycle_base.type" of="$cycle_udf" bs=1 seek=$((597 * 2048 + 27)) conv=notrunc 2>/dev/null
 dd if="$cycle_base.length" of="$cycle_udf" bs=1 seek=$((597 * 2048 + 56)) conv=notrunc 2>/dev/null
 dd if="$cycle_base.position" of="$cycle_udf" bs=1 seek=$((597 * 2048 + 204)) conv=notrunc 2>/dev/null
@@ -103,7 +107,7 @@ if test $info_rc -ne 0 || test $info_lines -gt 300 ; then
     echo "$0: cyclic UDF listing was not bounded"
     RC=1
 fi
-rm -f "$cycle_udf" "$cycle_hybrid" "$cycle_base.characteristics" "$cycle_base.type" "$cycle_base.length" "$cycle_base.position" "$info_output"
+rm -f "$cycle_udf" "$cycle_hybrid" "$cycle_base.characteristics" "$cycle_base.type" "$cycle_base.length" "$cycle_base.position" "$cycle_base.fid-length" "$cycle_base.fid-name" "$info_output"
 if test -d "$cycle_base" ; then
     rm -fr "$cycle_base"
 fi

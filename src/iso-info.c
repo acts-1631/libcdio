@@ -76,6 +76,8 @@
 */
 #define CDIO_MAX_DIR_RECURSION 512
 
+#define MAX_UDF_DIRECTORY_DEPTH 64
+
 /* Used by `main' to communicate with `parse_opt'. And global options
  */
 static struct arguments
@@ -370,7 +372,7 @@ list_udf_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent,
 {
   if (!p_udf_dirent) return;
 
-  if (depth >= 256) {
+  if (depth >= MAX_UDF_DIRECTORY_DEPTH) {
     fprintf(stderr, "Maximum UDF directory depth exceeded\n");
     udf_dirent_free(p_udf_dirent);
     return;
