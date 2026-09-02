@@ -103,6 +103,7 @@ long_block=$long_base.block
 long_name=$long_base.name
 long_log=$long_base.log
 
+if command -v dd >/dev/null 2>&1 && test -r /dev/zero; then
 put733()
 {
     value=$1
@@ -164,6 +165,9 @@ if test -d "$long_base" ; then
     rm -fr "$long_base"
 fi
 check_result ${RC-0} 'bounded ISO extraction path test' "$cmd"
+else
+    echo "-- $0: bounded ISO extraction path test skipped (dd or /dev/zero unavailable)."
+fi
 
 
 exit $RC
